@@ -1,0 +1,4 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="#2E7D32" android:state_checked="true"/> <!-- xanh lá khi chọn -->
+    <item android:color="#FFFFFF" android:state_checked="false"/> <!-- trắng khi chưa chọn -->
+</selector>

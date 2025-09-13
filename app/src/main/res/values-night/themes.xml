@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Theme chính cho app khi Dark Mode -->
+    <style name="Theme.PlanForPlant" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Màu nền chính (xanh lá vẫn giữ) -->
+        <item name="colorPrimary">#81C784</item> <!-- Xanh lá nhạt hơn -->
+        <item name="colorOnPrimary">#000000</item>
+
+        <!-- Màu phụ -->
+        <item name="colorSecondary">#6D4C41</item> <!-- Nâu đất đậm hơn -->
+        <item name="colorOnSecondary">#FFFFFF</item>
+
+        <!-- Nền tối -->
+        <item name="android:colorBackground">#121212</item>
+        <item name="colorSurface">#1E1E1E</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+
+        <!-- Font -->
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+    </style>
+
+</resources>
