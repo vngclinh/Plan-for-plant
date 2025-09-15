@@ -1,6 +1,8 @@
-// ApiClient.java
 package com.example.planforplant.api;
 
+import android.content.Context;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -11,18 +13,23 @@ public class ApiClient {
     private static final String LOCAL_BASE_URL = "http://10.0.2.2:8080/";
     private static final String PLANTNET_BASE_URL = "https://my-api.plantnet.org/v2/";
 
-    // Local API (your backend at 10.0.2.2)
-    public static Retrofit getLocalClient() {
+    // Local API (with auto-refresh interceptor)
+    public static Retrofit getLocalClient(Context context) {
         if (localRetrofit == null) {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(new AuthInterceptor(context))
+                    .build();
+
             localRetrofit = new Retrofit.Builder()
                     .baseUrl(LOCAL_BASE_URL)
+                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return localRetrofit;
     }
 
-    // PlantNet API
+    // PlantNet API (no JWT)
     public static Retrofit getPlantNetClient() {
         if (plantNetRetrofit == null) {
             plantNetRetrofit = new Retrofit.Builder()

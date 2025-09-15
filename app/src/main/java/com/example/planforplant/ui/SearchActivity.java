@@ -12,9 +12,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
-import com.example.planforplant.R;
 import com.example.planforplant.model.Plant;
 import com.squareup.picasso.Picasso;
 
@@ -39,7 +39,9 @@ public class SearchActivity extends AppCompatActivity {
         searchBox = findViewById(R.id.search_box);
         btnSearchIcon = findViewById(R.id.btnSearchIcon);
         layoutSearchResult = findViewById(R.id.layoutSearchResult);
-        apiService = ApiClient.getLocalClient().create(ApiService.class);
+
+        // FIX: pass context into ApiClient
+        apiService = ApiClient.getLocalClient(this).create(ApiService.class);
 
         // Nếu MainActivity gửi từ khóa
         String keyword = getIntent().getStringExtra("keyword");
@@ -108,7 +110,7 @@ public class SearchActivity extends AppCompatActivity {
             itemLayout.setLayoutParams(params);
 
             ImageView imageView = new ImageView(this);
-            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(48, 48);
+            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(100, 100); // bigger size
             imageView.setLayoutParams(imgParams);
             if (plant.getImageUrl() != null && !plant.getImageUrl().isEmpty()) {
                 Picasso.get().load(plant.getImageUrl()).into(imageView);
