@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/beige"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <!-- Thanh trên: vị trí + thời tiết -->
     <LinearLayout
@@ -348,7 +348,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                android:tint="#2E7D32" />
+                app:tint="#2E7D32" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -370,7 +370,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_book"
-                android:tint="#2E7D32" />
+                app:tint="#2E7D32" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -401,7 +401,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_chat"
-                android:tint="#2E7D32" />
+                app:tint="#2E7D32" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -423,7 +423,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_profile"
-                android:tint="#2E7D32" />
+                app:tint="#2E7D32" />
 
             <TextView
                 android:layout_width="wrap_content"

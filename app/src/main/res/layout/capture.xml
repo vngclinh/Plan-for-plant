@@ -1,24 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5DC">
 
-    <!-- Khung ảnh -->
+    <!-- Khung preview (include trực tiếp PreviewView) -->
+<!--    <include-->
+<!--        layout="@layout/part_previewview"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/tvTitle"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_margin="16dp"-->
+<!--        tools:layout="@layout/part_preview_placeholder" />-->
+
+<!--    &lt;!&ndash; Tiêu đề &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tvTitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Nhận diện cây"-->
+<!--        android:textColor="#6D4C41"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:fontFamily="sans-serif-medium"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/captureOptions"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginBottom="20dp" />-->
+
     <ImageView
-        android:id="@+id/plantImage"
+        android:id="@+id/previewPlaceholder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="Plant Image"
-        android:src="@drawable/sample_plant"
-        android:background="@drawable/plant_frame"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:src="@android:drawable/ic_menu_gallery"
+        tools:scaleType="centerCrop"
+        tools:contentDescription="Preview placeholder (editor only)" />
+
+    <!-- ViewStub: KHÔNG inflate trong Editor; runtime mình gọi inflate() -->
+    <ViewStub
+        android:id="@+id/stubPreview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:layout="@layout/part_previewview"
+        tools:layout="@layout/part_preview_placeholder"
+        tools:ignore="MissingId"/>
 
     <!-- Tiêu đề -->
     <TextView
@@ -34,7 +77,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="20dp" />
-
     <!-- Khung chọn loại chụp -->
     <LinearLayout
         android:id="@+id/captureOptions"
@@ -49,7 +91,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="8dp">
 
-        <!-- Hoa -->
         <TextView
             android:id="@+id/optionFlower"
             android:layout_width="wrap_content"
@@ -61,7 +102,6 @@
             android:background="@drawable/option_selector"
             android:layout_marginEnd="4dp" />
 
-        <!-- Lá -->
         <TextView
             android:id="@+id/optionLeaf"
             android:layout_width="wrap_content"
@@ -73,7 +113,6 @@
             android:background="@drawable/option_selector"
             android:layout_marginEnd="4dp" />
 
-        <!-- Cả cây -->
         <TextView
             android:id="@+id/optionWhole"
             android:layout_width="wrap_content"
@@ -96,7 +135,6 @@
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Gallery -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -121,7 +159,6 @@
                 android:textColor="#6D4C41" />
         </LinearLayout>
 
-        <!-- Camera -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -129,7 +166,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!-- Nút camera chính -->
             <ImageButton
                 android:id="@+id/btnCamera"
                 android:layout_width="65dp"
@@ -140,7 +176,6 @@
                 app:tint="@android:color/white" />
         </LinearLayout>
 
-        <!-- Tip -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -150,11 +185,11 @@
 
             <ImageButton
                 android:id="@+id/btnTip"
-                android:layout_width="40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:background="@null"
-                android:src="@android:drawable/ic_menu_info_details"
                 android:contentDescription="Tips"
+                android:src="@android:drawable/ic_menu_info_details"
                 app:tint="#2E7D32" />
 
             <TextView

@@ -48,11 +48,11 @@
         <ImageView
             android:id="@+id/plantImage"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_gallery"
+            android:layout_height="589dp"
+            android:layout_marginBottom="16dp"
             android:contentDescription="Ảnh minh họa cây"
-            android:layout_marginBottom="16dp" />
+            android:scaleType="centerCrop"
+            android:src="@android:drawable/ic_menu_gallery" />
 
         <!-- Tên cây -->
         <TextView
@@ -80,8 +80,8 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:cardCornerRadius="12dp"
-            android:cardElevation="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
             android:layout_marginBottom="16dp"
             app:cardBackgroundColor="@android:color/white">
 
@@ -262,6 +262,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="end"
+                            android:id="@+id/tvFamily"
                             android:text="Rosaceae"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -292,6 +293,7 @@
                             android:layout_weight="1"
                             android:gravity="end"
                             android:text="Prunus"
+                            android:id="@+id/tvGenus"
                             android:textSize="16sp" />
                     </LinearLayout>
 
@@ -321,6 +323,7 @@
                             android:layout_weight="1"
                             android:gravity="end"
                             android:text="P. mume"
+                            android:id="@+id/tvSpecies"
                             android:textSize="16sp" />
                     </LinearLayout>
                 </LinearLayout>
