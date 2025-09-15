@@ -12,7 +12,7 @@ import com.example.planforplant.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.content.Intent;
 
-public class MainActivity extends AppCompatActivity {
+public class IdentifyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException("fabCamera not found in activity_main.xml");
         }
         fab.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+            Intent intent = new Intent(IdentifyActivity.this, CaptureActivity.class);
             startActivity(intent);
         });
     }

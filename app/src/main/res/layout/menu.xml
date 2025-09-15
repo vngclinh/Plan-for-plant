@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/beige"
-    tools:context=".ui.MainActivity">
+    tools:context=".MainActivity">
 
     <!-- Thanh trên: vị trí + thời tiết -->
     <LinearLayout
@@ -177,35 +177,35 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Mẹo chăm sóc cây"
-                        android:textStyle="bold"
+                        android:textColor="@color/earth_brown_dark"
                         android:textSize="16sp"
-                        android:textColor="@color/earth_brown_dark" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Cách tưới nước và bón phân đúng cách"
-                        android:textSize="14sp"
                         android:textColor="#555"
-                        android:layout_marginTop="4dp"/>
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
                         android:text="Xem thêm >"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
                         android:textColor="#4CAF50"
-                        android:layout_marginTop="6dp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/plant1"
-                    android:scaleType="centerCrop"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/rounded_image_bg"/>
+                    android:background="@drawable/rounded_image_bg"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_gallery" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -259,7 +259,7 @@
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/plant2"
+                    android:src="@android:drawable/ic_menu_gallery"
                     android:scaleType="centerCrop"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/rounded_image_bg"/>
@@ -315,7 +315,7 @@
                 <ImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/plant3"
+                    android:src="@android:drawable/ic_menu_gallery"
                     android:scaleType="centerCrop"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/rounded_image_bg"/>
