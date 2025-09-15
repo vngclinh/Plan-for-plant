@@ -36,6 +36,9 @@ import com.google.gson.Gson;
 import com.example.planforplant.BuildConfig;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -245,24 +248,22 @@ public class CaptureActivity extends AppCompatActivity {
         }
     }
     private void identifyPlant(Uri imageUri) {
-        File file = new File(imageUri.getPath());
-        if (!file.exists()) {
-            Toast.makeText(this, "Ảnh không tồn tại", Toast.LENGTH_SHORT).show();
+        File file = getFileFromUri(imageUri);
+        if (file == null || !file.exists()) {
+            Toast.makeText(this, "Không thể đọc ảnh", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // chuẩn bị retrofit
-        PlantNetApi api = ApiClient.getClient().create(PlantNetApi.class);
-
-        // multipart file
+        // Chuẩn bị multipart file
         RequestBody requestFile = RequestBody.create(file, okhttp3.MediaType.parse("image/*"));
         MultipartBody.Part body = MultipartBody.Part.createFormData("images", file.getName(), requestFile);
 
-        // organ
+        // Organ
         String organ = mapOptionToOrgan(selectedOption);
         RequestBody organPart = RequestBody.create(organ, MultipartBody.FORM);
 
-        // api key
+        // Gọi API
+        PlantNetApi api = ApiClient.getClient().create(PlantNetApi.class);
         Call<PlantResponse> call = api.identify(body, organPart, BuildConfig.PLANTNET_API_KEY);
 
         call.enqueue(new Callback<PlantResponse>() {
@@ -270,8 +271,6 @@ public class CaptureActivity extends AppCompatActivity {
             public void onResponse(Call<PlantResponse> call, Response<PlantResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantResponse plantResponse = response.body();
-
-                    // truyền kết quả sang DetailActivity
                     Intent intent = new Intent(CaptureActivity.this, DetailActivity.class);
                     intent.putExtra("imageUri", imageUri.toString());
                     intent.putExtra("plantResponseJson", new Gson().toJson(plantResponse));
@@ -290,6 +289,32 @@ public class CaptureActivity extends AppCompatActivity {
         });
     }
 
+    private File getFileFromUri(Uri uri) {
+        try {
+            if ("file".equals(uri.getScheme())) {
+                // Trường hợp ảnh từ camera
+                return new File(uri.getPath());
+            } else if ("content".equals(uri.getScheme())) {
+                // Trường hợp ảnh từ thư viện
+                String fileName = "picked_" + System.currentTimeMillis() + ".jpg";
+                File tempFile = new File(getCacheDir(), fileName);
+
+                try (InputStream inputStream = getContentResolver().openInputStream(uri);
+                     OutputStream outputStream = new FileOutputStream(tempFile)) {
+                    byte[] buffer = new byte[4096];
+                    int length;
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, length);
+                    }
+                    return tempFile;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -297,5 +322,13 @@ public class CaptureActivity extends AppCompatActivity {
         if (cameraExecutor != null) {
             cameraExecutor.shutdown();
         }
+        // optional: clear cache images
+        File cacheDir = getCacheDir();
+        for (File f : cacheDir.listFiles()) {
+            if (f.getName().startsWith("picked_")) {
+                f.delete();
+            }
+        }
     }
+
 }
