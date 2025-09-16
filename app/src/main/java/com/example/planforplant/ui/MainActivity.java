@@ -1,36 +1,48 @@
 package com.example.planforplant.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.planforplant.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import android.content.Intent;
+import com.example.planforplant.ui.SearchActivity;
 
 public class MainActivity extends AppCompatActivity {
+
+    private EditText searchBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        setContentView(R.layout.menu);
+
+        searchBox = findViewById(R.id.search_box);
+
+        // 🔎 Search box action
+        searchBox.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH
+                    || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+
+                String keyword = searchBox.getText().toString().trim();
+                if (!keyword.isEmpty()) {
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                    intent.putExtra("keyword", keyword);
+                    startActivity(intent);
+                }
+                return true;
+            }
+            return false;
         });
 
-        FloatingActionButton fab = findViewById(R.id.fabCamera);
-        if (fab == null) {
-            throw new RuntimeException("fabCamera not found in activity_main.xml");
-        }
-        fab.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+
+        LinearLayout plantIdentifier = findViewById(R.id.plant_identifier);
+        plantIdentifier.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, IdentifyActivity.class);
             startActivity(intent);
         });
     }

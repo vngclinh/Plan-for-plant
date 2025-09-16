@@ -263,7 +263,7 @@ public class CaptureActivity extends AppCompatActivity {
         RequestBody organPart = RequestBody.create(organ, MultipartBody.FORM);
 
         // Gọi API
-        PlantNetApi api = ApiClient.getClient().create(PlantNetApi.class);
+        PlantNetApi api = ApiClient.getPlantNetClient().create(PlantNetApi.class);
         Call<PlantResponse> call = api.identify(body, organPart, BuildConfig.PLANTNET_API_KEY);
 
         call.enqueue(new Callback<PlantResponse>() {
