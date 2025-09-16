@@ -5,6 +5,7 @@ import android.content.Context;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ApiClient {
     private static Retrofit localRetrofit = null;
@@ -23,6 +24,7 @@ public class ApiClient {
             localRetrofit = new Retrofit.Builder()
                     .baseUrl(LOCAL_BASE_URL)
                     .client(client)
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
