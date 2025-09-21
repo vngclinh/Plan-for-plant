@@ -1,7 +1,4 @@
-
-
 package com.example.planforplant.ui;
-
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +9,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.planforplant.DTO.RegisterRequest;
-import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
-
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,20 +48,84 @@ public class SignupActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        // Validate
-        if (fullname.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+        // ✅ Validate fullname
+        if (fullname.isEmpty()) {
+            etFullName.setError("Vui lòng nhập họ tên");
+            etFullName.requestFocus();
             return;
         }
 
-        // Build request
+        // ✅ Validate username
+        if (username.isEmpty()) {
+            etUsername.setError("Vui lòng nhập tên đăng nhập");
+            etUsername.requestFocus();
+            return;
+        }
+        if (username.length() < 4) {
+            etUsername.setError("Tên đăng nhập phải có ít nhất 4 ký tự");
+            etUsername.requestFocus();
+            return;
+        }
+        if (!username.matches("^[a-zA-Z0-9_]+$")) {
+            etUsername.setError("Tên đăng nhập chỉ được chứa chữ, số và dấu gạch dưới (_)");
+            etUsername.requestFocus();
+            return;
+        }
+
+        // ✅ Validate email
+        if (email.isEmpty()) {
+            etEmail.setError("Vui lòng nhập email");
+            etEmail.requestFocus();
+            return;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Email không hợp lệ");
+            etEmail.requestFocus();
+            return;
+        }
+
+        // ✅ Validate password
+        if (password.isEmpty()) {
+            etPassword.setError("Vui lòng nhập mật khẩu");
+            etPassword.requestFocus();
+            return;
+        }
+        if (password.length() < 8) {
+            etPassword.setError("Mật khẩu phải có ít nhất 8 ký tự");
+            etPassword.requestFocus();
+            return;
+        }
+        if (!password.matches(".*[A-Z].*")) {
+            etPassword.setError("Mật khẩu phải chứa ít nhất 1 chữ hoa");
+            etPassword.requestFocus();
+            return;
+        }
+        if (!password.matches(".*[a-z].*")) {
+            etPassword.setError("Mật khẩu phải chứa ít nhất 1 chữ thường");
+            etPassword.requestFocus();
+            return;
+        }
+        if (!password.matches(".*\\d.*")) {
+            etPassword.setError("Mật khẩu phải chứa ít nhất 1 chữ số");
+            etPassword.requestFocus();
+            return;
+        }
+        if (!password.matches(".*[@#$%^&+=!].*")) {
+            etPassword.setError("Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt (@#$%^&+=!)");
+            etPassword.requestFocus();
+            return;
+        }
+
+        // ✅ Confirm password
+        if (!password.equals(confirmPassword)) {
+            etConfirmPassword.setError("Mật khẩu xác nhận không khớp");
+            etConfirmPassword.requestFocus();
+            return;
+        }
+
+        // ✅ Nếu hợp lệ thì gọi API
         RegisterRequest request = new RegisterRequest(username, password, email, "0123456789", fullname);
 
-        // Call API
         Call<String> call = apiService.register(request);
         call.enqueue(new Callback<String>() {
             @Override
@@ -74,7 +133,6 @@ public class SignupActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(SignupActivity.this, response.body(), Toast.LENGTH_SHORT).show();
 
-                    // Example: go to LoginActivity
                     Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
@@ -90,4 +148,3 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 }
-

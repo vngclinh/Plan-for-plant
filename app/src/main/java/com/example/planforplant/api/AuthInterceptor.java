@@ -1,11 +1,11 @@
 package com.example.planforplant.api;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
 import com.example.planforplant.DTO.JwtResponse;
+import com.example.planforplant.session.SessionManager;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,13 +18,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AuthInterceptor implements Interceptor {
-    private final SharedPreferences prefs;
+    private final SessionManager sessionManager;
     private final ApiService authApi;
 
     public AuthInterceptor(Context context) {
-        this.prefs = context.getSharedPreferences("APP_PREF", Context.MODE_PRIVATE);
+        this.sessionManager = new SessionManager(context);
 
-        // Separate Retrofit for refresh calls (no interceptor to avoid recursion)
+        // Retrofit for refresh calls (no interceptor → avoids infinite loop)
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/") // backend base URL
                 .addConverterFactory(GsonConverterFactory.create())
@@ -36,7 +36,7 @@ public class AuthInterceptor implements Interceptor {
     @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
-        String jwt = prefs.getString("JWT_TOKEN", null);
+        String jwt = sessionManager.getToken();
         Request request = chain.request();
 
         // attach JWT if available
@@ -48,11 +48,11 @@ public class AuthInterceptor implements Interceptor {
 
         Response response = chain.proceed(request);
 
-        // if unauthorized -> try refresh
+        // if unauthorized → try refresh
         if (response.code() == 401) {
             response.close();
 
-            String refreshToken = prefs.getString("REFRESH_TOKEN", null);
+            String refreshToken = sessionManager.getRefreshToken();
             if (refreshToken != null) {
                 try {
                     Map<String, String> body = new HashMap<>();
@@ -64,10 +64,11 @@ public class AuthInterceptor implements Interceptor {
                     if (refreshResponse.isSuccessful() && refreshResponse.body() != null) {
                         JwtResponse jwtResponse = refreshResponse.body();
 
-                        // save new JWT
-                        prefs.edit()
-                                .putString("JWT_TOKEN", jwtResponse.getToken())
-                                .apply();
+                        // Save new tokens
+                        sessionManager.saveTokens(
+                                jwtResponse.getToken(),
+                                jwtResponse.getRefreshToken()
+                        );
 
                         // retry original request with new JWT
                         Request newRequest = request.newBuilder()
