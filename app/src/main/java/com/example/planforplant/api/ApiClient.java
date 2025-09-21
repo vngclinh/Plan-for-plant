@@ -11,7 +11,9 @@ public class ApiClient {
     private static Retrofit localRetrofit = null;
     private static Retrofit plantNetRetrofit = null;
 
-    private static final String LOCAL_BASE_URL = "http://10.0.2.2:8080/";
+//    private static final String LOCAL_BASE_URL = "http://192.168.100.90:8080/";
+    // nếu dùng điện thoại ảo
+     private static final String LOCAL_BASE_URL = "http://10.0.2.2:8080/";
     private static final String PLANTNET_BASE_URL = "https://my-api.plantnet.org/v2/";
 
     // Local API (with auto-refresh interceptor)
