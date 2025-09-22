@@ -2,8 +2,11 @@ package com.example.planforplant.api;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.session.SessionManager;
@@ -82,27 +85,37 @@ public class AuthInterceptor implements Interceptor {
 
                         return chain.proceed(newRequest);
                     } else {
-                        // Refresh token expired or invalid → logout user
-                        logoutUser();
+                        // Refresh token expired or invalid → logout with dialog
+                        showSessionExpiredDialog();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    // On network or unexpected error, consider logging out
-                    logoutUser();
+                    showSessionExpiredDialog();
                 }
             } else {
-                // No refresh token → logout
-                logoutUser();
+                // No refresh token → logout with dialog
+                showSessionExpiredDialog();
             }
         }
 
         return response;
     }
 
-    private void logoutUser() {
+    private void showSessionExpiredDialog() {
         sessionManager.clear();
-        Intent intent = new Intent(context, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(intent);
+
+        // Show dialog on UI thread
+        new Handler(Looper.getMainLooper()).post(() -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Thông báo")
+                    .setMessage("Hết thời hạn, vui lòng đăng nhập lại")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        context.startActivity(intent);
+                    });
+            builder.show();
+        });
     }
 }
