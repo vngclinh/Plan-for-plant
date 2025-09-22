@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">planForplant</string>
+    <string name="login_title">Đăng nhập</string>
+    <string name="username_hint">Tên đăng nhập</string>
+    <string name="password_hint">Mật khẩu</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="login_button">Đăng nhập</string>
+    <string name="register_button">Đăng ký tài khoản</string>
+    <string name="back_home_button">Quay về trang chủ</string>
 </resources>
