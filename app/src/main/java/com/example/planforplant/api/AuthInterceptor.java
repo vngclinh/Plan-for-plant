@@ -1,11 +1,13 @@
 package com.example.planforplant.api;
 
 import android.content.Context;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.session.SessionManager;
+import com.example.planforplant.ui.LoginActivity;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,9 +22,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AuthInterceptor implements Interceptor {
     private final SessionManager sessionManager;
     private final ApiService authApi;
+    private final Context context;
 
     public AuthInterceptor(Context context) {
-        this.sessionManager = new SessionManager(context);
+        this.context = context.getApplicationContext();
+        this.sessionManager = new SessionManager(this.context);
 
         // Retrofit for refresh calls (no interceptor → avoids infinite loop)
         Retrofit retrofit = new Retrofit.Builder()
@@ -77,13 +81,28 @@ public class AuthInterceptor implements Interceptor {
                                 .build();
 
                         return chain.proceed(newRequest);
+                    } else {
+                        // Refresh token expired or invalid → logout user
+                        logoutUser();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    // On network or unexpected error, consider logging out
+                    logoutUser();
                 }
+            } else {
+                // No refresh token → logout
+                logoutUser();
             }
         }
 
         return response;
+    }
+
+    private void logoutUser() {
+        sessionManager.clear();
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
     }
 }
