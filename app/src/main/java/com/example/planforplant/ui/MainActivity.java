@@ -1,6 +1,7 @@
 package com.example.planforplant.ui;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -55,22 +56,20 @@ public class MainActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
 
-        // --- Token expiration check ---
-        if (!sessionManager.isLoggedIn() ||
-                sessionManager.isTokenExpired() ||
-                sessionManager.isRefreshTokenExpired()) {
+        String token = sessionManager.getToken();
+        String refresh = sessionManager.getRefreshToken();
 
-            new AlertDialog.Builder(this)
-                    .setTitle("Thông báo")
-                    .setMessage("Hết thời gian, vui lòng đăng nhập lại")
-                    .setCancelable(false)
-                    .setPositiveButton("OK", (dialog, which) -> {
-                        startActivity(new android.content.Intent(MainActivity.this, LoginActivity.class));
-                        finish();
-                    })
-                    .show();
+        Log.d("MainActivity", "Access Token: " + token);
+        Log.d("MainActivity", "Refresh Token: " + refresh);
 
-            return; // stop further execution
+        if (!sessionManager.isLoggedIn()) {
+            Log.d("MainActivity", "⚠️ User chưa đăng nhập hoặc token đã hết hạn");
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        } else {
+            Log.d("MainActivity", "✅ Token còn hạn, user vẫn đăng nhập");
         }
 
         setContentView(R.layout.menu);

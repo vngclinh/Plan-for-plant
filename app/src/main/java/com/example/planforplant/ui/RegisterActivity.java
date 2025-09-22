@@ -23,7 +23,6 @@ import retrofit2.Response;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText etFullName, etPhone, etEmail, etUsername, etPassword, etConfirmPassword;
-    private Button btnConfirm;
     private ApiService apiService;
 
     // Regex mật khẩu mạnh: >=8 ký tự, có số, chữ thường, chữ hoa, ký tự đặc biệt
@@ -42,7 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
-        btnConfirm = findViewById(R.id.btnConfirm);
+        Button btnConfirm = findViewById(R.id.btnConfirm);
 
         apiService = ApiClient.getLocalClient(this).create(ApiService.class);
 
@@ -134,7 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(RegisterActivity.this, response.body(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Đăng ký thành công, vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
