@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/beige">
 
-    <!-- XML -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,10 +39,52 @@
             android:textColor="@color/black"
             android:textColorHint="@android:color/darker_gray"
             android:fontFamily="@font/roboto_regular"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="32dp"/>
+
+        <!-- Phone -->
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="Số điện thoại"
+            android:textSize="18sp"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:fontFamily="@font/roboto_regular"
+            android:imeOptions="actionNext"
+            android:inputType="phone"
+            app:layout_constraintTop_toBottomOf="@id/etFullName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="32dp"/>
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="Email"
+            android:textSize="18sp"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:fontFamily="@font/roboto_regular"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            app:layout_constraintTop_toBottomOf="@id/etPhone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
             android:layout_marginHorizontal="32dp"/>
 
         <!-- Username -->
@@ -58,26 +99,9 @@
             android:textColor="@color/black"
             android:textColorHint="@android:color/darker_gray"
             android:fontFamily="@font/roboto_regular"
-            app:layout_constraintTop_toBottomOf="@id/etFullName"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginHorizontal="32dp"/>
-
-        <!-- Email -->
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:hint="Email"
-            android:textSize="18sp"
-            android:inputType="textEmailAddress"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:textColor="@color/black"
-            android:textColorHint="@android:color/darker_gray"
-            android:fontFamily="@font/roboto_regular"
-            app:layout_constraintTop_toBottomOf="@id/etUsername"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@id/etEmail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
@@ -90,13 +114,14 @@
             android:layout_height="48dp"
             android:hint="Mật khẩu"
             android:textSize="18sp"
-            android:inputType="textPassword"
             android:background="@android:color/white"
             android:padding="12dp"
             android:textColor="@color/black"
             android:textColorHint="@android:color/darker_gray"
             android:fontFamily="@font/roboto_regular"
-            app:layout_constraintTop_toBottomOf="@id/etEmail"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            app:layout_constraintTop_toBottomOf="@id/etUsername"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
@@ -109,18 +134,20 @@
             android:layout_height="48dp"
             android:hint="Xác nhận mật khẩu"
             android:textSize="18sp"
-            android:inputType="textPassword"
             android:background="@android:color/white"
             android:padding="12dp"
             android:textColor="@color/black"
             android:textColorHint="@android:color/darker_gray"
             android:fontFamily="@font/roboto_regular"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
             app:layout_constraintTop_toBottomOf="@id/etPassword"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
             android:layout_marginHorizontal="32dp"/>
 
+        <!-- Button -->
         <Button
             android:id="@+id/btnConfirm"
             android:layout_width="0dp"
@@ -139,12 +166,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="24dp"
             android:layout_marginHorizontal="32dp"/>
-
-
-
-
-        <!-- Bottom Navigation (unchanged, keep your existing code here) -->
-        <!-- ... -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -23,18 +23,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         sessionManager = new SessionManager(this);
-        Log.d("MainActivity", "Token retrieved: " + sessionManager.getToken());
 
-        // 🔑 Check login state
+        String token = sessionManager.getToken();
+        String refresh = sessionManager.getRefreshToken();
+
+        Log.d("MainActivity", "Access Token: " + token);
+        Log.d("MainActivity", "Refresh Token: " + refresh);
+
         if (!sessionManager.isLoggedIn()) {
-            // User not logged in → go to LoginActivity
+            Log.d("MainActivity", "⚠️ User chưa đăng nhập hoặc token đã hết hạn");
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
             return;
+        } else {
+            Log.d("MainActivity", "✅ Token còn hạn, user vẫn đăng nhập");
         }
 
-        // ✅ If logged in → load the main screen
+        // ✅ Nếu còn login → load giao diện chính
         setContentView(R.layout.menu);
 
         searchBox = findViewById(R.id.search_box);
