@@ -19,8 +19,8 @@ import retrofit2.Response;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText etFullName, etUsername, etEmail, etPassword, etConfirmPassword;
-    private Button btnConfirm;
+    private EditText etFullName, etUsername, etEmail, etPhone, etPassword, etConfirmPassword;
+    private Button btnConfirm, btnBackHome;
     private ApiService apiService;
 
     @Override
@@ -32,30 +32,40 @@ public class SignupActivity extends AppCompatActivity {
         etFullName = findViewById(R.id.etFullName);
         etUsername = findViewById(R.id.etUsername);
         etEmail = findViewById(R.id.etEmail);
+        etPhone = findViewById(R.id.etPhone); // bind phone
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         btnConfirm = findViewById(R.id.btnConfirm);
+        btnBackHome = findViewById(R.id.btnBackHome); // bind back button
 
+        // Retrofit API
         apiService = ApiClient.getLocalClient(this).create(ApiService.class);
 
+        // Button listeners
         btnConfirm.setOnClickListener(v -> attemptRegister());
+        btnBackHome.setOnClickListener(v -> {
+            // Go back to login activity
+            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+            finish();
+        });
     }
 
     private void attemptRegister() {
         String fullname = etFullName.getText().toString().trim();
         String username = etUsername.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        // ✅ Validate fullname
+        // Validate fullname
         if (fullname.isEmpty()) {
             etFullName.setError("Vui lòng nhập họ tên");
             etFullName.requestFocus();
             return;
         }
 
-        // ✅ Validate username
+        // Validate username
         if (username.isEmpty()) {
             etUsername.setError("Vui lòng nhập tên đăng nhập");
             etUsername.requestFocus();
@@ -72,7 +82,7 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        // ✅ Validate email
+        // Validate email
         if (email.isEmpty()) {
             etEmail.setError("Vui lòng nhập email");
             etEmail.requestFocus();
@@ -84,7 +94,14 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        // ✅ Validate password
+        // Validate phone (optional, you can add more rules)
+        if (phone.isEmpty()) {
+            etPhone.setError("Vui lòng nhập số điện thoại");
+            etPhone.requestFocus();
+            return;
+        }
+
+        // Validate password
         if (password.isEmpty()) {
             etPassword.setError("Vui lòng nhập mật khẩu");
             etPassword.requestFocus();
@@ -116,25 +133,23 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        // ✅ Confirm password
+        // Confirm password
         if (!password.equals(confirmPassword)) {
             etConfirmPassword.setError("Mật khẩu xác nhận không khớp");
             etConfirmPassword.requestFocus();
             return;
         }
 
-        // ✅ Nếu hợp lệ thì gọi API
-        RegisterRequest request = new RegisterRequest(username, password, email, "0123456789", fullname);
-
+        // API call
+        RegisterRequest request = new RegisterRequest(username, password, email, phone, fullname);
         Call<String> call = apiService.register(request);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(SignupActivity.this, response.body(), Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    // Navigate to login
+                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                     finish();
                 } else {
                     Toast.makeText(SignupActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();

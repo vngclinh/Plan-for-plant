@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -53,22 +54,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         sessionManager = new SessionManager(this);
-        Log.d("MainActivity", "Token retrieved: " + sessionManager.getToken());
 
-        if (!sessionManager.isLoggedIn()) {
-            startActivity(new android.content.Intent(this, LoginActivity.class));
-            finish();
-            return;
+        // --- Token expiration check ---
+        if (!sessionManager.isLoggedIn() ||
+                sessionManager.isTokenExpired() ||
+                sessionManager.isRefreshTokenExpired()) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Thông báo")
+                    .setMessage("Hết thời gian, vui lòng đăng nhập lại")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        startActivity(new android.content.Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                    })
+                    .show();
+
+            return; // stop further execution
         }
 
         setContentView(R.layout.menu);
 
-        // Header views
+        // --- Header views ---
         tvLocation = findViewById(R.id.tvLocation);
         tvWeather = findViewById(R.id.tvWeather);
         ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
 
-        // Search box
+        // --- Search box ---
         searchBox = findViewById(R.id.search_box);
         searchBox.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH
@@ -84,14 +96,12 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // Plant identifier click
+        // --- Plant identifier click ---
         LinearLayout plantIdentifier = findViewById(R.id.plant_identifier);
         plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, IdentifyActivity.class)));
 
-        // Initialize location client
+        // --- Initialize location client ---
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        // Request real-time location
         requestLocation();
     }
 
@@ -105,12 +115,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Create high-accuracy location request
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(10000); // 10 seconds
-        locationRequest.setFastestInterval(5000); // 5 seconds
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
         locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setNumUpdates(1); // only need one update
+        locationRequest.setNumUpdates(1);
 
         fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
             @Override
