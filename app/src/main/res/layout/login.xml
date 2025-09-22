@@ -1,121 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/beige"
-    tools:context=".ui.LoginActivity">
+    tools:context=".MainActivity">
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đăng nhập"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textColor="@color/green_primary"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="48dp"/>
+    <!-- XML -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/beige"
+        tools:context=".LogupActivity">
 
-    <!-- Username -->
-    <EditText
-        android:id="@+id/etUsername"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:hint="Tên đăng nhập"
-        android:textSize="18sp"
-        android:background="@android:color/white"
-        android:padding="12dp"
-        android:textColor="@color/black"
-        android:textColorHint="@android:color/darker_gray"
-        android:fontFamily="@font/roboto_regular"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"
-        android:layout_marginHorizontal="32dp"/>
+        <!-- Title without Tree Icon -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_title"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/green_primary"
+            android:fontFamily="@font/roboto_regular"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="48dp"/>
 
-    <!-- Password -->
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:hint="Mật khẩu"
-        android:textSize="18sp"
-        android:inputType="textPassword"
-        android:background="@android:color/white"
-        android:padding="12dp"
-        android:textColor="@color/black"
-        android:textColorHint="@android:color/darker_gray"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintTop_toBottomOf="@id/etUsername"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="32dp"/>
+        <!-- Username -->
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="@string/username_hint"
+            android:textSize="18sp"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:fontFamily="@font/roboto_regular"
+            android:inputType="text"
+            android:autofillHints="username"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="32dp"
+            android:layout_marginHorizontal="32dp"/>
 
-    <!-- Forgot Password -->
-    <TextView
-        android:id="@+id/tvForgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quên mật khẩu?"
-        android:textColor="@color/green_primary"
-        android:textSize="16sp"
-        android:fontFamily="@font/roboto_regular"
-        android:textStyle="bold"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintTop_toBottomOf="@id/etPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"/>
+        <!-- Password -->
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="@string/password_hint"
+            android:textSize="18sp"
+            android:inputType="textPassword"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:fontFamily="@font/roboto_regular"
+            android:autofillHints="password"
+            app:layout_constraintTop_toBottomOf="@id/etUsername"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="32dp"/>
 
-    <!-- Login Button -->
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:text="Đăng nhập"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:backgroundTint="@color/green_primary"
-        android:textColor="@color/white"
-        android:elevation="6dp"
-        android:background="@drawable/rounded_button"
-        android:gravity="center"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintTop_toBottomOf="@id/tvForgotPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="32dp"/>
+        <!-- Forgot Password Button -->
+        <TextView
+            android:id="@+id/tvForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password"
+            android:textColor="@color/green_primary"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toBottomOf="@id/etPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"/>
 
-    <!-- Register Button -->
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:text="Đăng ký tài khoản"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:backgroundTint="@android:color/white"
-        android:textColor="@color/white"
-        android:elevation="2dp"
-        android:background="@drawable/rounded_button"
-        android:gravity="center"
-        android:fontFamily="@font/roboto_regular"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp"
-        android:layout_marginHorizontal="32dp"/>
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:text="@string/login_button"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/green_primary"
+            android:textColor="@color/white"
+            android:elevation="6dp"
+            android:background="@drawable/bg_button_rounded"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_regular"
+            app:layout_constraintTop_toBottomOf="@id/tvForgotPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="32dp"/>
 
+        <!-- Register Button -->
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:text="@string/register_button"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:backgroundTint="@android:color/white"
+            android:textColor="@color/white"
+            android:elevation="2dp"
+            android:background="@drawable/bg_button_rounded2"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_regular"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="32dp"/>
+
+        <!-- Back to Home Button (below register) -->
+        <Button
+            android:id="@+id/btnBackHome"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:text="@string/back_home_button"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_button_rounded2"
+            android:textColor="@color/black"
+            android:elevation="1dp"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_regular"
+            app:layout_constraintTop_toBottomOf="@id/btnRegister"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="32dp"/>
+
+
+
+
+        <!-- Bottom Navigation (unchanged, keep your existing code here) -->
+        <!-- ... -->
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
