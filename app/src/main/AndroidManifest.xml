@@ -33,7 +33,6 @@
         <activity android:name=".ui.CaptureActivity"/>
         <activity android:name=".ui.DetailActivity"/>
         <activity android:name=".ui.SearchActivity"/>
-        <activity android:name=".ui.IdentifyActivity"/>
         <activity android:name=".ui.NotFoundActivity"/>
         <activity android:name=".ui.LoginActivity"/>
         <activity android:name=".ui.RegisterActivity"/>

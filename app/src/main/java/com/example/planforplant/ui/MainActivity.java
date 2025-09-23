@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         // --- Plant identifier click ---
         LinearLayout plantIdentifier = findViewById(R.id.plant_identifier);
-        plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, IdentifyActivity.class)));
+        plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, CaptureActivity.class)));
     }
 
     @Override

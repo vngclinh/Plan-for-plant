@@ -55,7 +55,7 @@
         <ImageView
             android:id="@+id/plantImage"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="435dp"
             android:layout_marginBottom="16dp"
             android:contentDescription="Ảnh minh họa cây"
             android:scaleType="centerCrop"
