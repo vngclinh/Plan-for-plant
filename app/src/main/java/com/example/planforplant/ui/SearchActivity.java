@@ -17,6 +17,7 @@ import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
 import com.example.planforplant.model.Plant;
+import com.example.planforplant.session.SessionManager;
 import com.example.planforplant.weather.WeatherManager;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -91,8 +92,15 @@ public class SearchActivity extends AppCompatActivity {
             Toast.makeText(this, "Nhập từ khóa để tìm kiếm", Toast.LENGTH_SHORT).show();
             return;
         }
+        SessionManager sessionManager = new SessionManager(this);
+        String token = sessionManager.getToken();
 
-        apiService.searchPlants(keyword.trim()).enqueue(new Callback<List<Plant>>() {
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "Bạn cần đăng nhập để tìm kiếm", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        apiService.searchPlants("Bearer " + token, keyword.trim()).enqueue(new Callback<List<Plant>>() {
             @Override
             public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
                 if (response.isSuccessful() && response.body() != null) {
