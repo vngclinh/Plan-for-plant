@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         requestLocation();
     }
 
+
     private void requestLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -151,7 +152,31 @@ public class MainActivity extends AppCompatActivity {
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
             if (addresses != null && !addresses.isEmpty()) {
-                return addresses.get(0).getLocality();
+                Address address = addresses.get(0);
+
+                // Try to get city/locality first
+                String city = address.getLocality();
+                if (city != null && !city.isEmpty()) {
+                    return city;
+                }
+
+                // Fallback to sub-admin (like district)
+                String subAdmin = address.getSubAdminArea();
+                if (subAdmin != null && !subAdmin.isEmpty()) {
+                    return subAdmin;
+                }
+
+                // Fallback to province/state
+                String admin = address.getAdminArea();
+                if (admin != null && !admin.isEmpty()) {
+                    return admin;
+                }
+
+                // Last fallback: country
+                String country = address.getCountryName();
+                if (country != null && !country.isEmpty()) {
+                    return country;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

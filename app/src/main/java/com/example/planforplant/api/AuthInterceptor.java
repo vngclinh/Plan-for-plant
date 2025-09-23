@@ -1,16 +1,12 @@
 package com.example.planforplant.api;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.session.SessionManager;
-import com.example.planforplant.ui.LoginActivity;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,17 +19,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AuthInterceptor implements Interceptor {
+    private static final String TAG = "AuthInterceptor";
+
     private final SessionManager sessionManager;
     private final ApiService authApi;
-    private final Context context;
 
     public AuthInterceptor(Context context) {
-        this.context = context.getApplicationContext();
-        this.sessionManager = new SessionManager(this.context);
+        this.sessionManager = new SessionManager(context);
 
-        // Retrofit for refresh calls (no interceptor → avoids infinite loop)
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/") // backend base URL
+                .baseUrl("http://10.0.2.2:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -43,79 +38,83 @@ public class AuthInterceptor implements Interceptor {
     @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
+        Request originalRequest = chain.request();
         String jwt = sessionManager.getToken();
-        Request request = chain.request();
 
-        // attach JWT if available
+        Log.i(TAG, "================ NEW REQUEST ================");
+        Log.i(TAG, "URL: " + originalRequest.url());
+        Log.i(TAG, "Method: " + originalRequest.method());
+        Log.i(TAG, "Original Headers: " + originalRequest.headers());
+        Log.i(TAG, "Token from session: " + jwt);
+
+        Request requestToSend = originalRequest;
         if (jwt != null) {
-            request = request.newBuilder()
+            requestToSend = originalRequest.newBuilder()
                     .addHeader("Authorization", "Bearer " + jwt)
                     .build();
+            Log.i(TAG, "Added Authorization header with JWT");
         }
 
-        Response response = chain.proceed(request);
+        Response response;
+        try {
+            response = chain.proceed(requestToSend);
+        } catch (Exception e) {
+            Log.e(TAG, "Request failed: " + e.getMessage(), e);
+            throw e;
+        }
 
-        // if unauthorized → try refresh
-        if (response.code() == 401) {
+        Log.i(TAG, "Response Code: " + response.code());
+        Log.i(TAG, "Response Headers: " + response.headers());
+
+        // Retry on 401 or 403
+        if (response.code() == 401 || response.code() == 403) {
+            Log.w(TAG, "Unauthorized or Forbidden detected, attempting refresh...");
             response.close();
 
             String refreshToken = sessionManager.getRefreshToken();
+            Log.i(TAG, "Refresh token from session: " + refreshToken);
+
             if (refreshToken != null) {
                 try {
                     Map<String, String> body = new HashMap<>();
                     body.put("refreshToken", refreshToken);
 
-                    retrofit2.Response<JwtResponse> refreshResponse =
-                            authApi.refreshToken(body).execute();
-
+                    retrofit2.Response<JwtResponse> refreshResponse = authApi.refreshToken(body).execute();
                     if (refreshResponse.isSuccessful() && refreshResponse.body() != null) {
-                        JwtResponse jwtResponse = refreshResponse.body();
+                        JwtResponse newTokens = refreshResponse.body();
+                        sessionManager.saveTokens(newTokens.getToken(), newTokens.getRefreshToken());
 
-                        // Save new tokens
-                        sessionManager.saveTokens(
-                                jwtResponse.getToken(),
-                                jwtResponse.getRefreshToken()
-                        );
+                        Log.i(TAG, "Refresh successful. New token: " + newTokens.getToken());
 
-                        // retry original request with new JWT
-                        Request newRequest = request.newBuilder()
+                        Request newRequest = originalRequest.newBuilder()
                                 .removeHeader("Authorization")
-                                .addHeader("Authorization", "Bearer " + jwtResponse.getToken())
+                                .addHeader("Authorization", "Bearer " + newTokens.getToken())
                                 .build();
 
-                        return chain.proceed(newRequest);
+                        Log.i(TAG, "Retrying original request with new token...");
+                        Response retryResponse = chain.proceed(newRequest);
+                        Log.i(TAG, "Retry Response Code: " + retryResponse.code());
+                        Log.i(TAG, "Retry Response Headers: " + retryResponse.headers());
+                        return retryResponse;
                     } else {
-                        // Refresh token expired or invalid → logout with dialog
-                        showSessionExpiredDialog();
+                        Log.w(TAG, "Refresh token invalid or expired. Clearing session...");
+                        handleSessionExpired();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    showSessionExpiredDialog();
+                    Log.e(TAG, "Exception during refresh token call: " + e.getMessage(), e);
+                    handleSessionExpired();
                 }
             } else {
-                // No refresh token → logout with dialog
-                showSessionExpiredDialog();
+                Log.w(TAG, "No refresh token available. Clearing session...");
+                handleSessionExpired();
             }
         }
 
         return response;
     }
 
-    private void showSessionExpiredDialog() {
+    private void handleSessionExpired() {
         sessionManager.clear();
-
-        // Show dialog on UI thread
-        new Handler(Looper.getMainLooper()).post(() -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Thông báo")
-                    .setMessage("Hết thời hạn, vui lòng đăng nhập lại")
-                    .setCancelable(false)
-                    .setPositiveButton("OK", (dialog, which) -> {
-                        Intent intent = new Intent(context, LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        context.startActivity(intent);
-                    });
-            builder.show();
-        });
+        Log.i(TAG, "Session cleared due to expired/invalid token");
     }
 }

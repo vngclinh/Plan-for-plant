@@ -22,8 +22,16 @@ public class ApiClient {
     // Local API (with auto-refresh interceptor)
     public static Retrofit getLocalClient(Context context) {
         if (localRetrofit == null) {
+            // Logging interceptor for debugging
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
             OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(new AuthInterceptor(context))
+                    .addInterceptor(new AuthInterceptor(context)) // your JWT/refresh interceptor
+                    .addInterceptor(logging) // log request + response
+                    .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                    .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                    .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
                     .build();
 
             localRetrofit = new Retrofit.Builder()

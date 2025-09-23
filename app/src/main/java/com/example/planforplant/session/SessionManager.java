@@ -39,9 +39,23 @@ public class SessionManager {
 
     // Check login
     public boolean isLoggedIn() {
-        String token = getToken();
-        return token != null && !isTokenExpired(token);
+        String accessToken = getToken();
+        String refreshToken = getRefreshToken();
+
+        if (accessToken != null && !isTokenExpired(accessToken)) {
+            // Access token still valid
+            return true;
+        }
+
+        if (refreshToken != null && !isTokenExpired(refreshToken)) {
+            // Access token expired but refresh token valid → can refresh
+            return true;
+        }
+
+        // Both invalid or missing
+        return false;
     }
+
 
     // Xóa token (logout)
     public void clear() {

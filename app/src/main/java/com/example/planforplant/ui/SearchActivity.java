@@ -16,6 +16,7 @@ import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
 import com.example.planforplant.model.Plant;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -89,7 +90,11 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Plant>> call, Throwable t) {
-                Toast.makeText(SearchActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                // Redirect to NotFoundActivity with error message
+                Intent intent = new Intent(SearchActivity.this, NotFoundActivity.class);
+                intent.putExtra("message", "Lỗi khi gọi backend: " + t.getMessage());
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -124,6 +129,13 @@ public class SearchActivity extends AppCompatActivity {
             textView.setTextColor(getResources().getColor(R.color.black));
             textView.setPadding(12, 0, 0, 0);
             textView.setGravity(Gravity.CENTER_VERTICAL);
+
+            // 🔑 Click → open DetailActivity with plantEntityJson
+            itemLayout.setOnClickListener(v -> {
+                Intent intent = new Intent(SearchActivity.this, DetailActivity.class);
+                intent.putExtra("plantEntityJson", new Gson().toJson(plant));
+                startActivity(intent);
+            });
 
             itemLayout.addView(imageView);
             itemLayout.addView(textView);
