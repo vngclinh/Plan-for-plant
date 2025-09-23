@@ -18,7 +18,6 @@ public interface ApiService {
     @GET("plants/search")
     Call<List<Plant>> searchPlants(@Query("keyword") String keyword);
 
-
     @POST("api/auth/refresh")
     Call<JwtResponse> refreshToken(@Body Map<String, String> body);
 
@@ -27,4 +26,13 @@ public interface ApiService {
 
     @POST("/api/auth/register")
     Call<String> register(@Body RegisterRequest registerRequest);
+
+    @POST("/api/auth/forgot-password")
+    Call<String> forgotPassword(@Body Map<String, String> body);
+
+    @POST("/api/auth/verify-reset-code")
+    Call<String> verifyResetCode(@Body Map<String, String> body);
+
+    @POST("/api/auth/reset-password")
+    Call<String> resetPassword(@Body Map<String, String> body);
 }
