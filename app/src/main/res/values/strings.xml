@@ -7,4 +7,6 @@
     <string name="login_button">Đăng nhập</string>
     <string name="register_button">Đăng ký tài khoản</string>
     <string name="back_home_button">Quay về trang chủ</string>
+    <string name="toggle_password_visibility">Toggle password visibility</string>
+
 </resources>

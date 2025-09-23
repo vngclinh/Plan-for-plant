@@ -2,12 +2,16 @@ package com.example.planforplant.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.planforplant.DTO.RegisterRequest;
 import com.example.planforplant.R;
@@ -23,6 +27,10 @@ import retrofit2.Response;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText etFullName, etPhone, etEmail, etUsername, etPassword, etConfirmPassword;
+    private ImageView ivTogglePassword, ivToggleConfirmPassword;
+    private boolean isPasswordVisible = false;
+    private boolean isConfirmPasswordVisible = false;
+
     private ApiService apiService;
 
     // Regex mật khẩu mạnh: >=8 ký tự, có số, chữ thường, chữ hoa, ký tự đặc biệt
@@ -43,9 +51,41 @@ public class RegisterActivity extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         Button btnConfirm = findViewById(R.id.btnConfirm);
 
+        // Toggle icons
+        ivTogglePassword = findViewById(R.id.ivTogglePassword);
+        ivToggleConfirmPassword = findViewById(R.id.ivToggleConfirmPassword);
+
+        // Toggle password click
+        findViewById(R.id.flTogglePassword).setOnClickListener(v -> togglePassword());
+        findViewById(R.id.flToggleConfirmPassword).setOnClickListener(v -> toggleConfirmPassword());
+
         apiService = ApiClient.getLocalClient(this).create(ApiService.class);
 
         btnConfirm.setOnClickListener(v -> attemptRegister());
+    }
+
+    private void togglePassword() {
+        if (isPasswordVisible) {
+            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            ivTogglePassword.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_visibility_off));
+        } else {
+            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            ivTogglePassword.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_visibility));
+        }
+        etPassword.setSelection(etPassword.getText().length());
+        isPasswordVisible = !isPasswordVisible;
+    }
+
+    private void toggleConfirmPassword() {
+        if (isConfirmPasswordVisible) {
+            etConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            ivToggleConfirmPassword.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_visibility_off));
+        } else {
+            etConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            ivToggleConfirmPassword.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_visibility));
+        }
+        etConfirmPassword.setSelection(etConfirmPassword.getText().length());
+        isConfirmPasswordVisible = !isConfirmPasswordVisible;
     }
 
     private void attemptRegister() {
@@ -128,15 +168,12 @@ public class RegisterActivity extends AppCompatActivity {
         RegisterRequest request = new RegisterRequest(username, password, email, phone, fullname);
 
         // Call API
-        Call<String> call = apiService.register(request);
-        call.enqueue(new Callback<String>() {
+        apiService.register(request).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(RegisterActivity.this, "Đăng ký thành công, vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                     finish();
                 } else {
                     Toast.makeText(RegisterActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
@@ -149,5 +186,4 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
 }
