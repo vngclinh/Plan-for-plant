@@ -10,12 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
 import com.example.planforplant.model.Plant;
+import com.example.planforplant.weather.WeatherManager;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -32,16 +34,29 @@ public class SearchActivity extends AppCompatActivity {
     private LinearLayout layoutSearchResult;
     private ApiService apiService;
 
+    // --- Weather views ---
+    private TextView tvLocation, tvWeather;
+    private ImageView ivWeatherIcon;
+    private WeatherManager weatherManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
 
+        // --- Initialize weather views ---
+        tvLocation = findViewById(R.id.tvLocation);
+        tvWeather = findViewById(R.id.tvWeather);
+        ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
+
+        // --- Start weather manager ---
+        weatherManager = new WeatherManager(this, tvLocation, tvWeather, ivWeatherIcon);
+        weatherManager.start();
+
         searchBox = findViewById(R.id.search_box);
         btnSearchIcon = findViewById(R.id.btnSearchIcon);
         layoutSearchResult = findViewById(R.id.layoutSearchResult);
 
-        // FIX: pass context into ApiClient
         apiService = ApiClient.getLocalClient(this).create(ApiService.class);
 
         // Nếu MainActivity gửi từ khóa
@@ -62,6 +77,13 @@ public class SearchActivity extends AppCompatActivity {
 
         // Khi click vào icon tìm kiếm
         btnSearchIcon.setOnClickListener(v -> triggerSearch(searchBox.getText().toString()));
+    }
+
+    // --- Delegate permission result to WeatherManager ---
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        weatherManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void triggerSearch(String keyword) {
@@ -90,7 +112,6 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Plant>> call, Throwable t) {
-                // Redirect to NotFoundActivity with error message
                 Intent intent = new Intent(SearchActivity.this, NotFoundActivity.class);
                 intent.putExtra("message", "Lỗi khi gọi backend: " + t.getMessage());
                 startActivity(intent);
@@ -115,7 +136,7 @@ public class SearchActivity extends AppCompatActivity {
             itemLayout.setLayoutParams(params);
 
             ImageView imageView = new ImageView(this);
-            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(100, 100); // bigger size
+            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(100, 100);
             imageView.setLayoutParams(imgParams);
             if (plant.getImageUrl() != null && !plant.getImageUrl().isEmpty()) {
                 Picasso.get().load(plant.getImageUrl()).into(imageView);
