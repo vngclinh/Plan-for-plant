@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Thanh trên: vị trí + thời tiết -->
+        <!-- Top bar: location + weather -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,20 +41,27 @@
                 android:text="☀️ 30°C"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#2E7D32" />
+                android:textColor="#2E7D32"
+                android:layout_marginEnd="8dp" />
+
+            <ImageView
+                android:id="@+id/ivWeatherIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_1" />
         </LinearLayout>
 
-        <!-- Ảnh cây -->
+        <!-- Plant image -->
         <ImageView
             android:id="@+id/plantImage"
             android:layout_width="match_parent"
-            android:layout_height="589dp"
+            android:layout_height="300dp"
             android:layout_marginBottom="16dp"
             android:contentDescription="Ảnh minh họa cây"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_gallery" />
 
-        <!-- Tên cây -->
+        <!-- Plant name -->
         <TextView
             android:id="@+id/tvPlantName"
             android:layout_width="wrap_content"
@@ -65,18 +72,7 @@
             android:textColor="#2E7D32"
             android:layout_marginBottom="8dp" />
 
-        <!-- Tiêu đề thông tin -->
-        <TextView
-            android:id="@+id/tvInfoTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thông tin chi tiết"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/earth_brown_dark"
-            android:layout_marginBottom="8dp" />
-
-        <!-- OVERVIEW / Description -->
+        <!-- Overview / Description -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,7 +92,7 @@
                 android:textColor="#000000" />
         </androidx.cardview.widget.CardView>
 
-        <!-- Phân loại khoa học -->
+        <!-- Taxonomy -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,9 +114,9 @@
                     android:textColor="#2E7D32"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_marginBottom="8dp" />
 
-                <!-- Ngành -->
+                <!-- Phylum -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -132,7 +128,7 @@
                         android:layout_weight="1"
                         android:text="Ngành"
                         android:textStyle="bold"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                     <TextView
                         android:id="@+id/tvPhylum"
                         android:layout_width="0dp"
@@ -140,11 +136,11 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="Magnoliophyta"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
 
-                <!-- Lớp -->
+                <!-- Class -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,7 +164,7 @@
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
 
-                <!-- Bộ -->
+                <!-- Order -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -192,7 +188,7 @@
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
 
-                <!-- Họ -->
+                <!-- Family -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -216,7 +212,7 @@
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
 
-                <!-- Chi -->
+                <!-- Genus -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -240,7 +236,7 @@
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
 
-                <!-- Loài -->
+                <!-- Species -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -265,7 +261,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Điều kiện sinh trưởng -->
+        <!-- Growth conditions -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -287,9 +283,9 @@
                     android:textColor="#2E7D32"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_marginBottom="8dp" />
 
-                <!-- Nước -->
+                <!-- Water -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -301,7 +297,7 @@
                         android:layout_weight="1"
                         android:text="💧 Nước"
                         android:textStyle="bold"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                     <TextView
                         android:id="@+id/tvWater"
                         android:layout_width="0dp"
@@ -309,11 +305,11 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="Tưới 2–3 lần/tuần"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
 
-                <!-- Ánh sáng -->
+                <!-- Light -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -325,7 +321,7 @@
                         android:layout_weight="1"
                         android:text="☀️ Ánh sáng"
                         android:textStyle="bold"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                     <TextView
                         android:id="@+id/tvLight"
                         android:layout_width="0dp"
@@ -333,11 +329,11 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="Ưa sáng, cần ≥4h/ngày"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
 
-                <!-- Nhiệt độ -->
+                <!-- Temperature -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -349,7 +345,7 @@
                         android:layout_weight="1"
                         android:text="🌡️ Nhiệt độ"
                         android:textStyle="bold"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                     <TextView
                         android:id="@+id/tvTemperature"
                         android:layout_width="0dp"
@@ -357,12 +353,12 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="18–30°C"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Điều kiện chăm sóc -->
+        <!-- Care guide -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -384,7 +380,7 @@
                     android:textColor="#2E7D32"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:id="@+id/tvCareGuide"
@@ -392,11 +388,11 @@
                     android:layout_height="wrap_content"
                     android:text="Cần cắt tỉa định kỳ, bón phân hữu cơ 1–2 tháng/lần, kiểm tra sâu bệnh thường xuyên."
                     android:textColor="#000000"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Một số bệnh thường gặp -->
+        <!-- Common diseases -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -418,7 +414,7 @@
                     android:textColor="#2E7D32"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:id="@+id/tvDiseases"
@@ -426,10 +422,11 @@
                     android:layout_height="wrap_content"
                     android:text="🍂 Bệnh rụng lá sớm\n🕷️ Sâu đục thân\n🦠 Nấm mốc trắng"
                     android:textColor="#000000"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Add to garden button -->
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -443,5 +440,6 @@
             app:iconPadding="8dp"
             app:iconTint="@android:color/white"
             app:iconGravity="textStart" />
+
     </LinearLayout>
 </ScrollView>

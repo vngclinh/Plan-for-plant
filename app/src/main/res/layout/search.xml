@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@color/beige">
 
-    <!-- Header -->
+    <!-- Header: location + weather -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -32,10 +32,17 @@
             android:id="@+id/tvWeather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="☀️ 30°C"
+            android:text="30°C"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#2E7D32" />
+            android:textColor="#2E7D32"
+            android:layout_marginEnd="8dp"/>
+
+        <ImageView
+            android:id="@+id/ivWeatherIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_1" />
     </LinearLayout>
 
     <!-- Search box -->
