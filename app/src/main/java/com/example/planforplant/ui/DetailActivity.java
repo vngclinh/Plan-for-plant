@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -49,7 +50,6 @@ public class DetailActivity extends AppCompatActivity {
         tvGenus = findViewById(R.id.tvGenus);
         tvSpecies = findViewById(R.id.tvSpecies);
 
-        tvKingdom = findViewById(R.id.tvKingdom);
         tvPhylum = findViewById(R.id.tvPhylum);
         tvClass = findViewById(R.id.tvClass);
         tvOrder = findViewById(R.id.tvOrder);
@@ -60,9 +60,6 @@ public class DetailActivity extends AppCompatActivity {
         tvCareGuide = findViewById(R.id.tvCareGuide);
         tvDiseases = findViewById(R.id.tvDiseases);
 
-        // Always show image first
-        handleImage();
-
         Intent intent = getIntent();
 
         // Case 1: CaptureActivity -> PlantResponse
@@ -71,8 +68,38 @@ public class DetailActivity extends AppCompatActivity {
             PlantResponse response = new Gson().fromJson(json, PlantResponse.class);
             bindPlantData(response);
 
-            if (response != null && response.bestMatch != null) {
-                fetchPlantFromBackend(response.bestMatch);
+            if (response != null && response.results != null && !response.results.isEmpty()) {
+                Result first = response.results.get(0);
+
+                List<String> keywords = new ArrayList<>();
+
+                // Best match
+                if (response.bestMatch != null) {
+                    keywords.add(response.bestMatch);
+                }
+
+                // Tên khoa học
+                if (first.species != null) {
+                    if (first.species.scientificName != null)
+                        keywords.add(first.species.scientificName);
+
+                    if (first.species.scientificNameWithoutAuthor != null)
+                        keywords.add(first.species.scientificNameWithoutAuthor);
+
+                    // Common names
+                    if (first.species.commonNames != null)
+                        keywords.addAll(first.species.commonNames);
+                }
+
+                // Genus + Family
+                if (first.species.genus != null && first.species.genus.scientificName != null)
+                    keywords.add(first.species.genus.scientificName);
+
+                if (first.species.family != null && first.species.family.scientificName != null)
+                    keywords.add(first.species.family.scientificName);
+
+                // Gọi backend thử lần lượt với từng keyword
+                searchWithFallback(keywords);
             }
             return;
         }
@@ -84,6 +111,28 @@ public class DetailActivity extends AppCompatActivity {
             bindPlantEntity(plant);
         }
     }
+        private void searchWithFallback(List<String> keywords) {
+            if (keywords == null || keywords.isEmpty()) return;
+
+            ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
+
+            // Duyệt lần lượt cho tới khi tìm thấy
+            for (String keyword : keywords) {
+                apiService.searchPlants(keyword).enqueue(new Callback<List<Plant>>() {
+                    @Override
+                    public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            bindPlantEntity(response.body().get(0));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Plant>> call, Throwable t) {
+                        // có thể log lại nhưng không stop
+                    }
+                });
+            }
+        }
 
     private void bindPlantData(PlantResponse response) {
         if (response == null) return;
@@ -116,7 +165,6 @@ public class DetailActivity extends AppCompatActivity {
         tvOverview.setText(plant.getDescription() != null ? plant.getDescription() : "No description available");
 
         // Taxonomy
-        tvKingdom.setText("Plantae"); // fixed
         tvPhylum.setText(plant.getPhylum() != null ? plant.getPhylum() : "");
         tvClass.setText(plant.getPlantClass() != null ? plant.getPlantClass() : "");
         tvOrder.setText(plant.getPlantOrder() != null ? plant.getPlantOrder() : "");
@@ -169,32 +217,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
     }
-    private void handleImage() {
-        String imageUriString = getIntent().getStringExtra("imageUri");
-        if (imageUriString == null) return;
-
-        Uri imageUri = Uri.parse(imageUriString);
-        try {
-            Bitmap bitmap;
-            if ("file".equals(imageUri.getScheme())) {
-                String path = imageUri.getPath();
-                bitmap = BitmapFactory.decodeFile(path);
-                ExifInterface ei = new ExifInterface(path);
-                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-                bitmap = rotateBitmap(bitmap, orientation);
-            } else {
-                InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                bitmap = BitmapFactory.decodeStream(inputStream);
-                ExifInterface ei = new ExifInterface(getContentResolver().openInputStream(imageUri));
-                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-                bitmap = rotateBitmap(bitmap, orientation);
-            }
-            plantImage.setImageBitmap(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
         if (bitmap == null) return null;
         Matrix matrix = new Matrix();
