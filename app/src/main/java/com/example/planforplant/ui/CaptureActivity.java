@@ -200,16 +200,9 @@ public class CaptureActivity extends AppCompatActivity {
         );
     }
 
-//    private void goToDetail(@NonNull Uri imageUri) {
-//        Intent intent = new Intent(CaptureActivity.this, DetailActivity.class);
-//        intent.putExtra("imageUri", imageUri.toString());
-//        intent.putExtra("selectedOption", selectedOption);
-//        startActivity(intent);
-//    }
     private void goToDetail(@NonNull Uri imageUri) {
         identifyPlant(imageUri);
     }
-
 
     private void setupCaptureOptions() {
         TextView optionFlower = findViewById(R.id.optionFlower);
@@ -277,8 +270,12 @@ public class CaptureActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     Toast.makeText(CaptureActivity.this, "API trả về lỗi", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "API error: " + response.message());
-                }
+                    try {
+                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "null";
+                        Log.e(TAG, "API error: " + response.code() + " - " + response.message() + " - " + errorBody);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }                }
             }
 
             @Override
@@ -288,7 +285,6 @@ public class CaptureActivity extends AppCompatActivity {
             }
         });
     }
-
     private File getFileFromUri(Uri uri) {
         try {
             if ("file".equals(uri.getScheme())) {
