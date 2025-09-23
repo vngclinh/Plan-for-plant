@@ -1,5 +1,7 @@
 package com.example.planforplant.api;
 
+import com.example.planforplant.DTO.AddGardenRequest;
+import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.DTO.LoginRequest;
 import com.example.planforplant.DTO.RegisterRequest;
@@ -11,13 +13,16 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
     @GET("plants/search")
-    Call<List<Plant>> searchPlants(@Query("keyword") String keyword);
-
+    Call<List<Plant>> searchPlants(
+            @Header("Authorization") String token,
+            @Query("keyword") String keyword
+    );
 
     @POST("api/auth/refresh")
     Call<JwtResponse> refreshToken(@Body Map<String, String> body);
@@ -27,4 +32,16 @@ public interface ApiService {
 
     @POST("/api/auth/register")
     Call<String> register(@Body RegisterRequest registerRequest);
+
+    @POST("/garden/add")
+    Call<GardenResponse> addPlantToGarden(
+            @Header("Authorization") String token,
+            @Body AddGardenRequest request
+    );
+
+    @GET("garden/exists")
+    Call<Boolean> checkPlantExists(
+            @Header("Authorization") String token,
+            @Query("plantId") Long plantId
+    );
 }

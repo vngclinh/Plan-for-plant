@@ -1,24 +1,30 @@
 package com.example.planforplant.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.bumptech.glide.Glide;
+import com.example.planforplant.DTO.AddGardenRequest;
+import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
 import com.example.planforplant.model.Plant;
 import com.example.planforplant.model.PlantResponse;
 import com.example.planforplant.model.Result;
+import com.example.planforplant.session.SessionManager;
 import com.example.planforplant.weather.WeatherManager;
+import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -30,6 +36,7 @@ import retrofit2.Response;
 
 public class DetailActivity extends AppCompatActivity {
     private ImageView plantImage;
+    private Plant plant;
     private TextView tvPlantName, tvOverview, tvFamily, tvGenus, tvSpecies;
     private TextView tvPhylum, tvClass, tvOrder;
     private TextView tvWater, tvLight, tvTemperature, tvCareGuide, tvDiseases;
@@ -101,12 +108,90 @@ public class DetailActivity extends AppCompatActivity {
             }
             return;
         }
-
         String plantJson = intent.getStringExtra("plantEntityJson");
         if (plantJson != null) {
-            Plant plant = new Gson().fromJson(plantJson, Plant.class);
+            plant = new Gson().fromJson(plantJson, Plant.class);
             bindPlantEntity(plant);
         }
+        // Bind nút "Thêm vào vườn"
+        MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
+        checkIfPlantInGarden(plant.getId(), btnAddToGarden);
+
+        btnAddToGarden.setOnClickListener(v -> {
+            if (plant != null && plant.getId() != null) {
+                addPlantToGarden(plant.getId());
+            } else {
+                Toast.makeText(this, "Không tìm thấy ID của cây", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void checkIfPlantInGarden(Long plantId, MaterialButton button) {
+        SessionManager sessionManager = new SessionManager(this);
+        String token = sessionManager.getToken();
+
+        ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
+        apiService.checkPlantExists("Bearer " + token, plantId).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    boolean exists = response.body();
+                    if (exists) {
+                        button.setText("❌  Xoá cây khỏi vườn");
+                    } else {
+                        button.setText("➕  Thêm vào vườn cây của tôi");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                // có thể giữ text mặc định
+            }
+        });
+    }
+
+    private void addPlantToGarden(Long plantId) {
+        // Lấy token đã lưu
+        SessionManager sessionManager = new SessionManager(this);
+        String token = sessionManager.getToken();
+
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "Bạn cần đăng nhập để sử dụng chức năng này", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Chuẩn bị request
+        ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
+        AddGardenRequest request = new AddGardenRequest(plantId);
+
+        apiService.addPlantToGarden("Bearer " + token, request).enqueue(new Callback<GardenResponse>() {
+            @Override
+            public void onResponse(Call<GardenResponse> call, Response<GardenResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(
+                            DetailActivity.this,
+                            "🌱 Đã thêm cây vào vườn của bạn!",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                } else {
+                    String errorMsg = "Không thể thêm cây";
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMsg = response.errorBody().string();
+                        }
+                    } catch (Exception ignored) {}
+
+                    Toast.makeText(DetailActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GardenResponse> call, Throwable t) {
+                Toast.makeText(DetailActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -121,9 +206,15 @@ public class DetailActivity extends AppCompatActivity {
     // --- Plant data methods ---
     private void searchWithFallback(List<String> keywords) {
         if (keywords == null || keywords.isEmpty()) return;
+
         ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
+
+        // Lấy token từ SessionManager
+        SessionManager sessionManager = new SessionManager(this);
+        String token = sessionManager.getToken();
+
         for (String keyword : keywords) {
-            apiService.searchPlants(keyword).enqueue(new Callback<List<Plant>>() {
+            apiService.searchPlants("Bearer " + token, keyword).enqueue(new Callback<List<Plant>>() {
                 @Override
                 public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
                     if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
@@ -132,10 +223,13 @@ public class DetailActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<List<Plant>> call, Throwable t) { }
+                public void onFailure(Call<List<Plant>> call, Throwable t) {
+                    // log lỗi hoặc show Toast
+                }
             });
         }
     }
+
 
     private void bindPlantData(PlantResponse response) {
         if (response == null) return;
