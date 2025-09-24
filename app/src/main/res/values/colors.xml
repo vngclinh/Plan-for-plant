@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <!-- Greens -->
+    <color name="green_primary">#2E7D32</color>
+    <color name="green_medium">#4CAF50</color>
+    <color name="green_light">#81C784</color>
+
+    <!-- Beige / Background -->
+    <color name="beige">#F5F5DC</color>
+    <color name="beige_light">#FAFAFA</color>
+
+    <!-- Earth brown (accents) -->
+    <color name="earth_brown">#8D6E63</color>
+    <color name="earth_brown_dark">#6D4C41</color>
+
+    <!-- Sky blue (weather) -->
+    <color name="sky_blue_light">#B3E5FC</color>
+    <color name="sky_blue">#81D4FA</color>
+    <color name="sky_blue_dark">#0288D1</color>
+
+    <!-- text -->
+    <color name="text_primary">#263238</color>
+    <color name="text_secondary">#455A64</color>
+
+    <!-- card shadow fallback -->
+    <color name="card_shadow">#22000000</color>
+</resources>

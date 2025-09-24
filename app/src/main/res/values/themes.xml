@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Theme chính cho app -->
+    <style name="Theme.PlanForPlant" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Màu nền chính -->
+        <item name="colorPrimary">#2E7D32</item> <!-- Xanh lá đậm -->
+        <item name="colorOnPrimary">#FFFFFF</item>
+
+        <!-- Màu phụ -->
+        <item name="colorSecondary">#8D6E63</item> <!-- Nâu đất -->
+        <item name="colorOnSecondary">#FFFFFF</item>
+
+        <!-- Màu nền app -->
+        <item name="android:colorBackground">#F5F5DC</item> <!-- Be sáng -->
+        <item name="colorSurface">#FAFAFA</item>
+        <item name="colorOnSurface">#000000</item>
+
+        <!-- Font mặc định -->
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+    </style>
+
+</resources>

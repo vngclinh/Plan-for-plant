@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/beige">
+
+    <!-- Main container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".LogupActivity">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng ký"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/green_primary"
+            android:fontFamily="@font/roboto_regular"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="48dp"/>
+
+        <!-- Full Name -->
+        <EditText
+            android:id="@+id/etFullName"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="Tên đầy đủ"
+            android:textSize="18sp"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:fontFamily="@font/roboto_regular"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="32dp"/>
+
+        <!-- Phone -->
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="Số điện thoại"
+            android:textSize="18sp"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:fontFamily="@font/roboto_regular"
+            android:imeOptions="actionNext"
+            android:inputType="phone"
+            app:layout_constraintTop_toBottomOf="@id/etFullName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="32dp"/>
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="Email"
+            android:textSize="18sp"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:fontFamily="@font/roboto_regular"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            app:layout_constraintTop_toBottomOf="@id/etPhone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="32dp"/>
+
+        <!-- Username -->
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="Tên đăng nhập"
+            android:textSize="18sp"
+            android:background="@android:color/white"
+            android:padding="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:fontFamily="@font/roboto_regular"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@id/etEmail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="32dp"/>
+
+        <!-- Password container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/passwordContainer"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/white"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            app:layout_constraintTop_toBottomOf="@id/etUsername"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="32dp">
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:hint="Mật khẩu"
+                android:textSize="18sp"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textColorHint="@android:color/darker_gray"
+                android:fontFamily="@font/roboto_regular"
+                android:background="@null"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flTogglePassword"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <!-- Eye toggle wrapper -->
+            <FrameLayout
+                android:id="@+id/flTogglePassword"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivTogglePassword"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_visibility_off"
+                    android:contentDescription="Toggle password visibility"/>
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Confirm Password container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/confirmPasswordContainer"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/white"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            app:layout_constraintTop_toBottomOf="@id/passwordContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="32dp">
+
+            <EditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:hint="Xác nhận mật khẩu"
+                android:textSize="18sp"
+                android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textColorHint="@android:color/darker_gray"
+                android:fontFamily="@font/roboto_regular"
+                android:background="@null"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flToggleConfirmPassword"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <!-- Eye toggle wrapper -->
+            <FrameLayout
+                android:id="@+id/flToggleConfirmPassword"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivToggleConfirmPassword"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_visibility_off"
+                    android:contentDescription="Toggle confirm password"/>
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Confirm Button -->
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:text="Xác nhận"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/green_primary"
+            android:textColor="@color/white"
+            android:elevation="6dp"
+            android:background="@drawable/rounded_button"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_regular"
+            app:layout_constraintTop_toBottomOf="@id/confirmPasswordContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="32dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

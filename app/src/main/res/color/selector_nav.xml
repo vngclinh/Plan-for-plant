@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Màu khi item được chọn -->
+    <item android:color="#2E7D32" android:state_checked="true" /> <!-- xanh lá đậm -->
+    <!-- Màu khi item được focus -->
+    <item android:color="#8D6E63" android:state_focused="true" /> <!-- nâu đất -->
+    <!-- Mặc định -->
+    <item android:color="#000000" /> <!-- đen -->
+</selector>

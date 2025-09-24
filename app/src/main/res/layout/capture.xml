@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5DC">
+
+    <!-- Khung preview (include trực tiếp PreviewView) -->
+<!--    <include-->
+<!--        layout="@layout/part_previewview"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/tvTitle"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_margin="16dp"-->
+<!--        tools:layout="@layout/part_preview_placeholder" />-->
+
+<!--    &lt;!&ndash; Tiêu đề &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/tvTitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Nhận diện cây"-->
+<!--        android:textColor="#6D4C41"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:fontFamily="sans-serif-medium"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/captureOptions"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginBottom="20dp" />-->
+
+    <ImageView
+        android:id="@+id/previewPlaceholder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:src="@android:drawable/ic_menu_gallery"
+        tools:scaleType="centerCrop"
+        tools:contentDescription="Preview placeholder (editor only)" />
+
+    <!-- ViewStub: KHÔNG inflate trong Editor; runtime mình gọi inflate() -->
+    <ViewStub
+        android:id="@+id/stubPreview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:layout="@layout/part_previewview"
+        tools:layout="@layout/part_preview_placeholder"
+        tools:ignore="MissingId"/>
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nhận diện cây"
+        android:textColor="#6D4C41"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        app:layout_constraintBottom_toTopOf="@id/captureOptions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="20dp" />
+    <!-- Khung chọn loại chụp -->
+    <LinearLayout
+        android:id="@+id/captureOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_options"
+        android:padding="6dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/optionFlower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Hoa"
+            android:textSize="12sp"
+            android:textColor="#2E7D32"
+            android:background="@drawable/option_selector"
+            android:layout_marginEnd="4dp" />
+
+        <TextView
+            android:id="@+id/optionLeaf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Lá"
+            android:textSize="12sp"
+            android:textColor="#2E7D32"
+            android:background="@drawable/option_selector"
+            android:layout_marginEnd="4dp" />
+
+        <TextView
+            android:id="@+id/optionWhole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Toàn cây"
+            android:textSize="12sp"
+            android:textColor="#2E7D32"
+            android:background="@drawable/option_selector" />
+    </LinearLayout>
+
+    <!-- Thanh điều hướng -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnGallery"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@null"
+                android:src="@android:drawable/ic_menu_gallery"
+                android:contentDescription="Ảnh từ điện thoại"
+                app:tint="#2E7D32" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thư viện"
+                android:textSize="12sp"
+                android:textColor="#6D4C41" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnCamera"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:background="@drawable/camera_button_bg"
+                android:src="@android:drawable/ic_menu_camera"
+                android:contentDescription="Nhận diện cây"
+                app:tint="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnTip"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@null"
+                android:contentDescription="Tips"
+                android:src="@android:drawable/ic_menu_info_details"
+                app:tint="#2E7D32" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tip"
+                android:textSize="12sp"
+                android:textColor="#6D4C41" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
