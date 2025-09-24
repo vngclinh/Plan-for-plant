@@ -121,7 +121,7 @@ public class CaptureActivity extends AppCompatActivity {
                 new ActivityResultContracts.PickVisualMedia(),
                 uri -> {
                     if (uri != null) {
-                        goToDetail(uri);
+                        identifyPlant(uri);
                     }
                 });
     }
@@ -188,7 +188,7 @@ public class CaptureActivity extends AppCompatActivity {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                         Uri uri = Uri.fromFile(photoFile);
-                        goToDetail(uri);
+                        identifyPlant(uri);
                     }
 
                     @Override
@@ -198,10 +198,6 @@ public class CaptureActivity extends AppCompatActivity {
                     }
                 }
         );
-    }
-
-    private void goToDetail(@NonNull Uri imageUri) {
-        identifyPlant(imageUri);
     }
 
     private void setupCaptureOptions() {

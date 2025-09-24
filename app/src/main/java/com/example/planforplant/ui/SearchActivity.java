@@ -100,7 +100,7 @@ public class SearchActivity extends AppCompatActivity {
             return;
         }
 
-        apiService.searchPlants("Bearer " + token, keyword.trim()).enqueue(new Callback<List<Plant>>() {
+        apiService.searchPlants(keyword.trim()).enqueue(new Callback<List<Plant>>() {
             @Override
             public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
                 if (response.isSuccessful() && response.body() != null) {
