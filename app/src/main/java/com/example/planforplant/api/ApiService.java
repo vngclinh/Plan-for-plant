@@ -1,5 +1,7 @@
 package com.example.planforplant.api;
 
+import com.example.planforplant.DTO.AddGardenRequest;
+import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.DTO.LoginRequest;
 import com.example.planforplant.DTO.RegisterRequest;
@@ -35,4 +37,11 @@ public interface ApiService {
 
     @POST("/api/auth/reset-password")
     Call<String> resetPassword(@Body Map<String, String> body);
+
+    @GET("/plants/check")
+    Call<Boolean> checkPlantExists(@Query("plantId") Long plantId);
+
+
+    @POST("/garden/add")
+    Call<GardenResponse> addPlantToGarden(@Body AddGardenRequest body);
 }
