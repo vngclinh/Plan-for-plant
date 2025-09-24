@@ -56,10 +56,10 @@ public class LoginActivity extends AppCompatActivity {
         // Toggle password visibility using wrapper for larger touch target
         flTogglePasswordWrapper.setOnClickListener(v -> togglePasswordVisibility());
 
-        // Forgot password click
+        // 👉 Forgot password click → mở ForgotPasswordActivity
         flForgotPasswordWrapper.setOnClickListener(v -> {
-            // TODO: Navigate to ForgotPasswordActivity or show reset dialog
-            Toast.makeText(LoginActivity.this, "Forgot password clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
         });
 
         // Login click
