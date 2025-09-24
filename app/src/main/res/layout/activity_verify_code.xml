@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ui.VerifyCodeActivity">
+
+    <TextView
+        android:id="@+id/tvInstruction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Nhập mã xác thực đã gửi đến email của bạn"
+        android:textSize="18sp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginTop="32dp"/>
+
+    <EditText
+        android:id="@+id/etCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nhập mã xác thực"
+        android:inputType="number"
+        android:maxLength="6"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tvInstruction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <Button
+        android:id="@+id/btnVerify"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Xác nhận"
+        android:backgroundTint="@color/green_light"
+        app:layout_constraintTop_toBottomOf="@id/etCode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <TextView
+        android:id="@+id/tvResend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chưa nhận được mã? Gửi lại"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/btnVerify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
