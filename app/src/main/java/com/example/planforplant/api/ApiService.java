@@ -13,16 +13,12 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
     @GET("plants/search")
-    Call<List<Plant>> searchPlants(
-            @Header("Authorization") String token,
-            @Query("keyword") String keyword
-    );
+    Call<List<Plant>> searchPlants(@Query("keyword") String keyword);
 
     @POST("api/auth/refresh")
     Call<JwtResponse> refreshToken(@Body Map<String, String> body);
@@ -33,15 +29,19 @@ public interface ApiService {
     @POST("/api/auth/register")
     Call<String> register(@Body RegisterRequest registerRequest);
 
-    @POST("/garden/add")
-    Call<GardenResponse> addPlantToGarden(
-            @Header("Authorization") String token,
-            @Body AddGardenRequest request
-    );
+    @POST("/api/auth/forgot-password")
+    Call<String> forgotPassword(@Body Map<String, String> body);
 
-    @GET("garden/exists")
-    Call<Boolean> checkPlantExists(
-            @Header("Authorization") String token,
-            @Query("plantId") Long plantId
-    );
+    @POST("/api/auth/verify-reset-code")
+    Call<String> verifyResetCode(@Body Map<String, String> body);
+
+    @POST("/api/auth/reset-password")
+    Call<String> resetPassword(@Body Map<String, String> body);
+
+    @GET("/plants/check")
+    Call<Boolean> checkPlantExists(@Query("plantId") Long plantId);
+
+
+    @POST("/garden/add")
+    Call<GardenResponse> addPlantToGarden(@Body AddGardenRequest body);
 }
