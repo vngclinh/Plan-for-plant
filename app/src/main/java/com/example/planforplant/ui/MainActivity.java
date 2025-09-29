@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         String refresh = sessionManager.getRefreshToken();
 
         if (!sessionManager.isLoggedIn()) {
+            sessionManager.clear();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();

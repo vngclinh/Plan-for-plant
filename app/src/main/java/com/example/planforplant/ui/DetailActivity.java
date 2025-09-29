@@ -70,7 +70,7 @@ public class DetailActivity extends AppCompatActivity {
         // Bind weather views
         tvLocation = findViewById(R.id.tvLocation);
         tvWeather = findViewById(R.id.tvWeather);
-        ivWeatherIcon = findViewById(R.id.ivWeatherIcon); // optional, if your layout has an icon
+        ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
 
         // Initialize WeatherManager
         weatherManager = new WeatherManager(this, tvLocation, tvWeather, ivWeatherIcon);
@@ -147,7 +147,7 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
-                // có thể giữ text mặc định
+
             }
         });
     }
