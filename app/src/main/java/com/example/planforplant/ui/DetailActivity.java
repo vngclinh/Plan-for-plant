@@ -115,7 +115,6 @@ public class DetailActivity extends AppCompatActivity {
         }
         // Bind nút "Thêm vào vườn"
         MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
-        checkIfPlantInGarden(plant.getId(), btnAddToGarden);
 
         btnAddToGarden.setOnClickListener(v -> {
             if (plant != null && plant.getId() != null) {
@@ -125,31 +124,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void checkIfPlantInGarden(Long plantId, MaterialButton button) {
-        SessionManager sessionManager = new SessionManager(this);
-        String token = sessionManager.getToken();
-
-        ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
-        apiService.checkPlantExists("Bearer " + token, plantId).enqueue(new Callback<Boolean>() {
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    boolean exists = response.body();
-                    if (exists) {
-                        button.setText("❌  Xoá cây khỏi vườn");
-                    } else {
-                        button.setText("➕  Thêm vào vườn cây của tôi");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
-                // có thể giữ text mặc định
-            }
-        });
     }
 
     private void addPlantToGarden(Long plantId) {
