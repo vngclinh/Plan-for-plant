@@ -4,58 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ui.ChangePasswordActivity">
+    tools:context="ui.VerifyCodeActivity">
 
     <TextView
-        android:id="@+id/tvChangePasswordTitle"
+        android:id="@+id/tvInstruction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Đổi mật khẩu mới"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:text="Nhập mã xác thực đã gửi đến email của bạn"
+        android:textSize="18sp"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         android:layout_marginTop="32dp"/>
 
     <EditText
-        android:id="@+id/etNewPassword"
+        android:id="@+id/etCode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Mật khẩu mới"
-        android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/tvChangePasswordTitle"
+        android:hint="Nhập mã xác thực"
+        android:inputType="number"
+        android:maxLength="6"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tvInstruction"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"/>
-
-    <EditText
-        android:id="@+id/etConfirmPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Nhập lại mật khẩu mới"
-        android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/etNewPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"/>
 
     <Button
-        android:id="@+id/btnChangePassword"
+        android:id="@+id/btnVerify"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Đổi mật khẩu"
+        android:text="Xác nhận"
         android:backgroundTint="@color/green_light"
-        app:layout_constraintTop_toBottomOf="@id/etConfirmPassword"
+        app:layout_constraintTop_toBottomOf="@id/etCode"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"/>
+
+    <TextView
+        android:id="@+id/tvResend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chưa nhận được mã? Gửi lại"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/btnVerify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
