@@ -50,10 +50,4 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Body AddGardenRequest request
     );
-
-    @GET("garden/exists")
-    Call<Boolean> checkPlantExists(
-            @Header("Authorization") String token,
-            @Query("plantId") Long plantId
-    );
 }
