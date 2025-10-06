@@ -19,6 +19,7 @@ import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
+import com.example.planforplant.model.Disease;
 import com.example.planforplant.model.Plant;
 import com.example.planforplant.model.PlantResponse;
 import com.example.planforplant.model.Result;
@@ -132,24 +133,6 @@ public class DetailActivity extends AppCompatActivity {
         String token = sessionManager.getToken();
 
         ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
-        apiService.checkPlantExists("Bearer " + token, plantId).enqueue(new Callback<Boolean>() {
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    boolean exists = response.body();
-                    if (exists) {
-                        button.setText("❌  Xoá cây khỏi vườn");
-                    } else {
-                        button.setText("➕  Thêm vào vườn cây của tôi");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
-
-            }
-        });
     }
 
     private void addPlantToGarden(Long plantId) {
@@ -267,8 +250,20 @@ public class DetailActivity extends AppCompatActivity {
         tvWater.setText(plant.getWaterSchedule() != null ? plant.getWaterSchedule() : "");
         tvLight.setText(plant.getLight() != null ? plant.getLight() : "");
         tvTemperature.setText(plant.getTemperature() != null ? plant.getTemperature() : "");
-        tvCareGuide.setText(plant.getCareGuide() != null ? plant.getCareGuide() : "");
-        tvDiseases.setText("🍂 Bệnh rụng lá sớm\n🕷️ Sâu đục thân\n🦠 Nấm mốc trắng");
+        tvCareGuide.setText(plant.getCareguide() != null ? plant.getCareguide() : "");
+        List<Disease> diseases = plant.getDiseases();
+
+        if (diseases != null && !diseases.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (Disease d : diseases) {
+                // Add emoji + name + newline
+                sb.append("🦠 ").append(d.getName()).append("\n");
+            }
+            // Remove the last newline
+            tvDiseases.setText(sb.toString().trim());
+        } else {
+            tvDiseases.setText("✅ Không có bệnh được ghi nhận");
+        }
 
         if (plant.getImageUrl() != null && !plant.getImageUrl().isEmpty()) {
             Glide.with(this)
