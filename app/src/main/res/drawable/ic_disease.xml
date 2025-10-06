@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Virus body -->
+    <circle
+        android:fillColor="#43A047"
+        android:cx="24"
+        android:cy="24"
+        android:r="12"/>
+    <!-- Virus spikes -->
+    <path
+        android:strokeColor="#388E3C"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M24,6 L24,0"/>
+    <path
+        android:strokeColor="#388E3C"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M24,42 L24,48"/>
+    <path
+        android:strokeColor="#388E3C"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M6,24 L0,24"/>
+    <path
+        android:strokeColor="#388E3C"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M42,24 L48,24"/>
+    <path
+        android:strokeColor="#388E3C"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M10,10 L5,5"/>
+    <path
+        android:strokeColor="#388E3C"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M38,10 L43,5"/>
+    <path
+        android:strokeColor="#388E3C"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M10,38 L5,43"/>
+    <path
+        android:strokeColor="#388E3C"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M38,38 L43,43"/>
+    <!-- Virus spots -->
+    <circle
+        android:fillColor="#A5D6A7"
+        android:cx="20"
+        android:cy="20"
+        android:r="2"/>
+    <circle
+        android:fillColor="#A5D6A7"
+        android:cx="28"
+        android:cy="18"
+        android:r="1.5"/>
+    <circle
+        android:fillColor="#A5D6A7"
+        android:cx="26"
+        android:cy="28"
+        android:r="1.2"/>
+</vector>
