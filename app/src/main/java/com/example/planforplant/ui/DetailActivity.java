@@ -19,6 +19,7 @@ import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
+import com.example.planforplant.model.Disease;
 import com.example.planforplant.model.Plant;
 import com.example.planforplant.model.PlantResponse;
 import com.example.planforplant.model.Result;
@@ -70,7 +71,7 @@ public class DetailActivity extends AppCompatActivity {
         // Bind weather views
         tvLocation = findViewById(R.id.tvLocation);
         tvWeather = findViewById(R.id.tvWeather);
-        ivWeatherIcon = findViewById(R.id.ivWeatherIcon); // optional, if your layout has an icon
+        ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
 
         // Initialize WeatherManager
         weatherManager = new WeatherManager(this, tvLocation, tvWeather, ivWeatherIcon);
@@ -115,8 +116,11 @@ public class DetailActivity extends AppCompatActivity {
         }
         // Bind nút "Thêm vào vườn"
         MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
-        checkIfPlantInGarden(plant.getId(), btnAddToGarden);
-
+        if (plant != null && plant.getId() != null) {
+            checkIfPlantInGarden(plant.getId(), btnAddToGarden);
+        } else {
+            Toast.makeText(this, "Không thể tải thông tin cây", Toast.LENGTH_SHORT).show();
+        }
         btnAddToGarden.setOnClickListener(v -> {
             if (plant != null && plant.getId() != null) {
                 addPlantToGarden(plant.getId());
@@ -132,24 +136,6 @@ public class DetailActivity extends AppCompatActivity {
         String token = sessionManager.getToken();
 
         ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
-        apiService.checkPlantExists("Bearer " + token, plantId).enqueue(new Callback<Boolean>() {
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    boolean exists = response.body();
-                    if (exists) {
-                        button.setText("❌  Xoá cây khỏi vườn");
-                    } else {
-                        button.setText("➕  Thêm vào vườn cây của tôi");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
-                // có thể giữ text mặc định
-            }
-        });
     }
 
     private void addPlantToGarden(Long plantId) {
@@ -162,7 +148,6 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        // Chuẩn bị request
         ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
         AddGardenRequest request = new AddGardenRequest(plantId);
 
@@ -208,8 +193,6 @@ public class DetailActivity extends AppCompatActivity {
         if (keywords == null || keywords.isEmpty()) return;
 
         ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
-
-        // Lấy token từ SessionManager
         SessionManager sessionManager = new SessionManager(this);
         String token = sessionManager.getToken();
 
@@ -218,17 +201,24 @@ public class DetailActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
                     if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                        bindPlantEntity(response.body().get(0));
+                        // Gán lại plant từ backend
+                        plant = response.body().get(0);
+                        bindPlantEntity(plant);
+
+                        // Sau khi có plant (từ backend) mới cho phép thêm vào vườn
+                        MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
+                        btnAddToGarden.setOnClickListener(v -> addPlantToGarden(plant.getId()));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Plant>> call, Throwable t) {
-                    // log lỗi hoặc show Toast
+                    Toast.makeText(DetailActivity.this, "Không thể tìm thấy cây trong cơ sở dữ liệu", Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
+
 
 
     private void bindPlantData(PlantResponse response) {
@@ -267,8 +257,20 @@ public class DetailActivity extends AppCompatActivity {
         tvWater.setText(plant.getWaterSchedule() != null ? plant.getWaterSchedule() : "");
         tvLight.setText(plant.getLight() != null ? plant.getLight() : "");
         tvTemperature.setText(plant.getTemperature() != null ? plant.getTemperature() : "");
-        tvCareGuide.setText(plant.getCareGuide() != null ? plant.getCareGuide() : "");
-        tvDiseases.setText("🍂 Bệnh rụng lá sớm\n🕷️ Sâu đục thân\n🦠 Nấm mốc trắng");
+        tvCareGuide.setText(plant.getCareguide() != null ? plant.getCareguide() : "");
+        List<Disease> diseases = plant.getDiseases();
+
+        if (diseases != null && !diseases.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (Disease d : diseases) {
+                // Add emoji + name + newline
+                sb.append("🦠 ").append(d.getName()).append("\n");
+            }
+            // Remove the last newline
+            tvDiseases.setText(sb.toString().trim());
+        } else {
+            tvDiseases.setText("✅ Không có bệnh được ghi nhận");
+        }
 
         if (plant.getImageUrl() != null && !plant.getImageUrl().isEmpty()) {
             Glide.with(this)

@@ -121,7 +121,7 @@ public class CaptureActivity extends AppCompatActivity {
                 new ActivityResultContracts.PickVisualMedia(),
                 uri -> {
                     if (uri != null) {
-                        goToDetail(uri);
+                        identifyPlant(uri);
                     }
                 });
     }
@@ -141,7 +141,7 @@ public class CaptureActivity extends AppCompatActivity {
 
                 Preview preview = new Preview.Builder()
                         .setTargetRotation(rotation)
-                        .setTargetAspectRatio(AspectRatio.RATIO_4_3) // thường hợp với camera
+                        .setTargetAspectRatio(AspectRatio.RATIO_4_3)
                         .build();
                 preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
@@ -188,7 +188,7 @@ public class CaptureActivity extends AppCompatActivity {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                         Uri uri = Uri.fromFile(photoFile);
-                        goToDetail(uri);
+                        identifyPlant(uri);
                     }
 
                     @Override
@@ -198,10 +198,6 @@ public class CaptureActivity extends AppCompatActivity {
                     }
                 }
         );
-    }
-
-    private void goToDetail(@NonNull Uri imageUri) {
-        identifyPlant(imageUri);
     }
 
     private void setupCaptureOptions() {
@@ -237,7 +233,7 @@ public class CaptureActivity extends AppCompatActivity {
             case "Cả cây":
                 return "whole";
             default:
-                return "leaf"; // fallback
+                return "leaf";
         }
     }
     private void identifyPlant(Uri imageUri) {
@@ -264,10 +260,20 @@ public class CaptureActivity extends AppCompatActivity {
             public void onResponse(Call<PlantResponse> call, Response<PlantResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     PlantResponse plantResponse = response.body();
-                    Intent intent = new Intent(CaptureActivity.this, DetailActivity.class);
-                    intent.putExtra("imageUri", imageUri.toString());
-                    intent.putExtra("plantResponseJson", new Gson().toJson(plantResponse));
-                    startActivity(intent);
+
+                    // kiểm tra nếu không có kết quả
+                    if (plantResponse.getResults() == null || plantResponse.getResults().isEmpty()) {
+                        Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
+                        intent.putExtra("message", "Không tìm thấy loài cây nào khớp với ảnh bạn chọn.");
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // Có kết quả -> sang DetailActivity
+                        Intent intent = new Intent(CaptureActivity.this, DetailActivity.class);
+                        intent.putExtra("imageUri", imageUri.toString());
+                        intent.putExtra("plantResponseJson", new Gson().toJson(plantResponse));
+                        startActivity(intent);
+                    }
                 } else {
                     Toast.makeText(CaptureActivity.this, "API trả về lỗi", Toast.LENGTH_SHORT).show();
                     try {
@@ -275,13 +281,16 @@ public class CaptureActivity extends AppCompatActivity {
                         Log.e(TAG, "API error: " + response.code() + " - " + response.message() + " - " + errorBody);
                     } catch (Exception e) {
                         e.printStackTrace();
-                    }                }
+                    }
+                }
             }
 
             @Override
             public void onFailure(Call<PlantResponse> call, Throwable t) {
-                Toast.makeText(CaptureActivity.this, "Gọi API thất bại", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "API call failed", t);
+                Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
+                intent.putExtra("message", "Lỗi khi gọi API: " + t.getMessage());
+                startActivity(intent);
+                finish();
             }
         });
     }

@@ -14,7 +14,7 @@ public class ApiClient {
     private static Retrofit meteosourceRetrofit = null;
 
     private static final String LOCAL_BASE_URL = "http://192.168.100.90:8080/";
-    // nếu dùng điện thoại ảo
+
 //    private static final String LOCAL_BASE_URL = "http://10.0.2.2:8080/";
     private static final String PLANTNET_BASE_URL = "https://my-api.plantnet.org/v2/";
     private static final String METEOSOURCE_BASE_URL = "https://www.meteosource.com/";
@@ -27,7 +27,7 @@ public class ApiClient {
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(new AuthInterceptor(context)) // your JWT/refresh interceptor
+                    .addInterceptor(new AuthInterceptor(context)) //JWT/refresh interceptor
                     .addInterceptor(logging) // log request + response
                     .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
                     .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)

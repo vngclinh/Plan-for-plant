@@ -4,12 +4,13 @@
     android:height="48dp"
     android:viewportWidth="48"
     android:viewportHeight="48">
+
     <!-- Virus body -->
-    <circle
+    <path
         android:fillColor="#43A047"
-        android:cx="24"
-        android:cy="24"
-        android:r="12"/>
+        android:pathData="M24,12
+            a12,12 0 1,0 0.001,0Z" />
+
     <!-- Virus spikes -->
     <path
         android:strokeColor="#388E3C"
@@ -51,20 +52,15 @@
         android:strokeWidth="2"
         android:fillColor="@android:color/transparent"
         android:pathData="M38,38 L43,43"/>
+
     <!-- Virus spots -->
-    <circle
+    <path
         android:fillColor="#A5D6A7"
-        android:cx="20"
-        android:cy="20"
-        android:r="2"/>
-    <circle
+        android:pathData="M20,20 m-2,0 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0" />
+    <path
         android:fillColor="#A5D6A7"
-        android:cx="28"
-        android:cy="18"
-        android:r="1.5"/>
-    <circle
+        android:pathData="M28,18 m-1.5,0 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0" />
+    <path
         android:fillColor="#A5D6A7"
-        android:cx="26"
-        android:cy="28"
-        android:r="1.2"/>
+        android:pathData="M26,28 m-1.2,0 a1.2,1.2 0 1,0 2.4,0 a1.2,1.2 0 1,0 -2.4,0" />
 </vector>

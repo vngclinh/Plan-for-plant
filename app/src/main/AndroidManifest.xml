@@ -39,6 +39,8 @@
         <activity android:name=".ui.ForgotPasswordActivity"/>
         <activity android:name=".ui.VerifyCodeActivity"/>
         <activity android:name=".ui.ChangePasswordActivity"/>
+        <activity android:name=".ui.GardenActivity"/>
+        <activity android:name=".ui.GardenDetailActivity"/>
     </application>
 
 </manifest>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_edit_name"
+        android:title="Đổi tên"
+        android:icon="@drawable/ic_edit"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_update_status"
+        android:title="Cập nhật trạng thái"
+        android:icon="@drawable/ic_status"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add_photo"
+        android:title="Thêm ảnh"
+        android:icon="@android:drawable/ic_menu_camera"
+        app:showAsAction="never" />
+</menu>

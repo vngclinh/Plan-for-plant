@@ -1,12 +1,15 @@
 package com.example.planforplant.model;
 
-public class Plant {
+import java.io.Serializable;
+import java.util.List;
+
+public class Plant implements Serializable {
     private Long id;
     private String commonName;
     private String scientificName;
     private String phylum;
-    private String plantClass;
-    private String plantOrder;
+    private String plantClass;      // matches @Column(name = "class")
+    private String plantOrder;      // matches @Column(name = "\"order\"")
     private String family;
     private String genus;
     private String species;
@@ -14,8 +17,11 @@ public class Plant {
     private String waterSchedule;
     private String light;
     private String temperature;
-    private String careguide;
+    private String careguide;       // ✅ lowercase 'careguide' to match BE field name
     private String imageUrl;
+
+    // If you also return diseases in JSON from backend, include this:
+    private List<Disease> diseases;
 
     // --- Getters and Setters ---
     public Long getId() {
@@ -122,11 +128,11 @@ public class Plant {
         this.temperature = temperature;
     }
 
-    public String getCareGuide() {
+    public String getCareguide() {
         return careguide;
     }
 
-    public void setCareGuide(String careguide) {
+    public void setCareguide(String careguide) {
         this.careguide = careguide;
     }
 
@@ -136,5 +142,13 @@ public class Plant {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<Disease> getDiseases() {
+        return diseases;
+    }
+
+    public void setDiseases(List<Disease> diseases) {
+        this.diseases = diseases;
     }
 }
