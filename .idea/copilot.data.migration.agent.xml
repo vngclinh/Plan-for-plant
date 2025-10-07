@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AgentMigrationStateService">
+    <option name="migrationStatus" value="IN_PROGRESS" />
+    <option name="pendingSessionIds">
+      <option value="7aa00e65-97c8-4850-9849-a31eb426f1a5" />
+      <option value="c00d4307-a402-4a52-bed2-4fa4416ec248" />
+    </option>
+    <option name="pendingTurns">
+      <map>
+        <entry key="7aa00e65-97c8-4850-9849-a31eb426f1a5">
+          <value>
+            <set>
+              <option value="02d98e1f-420b-4bee-a896-45db5fac6d52" />
+              <option value="05a1b6d8-cd21-4b7c-90f6-d70e12ed2c34" />
+              <option value="142750a1-98bf-48fc-bd8e-f82fe70b12bb" />
+              <option value="168dbd77-6230-4a2f-8ade-5baed21632af" />
+              <option value="1cc19d77-76fe-4504-9ae2-c7b0a88fd323" />
+              <option value="1d83813b-65dd-4e04-97fe-d13fb79a731b" />
+              <option value="2ab0fb49-f2d6-4152-a8c1-e7b5dbc78a50" />
+              <option value="37acc081-dbdb-4166-8af8-031bab54334f" />
+              <option value="38875388-11ce-486e-b120-c10ed1da441a" />
+              <option value="39ffc258-ee19-418c-8391-3014480d8036" />
+              <option value="5654adae-3c12-4f3b-894d-78e92c9d9690" />
+              <option value="5961d8b5-3cbe-4687-b566-d991da67c0db" />
+              <option value="64b8bb56-82fb-4f6f-adde-46aa387c7141" />
+              <option value="6d5e317e-bb28-4c65-a44b-7a293879c142" />
+              <option value="77356fd6-083b-49b5-9faf-1e7a37865f52" />
+              <option value="7b437a05-64e4-480d-a531-94c332410422" />
+              <option value="88300f94-4dea-4d75-9343-fafe1efdd69c" />
+              <option value="924e8331-ad9e-41ae-85f7-b1596bd7d77a" />
+              <option value="92d5464f-4c9d-4932-8dec-4625c4e53797" />
+              <option value="940be7f7-74b3-4681-9e78-99d576161c6f" />
+              <option value="963d4384-e2b9-4b66-91f8-4af66fa59cf1" />
+              <option value="a3e5aced-70fe-4f99-9bee-8417b0cb6e29" />
+              <option value="aca21a11-5bb8-4cde-9631-a932df645015" />
+              <option value="c465b776-5e74-4537-95b5-6049741d8b8e" />
+              <option value="ce35566e-dcb6-43dc-9e40-06c0f3dc1cf4" />
+              <option value="ceda9c92-7280-4331-a898-065a84718bff" />
+              <option value="d092c90d-8017-4ab3-b536-e6789f5dc865" />
+              <option value="d19c8257-4d33-487c-95f6-1a4596e08c6c" />
+              <option value="f354ecc4-ba83-4e59-9c9d-d52d733f3315" />
+              <option value="f5211194-1b68-4d41-b74c-0683fe3f328d" />
+              <option value="ff96e1f6-b858-49df-8c6f-3ac7d6812f28" />
+            </set>
+          </value>
+        </entry>
+        <entry key="c00d4307-a402-4a52-bed2-4fa4416ec248">
+          <value>
+            <set>
+              <option value="2d2afe10-e768-4997-8eef-1266de2f4b3b" />
+              <option value="2e032415-bd4c-4ea3-a6a9-31efce63f097" />
+              <option value="91d3b683-0ec1-4897-b83d-fb8e53f0130b" />
+              <option value="d90ec1c6-f2af-4577-bef0-5f8002093b2b" />
+            </set>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <pendingWorkingSetItems>
+      <entry key="7aa00e65-97c8-4850-9849-a31eb426f1a5">
+        <set>
+          <option value="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_add.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_more_vert.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/mygarden.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/planforplant/ui/HomeFragment.java" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/planforplant/ui/JournalFragment.java" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/planforplant/ui/CameraFragment.java" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/planforplant/ui/ChatbotFragment.java" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/planforplant/ui/ProfileFragment.java" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_journal.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_camera.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_chatbot.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_profile.xml" />
+          <option value="file://$PROJECT_DIR$/app/src/main/java/com/example/planforplant/ui/MainActivity.java" />
+          <option value="file://$PROJECT_DIR$/app/src/main/res/layout/menu.xml" />
+        </set>
+      </entry>
+      <entry key="c00d4307-a402-4a52-bed2-4fa4416ec248" />
+    </pendingWorkingSetItems>
+  </component>
+</project>
