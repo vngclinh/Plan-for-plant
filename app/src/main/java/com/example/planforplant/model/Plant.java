@@ -1,8 +1,9 @@
 package com.example.planforplant.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Plant {
+public class Plant implements Serializable {
     private Long id;
     private String commonName;
     private String scientificName;
