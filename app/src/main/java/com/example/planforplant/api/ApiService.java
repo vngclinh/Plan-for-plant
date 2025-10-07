@@ -61,4 +61,9 @@ public interface ApiService {
 
     @GET("api/diseases/search")
     Call<List<Disease>> searchDiseases(@Query("keyword") String keyword);
+
+    @GET("/garden/my")
+    Call<List<GardenResponse>> getMyGarden(
+            @Header("Authorization") String token
+    );
 }

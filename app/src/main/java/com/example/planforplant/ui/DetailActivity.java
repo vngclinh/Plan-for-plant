@@ -116,8 +116,11 @@ public class DetailActivity extends AppCompatActivity {
         }
         // Bind nút "Thêm vào vườn"
         MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
-        checkIfPlantInGarden(plant.getId(), btnAddToGarden);
-
+        if (plant != null && plant.getId() != null) {
+            checkIfPlantInGarden(plant.getId(), btnAddToGarden);
+        } else {
+            Toast.makeText(this, "Không thể tải thông tin cây", Toast.LENGTH_SHORT).show();
+        }
         btnAddToGarden.setOnClickListener(v -> {
             if (plant != null && plant.getId() != null) {
                 addPlantToGarden(plant.getId());
