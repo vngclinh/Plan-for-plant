@@ -16,6 +16,7 @@ import com.example.planforplant.R;
 import com.example.planforplant.session.SessionManager;
 import com.example.planforplant.weather.WeatherManager;
 import com.example.planforplant.weather.WeatherUtils;
+import com.google.android.material.button.MaterialButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,8 +72,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // --- Plant identifier click ---
-        LinearLayout plantIdentifier = findViewById(R.id.plant_identifier);
+        MaterialButton plantIdentifier = findViewById(R.id.plant_identifier);
         plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, CaptureActivity.class)));
+
+        // view garden click
+        MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
+        viewGarden.setOnClickListener(  v -> startActivity(new android.content.Intent(this,GardenActivity.class )));
     }
 
     @Override

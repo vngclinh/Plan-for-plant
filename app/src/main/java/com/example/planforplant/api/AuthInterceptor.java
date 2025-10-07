@@ -28,7 +28,7 @@ public class AuthInterceptor implements Interceptor {
         this.sessionManager = new SessionManager(context);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl("http://192.168.100.90:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

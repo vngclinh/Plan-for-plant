@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/res/drawable/ic_arrow_back.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/res/drawable/ic_arrow_back.xml" />
+              <option name="originalContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&#10;    android:width=&quot;24dp&quot;&#10;    android:height=&quot;24dp&quot;&#10;    android:viewportWidth=&quot;24&quot;&#10;    android:viewportHeight=&quot;24&quot;&gt;&#10;    &lt;path&#10;        android:fillColor=&quot;#388E3C&quot;&#10;        android:pathData=&quot;M20,11H7.83l5.59-5.59c0.36-0.36,0.36-0.93,0-1.29s-0.93-0.36-1.29,0l-7,7c-0.36,0.36-0.36,0.93,0,1.29l7,7c0.36,0.36,0.93,0.36,1.29,0s0.36-0.93,0-1.29L7.83,13H20c0.52,0,1-0.42,1-1s-0.48-1-1-1z&quot;/&gt;&#10;&lt;/vector&gt;&#10;" />
+              <option name="updatedContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;vector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&#10;    android:width=&quot;24dp&quot;&#10;    android:height=&quot;24dp&quot;&#10;    android:viewportWidth=&quot;24&quot;&#10;    android:viewportHeight=&quot;24&quot;&gt;&#10;    &lt;path&#10;        android:fillColor=&quot;#388E3C&quot;&#10;        android:pathData=&quot;M20,11H7.83l5.59-5.59c0.36-0.36,0.36-0.93,0-1.29s-0.93-0.36-1.29,0l-7,7c-0.36,0.36-0.36,0.93,0,1.29l7,7c0.36,0.36,0.93,0.36,1.29,0s0.36-0.93,0-1.29L7.83,13H20c0.52,0,1-0.42,1-1s-0.48-1-1-1z&quot;/&gt;&#10;&lt;/vector&gt;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
