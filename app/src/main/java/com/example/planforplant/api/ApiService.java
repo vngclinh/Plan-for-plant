@@ -5,6 +5,7 @@ import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.DTO.LoginRequest;
 import com.example.planforplant.DTO.RegisterRequest;
+import com.example.planforplant.model.Disease;
 import com.example.planforplant.model.Plant;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -50,6 +52,15 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Body AddGardenRequest request
     );
+
+    @GET("api/diseases")
+    Call<List<Disease>> getAllDiseases();
+
+    @GET("api/diseases/{id}")
+    Call<Disease> getDiseaseById(@Path("id") Long id);
+
+    @GET("api/diseases/search")
+    Call<List<Disease>> searchDiseases(@Query("keyword") String keyword);
 
     @GET("/garden/my")
     Call<List<GardenResponse>> getMyGarden(

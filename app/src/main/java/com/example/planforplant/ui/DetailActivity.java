@@ -19,6 +19,7 @@ import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
+import com.example.planforplant.model.Disease;
 import com.example.planforplant.model.Plant;
 import com.example.planforplant.model.PlantResponse;
 import com.example.planforplant.model.Result;
@@ -70,7 +71,7 @@ public class DetailActivity extends AppCompatActivity {
         // Bind weather views
         tvLocation = findViewById(R.id.tvLocation);
         tvWeather = findViewById(R.id.tvWeather);
-        ivWeatherIcon = findViewById(R.id.ivWeatherIcon); // optional, if your layout has an icon
+        ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
 
         // Initialize WeatherManager
         weatherManager = new WeatherManager(this, tvLocation, tvWeather, ivWeatherIcon);
@@ -115,7 +116,11 @@ public class DetailActivity extends AppCompatActivity {
         }
         // Bind nút "Thêm vào vườn"
         MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
-
+        if (plant != null && plant.getId() != null) {
+            checkIfPlantInGarden(plant.getId(), btnAddToGarden);
+        } else {
+            Toast.makeText(this, "Không thể tải thông tin cây", Toast.LENGTH_SHORT).show();
+        }
         btnAddToGarden.setOnClickListener(v -> {
             if (plant != null && plant.getId() != null) {
                 addPlantToGarden(plant.getId());
@@ -124,6 +129,13 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void checkIfPlantInGarden(Long plantId, MaterialButton button) {
+        SessionManager sessionManager = new SessionManager(this);
+        String token = sessionManager.getToken();
+
+        ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
     }
 
     private void addPlantToGarden(Long plantId) {
@@ -240,8 +252,20 @@ public class DetailActivity extends AppCompatActivity {
         tvWater.setText(plant.getWaterSchedule() != null ? plant.getWaterSchedule() : "");
         tvLight.setText(plant.getLight() != null ? plant.getLight() : "");
         tvTemperature.setText(plant.getTemperature() != null ? plant.getTemperature() : "");
-        tvCareGuide.setText(plant.getCareGuide() != null ? plant.getCareGuide() : "");
-        tvDiseases.setText("🍂 Bệnh rụng lá sớm\n🕷️ Sâu đục thân\n🦠 Nấm mốc trắng");
+        tvCareGuide.setText(plant.getCareguide() != null ? plant.getCareguide() : "");
+        List<Disease> diseases = plant.getDiseases();
+
+        if (diseases != null && !diseases.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (Disease d : diseases) {
+                // Add emoji + name + newline
+                sb.append("🦠 ").append(d.getName()).append("\n");
+            }
+            // Remove the last newline
+            tvDiseases.setText(sb.toString().trim());
+        } else {
+            tvDiseases.setText("✅ Không có bệnh được ghi nhận");
+        }
 
         if (plant.getImageUrl() != null && !plant.getImageUrl().isEmpty()) {
             Glide.with(this)
