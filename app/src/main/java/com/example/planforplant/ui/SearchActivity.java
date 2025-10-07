@@ -159,7 +159,7 @@ public class SearchActivity extends AppCompatActivity {
             textView.setPadding(12, 0, 0, 0);
             textView.setGravity(Gravity.CENTER_VERTICAL);
 
-            // 🔑 Click → open DetailActivity with plantEntityJson
+            // Click → open DetailActivity with plantEntityJson
             itemLayout.setOnClickListener(v -> {
                 Intent intent = new Intent(SearchActivity.this, DetailActivity.class);
                 intent.putExtra("plantEntityJson", new Gson().toJson(plant));

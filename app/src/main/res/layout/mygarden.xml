@@ -1,211 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/beige">
 
-    <!-- Tiêu đề và nút quay về -->
+    <!-- Header: Nút Back + Tiêu đề -->
     <LinearLayout
         android:id="@+id/header_garden"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="16dp"
+        android:padding="12dp"
+        android:background="#B3E5FC"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_back_home"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:icon="@drawable/ic_arrow_back"
-            android:iconTint="@color/green_primary"
-            android:backgroundTint="@android:color/white"
-            android:elevation="2dp"
-            android:text=""
-            android:layout_marginEnd="8dp" />
+        <!-- Nút quay lại -->
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/outline_arrow_back_ios_24"
+            app:tint="@color/green_primary"
+            android:contentDescription="Back"
+            android:padding="4dp" />
 
+        <!-- Tiêu đề -->
         <TextView
             android:id="@+id/tv_garden_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vườn cây của tôi"
-            android:textSize="22sp"
+            android:text="🌿 Vườn cây của tôi"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/green_primary"
-            android:fontFamily="@font/poppins_semibold" />
+            android:layout_marginStart="12dp" />
     </LinearLayout>
 
-    <!-- Khung ví dụ 1 cây đã thêm -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/garden_card"
+    <!-- Danh sách cây -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_garden"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="6dp"
-        app:cardBackgroundColor="@android:color/white"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/header_garden"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Cây 1: Hoa dâm bụt -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_plant"
-                    android:background="@drawable/rounded_image_bg"
-                    android:contentDescription="Ảnh cây" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hoa dâm bụt"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="#388E3C" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ngày thêm: 01/10/2025"
-                        android:textSize="14sp"
-                        android:textColor="#757575"
-                        android:layout_marginTop="2dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Trạng thái: Đang phát triển tốt"
-                        android:textSize="14sp"
-                        android:textColor="#388E3C"
-                        android:layout_marginTop="2dp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Cây 2: Ráy lá xẻ (Monstera deliciosa) -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_plant"
-                    android:background="@drawable/rounded_image_bg"
-                    android:contentDescription="Ảnh cây" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ráy lá xẻ (Monstera)"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="#388E3C" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ngày thêm: 01/10/2025"
-                        android:textSize="14sp"
-                        android:textColor="#757575"
-                        android:layout_marginTop="2dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Trạng thái: Đang phát triển tốt"
-                        android:textSize="14sp"
-                        android:textColor="#388E3C"
-                        android:layout_marginTop="2dp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Cây 3: Vạn niên thanh -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_plant"
-                    android:background="@drawable/rounded_image_bg"
-                    android:contentDescription="Ảnh cây" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Vạn niên thanh"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="#388E3C" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ngày thêm: 27/09/2025"
-                        android:textSize="14sp"
-                        android:textColor="#757575"
-                        android:layout_marginTop="2dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Trạng thái: Đang phát triển tốt"
-                        android:textSize="14sp"
-                        android:textColor="#388E3C"
-                        android:layout_marginTop="2dp" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Thanh điều hướng dưới -->
     <LinearLayout
@@ -242,7 +88,7 @@
                 android:textColor="@color/green_primary" />
         </LinearLayout>
 
-        <!-- Nhật ký trồng cây -->
+        <!-- Nhật ký -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -264,22 +110,14 @@
                 android:textColor="@color/green_primary" />
         </LinearLayout>
 
-        <!-- Camera giữa -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:src="@android:drawable/ic_menu_camera"
-                android:background="@drawable/bg_circle_green"
-                android:padding="12dp"
-                android:layout_marginHorizontal="12dp" />
-        </LinearLayout>
+        <!-- Camera -->
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@android:drawable/ic_menu_camera"
+            android:background="@drawable/bg_circle_green"
+            android:padding="12dp"
+            android:layout_marginHorizontal="12dp" />
 
         <!-- Chatbot -->
         <LinearLayout

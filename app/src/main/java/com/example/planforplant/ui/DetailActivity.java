@@ -136,7 +136,6 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        // Chuẩn bị request
         ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
         AddGardenRequest request = new AddGardenRequest(plantId);
 

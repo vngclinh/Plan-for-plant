@@ -50,4 +50,9 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Body AddGardenRequest request
     );
+
+    @GET("/garden/my")
+    Call<List<GardenResponse>> getMyGarden(
+            @Header("Authorization") String token
+    );
 }
