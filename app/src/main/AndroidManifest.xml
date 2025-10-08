@@ -41,6 +41,7 @@
         <activity android:name=".ui.ChangePasswordActivity"/>
         <activity android:name=".ui.GardenActivity"/>
         <activity android:name=".ui.CreatePlanActivity" />
+        <activity android:name=".ui.GardenDetailActivity"/>
     </application>
 
 </manifest>

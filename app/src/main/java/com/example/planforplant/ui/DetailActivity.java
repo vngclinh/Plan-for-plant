@@ -193,8 +193,6 @@ public class DetailActivity extends AppCompatActivity {
         if (keywords == null || keywords.isEmpty()) return;
 
         ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
-
-        // Lấy token từ SessionManager
         SessionManager sessionManager = new SessionManager(this);
         String token = sessionManager.getToken();
 
@@ -203,17 +201,24 @@ public class DetailActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
                     if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                        bindPlantEntity(response.body().get(0));
+                        // Gán lại plant từ backend
+                        plant = response.body().get(0);
+                        bindPlantEntity(plant);
+
+                        // Sau khi có plant (từ backend) mới cho phép thêm vào vườn
+                        MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
+                        btnAddToGarden.setOnClickListener(v -> addPlantToGarden(plant.getId()));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Plant>> call, Throwable t) {
-                    // log lỗi hoặc show Toast
+                    Toast.makeText(DetailActivity.this, "Không thể tìm thấy cây trong cơ sở dữ liệu", Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
+
 
 
     private void bindPlantData(PlantResponse response) {
