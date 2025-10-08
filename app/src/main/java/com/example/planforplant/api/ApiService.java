@@ -2,6 +2,8 @@ package com.example.planforplant.api;
 
 import com.example.planforplant.DTO.AddGardenRequest;
 import com.example.planforplant.DTO.GardenResponse;
+import com.example.planforplant.DTO.GardenScheduleRequest;
+import com.example.planforplant.DTO.GardenScheduleResponse;
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.DTO.LoginRequest;
 import com.example.planforplant.DTO.RegisterRequest;
@@ -32,12 +34,6 @@ public interface ApiService {
     @POST("/api/auth/reset-password")
     Call<String> resetPassword(@Body Map<String, String> body);
 
-    @GET("plants/search")
-    Call<List<Plant>> searchPlants(
-            @Header("Authorization") String token,
-            @Query("keyword") String keyword
-    );
-
     @POST("api/auth/refresh")
     Call<JwtResponse> refreshToken(@Body Map<String, String> body);
 
@@ -49,7 +45,6 @@ public interface ApiService {
 
     @POST("/garden/add")
     Call<GardenResponse> addPlantToGarden(
-            @Header("Authorization") String token,
             @Body AddGardenRequest request
     );
 
@@ -63,7 +58,11 @@ public interface ApiService {
     Call<List<Disease>> searchDiseases(@Query("keyword") String keyword);
 
     @GET("/garden/my")
-    Call<List<GardenResponse>> getMyGarden(
-            @Header("Authorization") String token
-    );
+    Call<List<GardenResponse>> getMyGarden();
+
+    @POST("api/schedules")
+    Call<GardenScheduleResponse> createSchedule(@Body GardenScheduleRequest request);
+
+    @GET("/api/schedules/exists")
+    Call<Boolean> checkScheduleExists(@Query("gardenId") Long gardenId, @Query("scheduledTime") String scheduledTime);
 }

@@ -151,7 +151,7 @@ public class DetailActivity extends AppCompatActivity {
         ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
         AddGardenRequest request = new AddGardenRequest(plantId);
 
-        apiService.addPlantToGarden("Bearer " + token, request).enqueue(new Callback<GardenResponse>() {
+        apiService.addPlantToGarden(request).enqueue(new Callback<GardenResponse>() {
             @Override
             public void onResponse(Call<GardenResponse> call, Response<GardenResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -197,7 +197,7 @@ public class DetailActivity extends AppCompatActivity {
         String token = sessionManager.getToken();
 
         for (String keyword : keywords) {
-            apiService.searchPlants("Bearer " + token, keyword).enqueue(new Callback<List<Plant>>() {
+            apiService.searchPlants(keyword).enqueue(new Callback<List<Plant>>() {
                 @Override
                 public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
                     if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {

@@ -42,7 +42,7 @@ public class GardenActivity extends AppCompatActivity {
 
     private void loadGardenData() {
         ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
-        api.getMyGarden("Bearer " + sessionManager.getToken())
+        api.getMyGarden()
                 .enqueue(new Callback<List<GardenResponse>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<GardenResponse>> call, @NonNull Response<List<GardenResponse>> response) {

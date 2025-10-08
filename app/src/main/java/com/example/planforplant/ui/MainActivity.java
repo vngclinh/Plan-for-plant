@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton plantIdentifier = findViewById(R.id.plant_identifier);
         plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, CaptureActivity.class)));
 
+        MaterialButton addGarden = findViewById(R.id.btnCreatePlan);
+        addGarden.setOnClickListener(v -> startActivity(new android.content.Intent(this, CreatePlanActivity.class)));
         // view garden click
         MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
         viewGarden.setOnClickListener(  v -> startActivity(new android.content.Intent(this,GardenActivity.class )));

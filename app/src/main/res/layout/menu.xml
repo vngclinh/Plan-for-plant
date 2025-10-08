@@ -297,4 +297,19 @@
         </LinearLayout>
     </LinearLayout>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCreatePlan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Tạo kế hoạch"
+        style="@style/Widget.MaterialComponents.Button"
+        app:cornerRadius="12dp"
+        app:iconPadding="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/card_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav" />
 </androidx.constraintlayout.widget.ConstraintLayout>
