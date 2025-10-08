@@ -158,6 +158,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
+        android:descendantFocusability="afterDescendants"
+        android:focusableInTouchMode="true"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         app:layout_constraintStart_toStartOf="parent"
@@ -168,7 +170,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Chọn cây -->
+            <!-- 🌤️ Khu vực danh sách kế hoạch (hiển thị từ backend) -->
+            <LinearLayout
+                android:id="@+id/layoutScheduleContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp" />
+
+            <!-- 🌱 Chọn cây -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -186,7 +196,7 @@
                 android:padding="8dp"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Thời tiết dự kiến -->
+            <!-- ☀️ Thời tiết dự kiến -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -220,6 +230,7 @@
                         android:layout_marginBottom="4dp"/>
 
                     <TextView
+                        android:id="@+id/tvHumidity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Độ ẩm: 65%"
@@ -232,7 +243,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="📋 Kế hoạch chi tiết"
+                android:text="Kế hoạch chi tiết"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="@color/earth_brown_dark"
@@ -273,21 +284,35 @@
                         android:padding="8dp"
                         android:layout_marginBottom="8dp"/>
 
-                    <EditText
-                        android:id="@+id/etWaterTime"
+                    <!-- Ô chọn giờ tưới -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Chọn giờ tưới"
-                        android:focusable="false"
-                        android:clickable="true"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
                         android:background="@drawable/bg_input"
-                        android:padding="8dp"/>
-                    <TimePicker
-                        android:id="@+id/timePickerWater"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:timePickerMode="spinner"
-                        android:layout_marginTop="8dp"/>
+                        android:padding="8dp"
+                        android:layout_marginBottom="8dp">
+
+                        <EditText
+                            android:id="@+id/etWaterTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Chọn giờ tưới"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:cursorVisible="false"
+                            android:background="@drawable/bg_input"
+                            android:drawableEnd="@drawable/ic_arrow_down"
+                            android:drawablePadding="8dp"
+                            android:padding="12dp" />
+                        <ImageView
+                            android:id="@+id/icTimeArrow"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_down"
+                            app:tint="@color/text_secondary" />
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -435,6 +460,7 @@
 
         <!-- Trang chủ -->
         <LinearLayout
+            android:id="@+id/nav_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -457,6 +483,7 @@
 
         <!-- Nhật ký trồng cây -->
         <LinearLayout
+            android:id="@+id/nav_diary"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -488,6 +515,7 @@
 
         <!-- Chatbot -->
         <LinearLayout
+            android:id="@+id/nav_chatbot"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -510,6 +538,7 @@
 
         <!-- Hồ sơ -->
         <LinearLayout
+            android:id="@+id/nav_profile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

@@ -144,24 +144,27 @@
         android:layout_height="64dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="@color/white"
-        android:elevation="8dp"
+        android:background="#FFFFFF"
+        android:elevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Trang chủ -->
         <LinearLayout
+            android:id="@+id/nav_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                app:tint="@color/green_primary" />
+                app:tint="#2E7D32" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -170,18 +173,21 @@
                 android:textColor="@color/green_primary" />
         </LinearLayout>
 
-        <!-- Nhật ký -->
+        <!-- Nhật ký trồng cây -->
         <LinearLayout
+            android:id="@+id/nav_diary"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_book"
-                app:tint="@color/green_primary" />
+                app:tint="#2E7D32" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -190,7 +196,7 @@
                 android:textColor="@color/green_primary" />
         </LinearLayout>
 
-        <!-- Camera -->
+        <!-- Camera giữa -->
         <ImageView
             android:layout_width="56dp"
             android:layout_height="56dp"
@@ -201,16 +207,19 @@
 
         <!-- Chatbot -->
         <LinearLayout
+            android:id="@+id/nav_chatbot"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_chat"
-                app:tint="@color/green_primary" />
+                app:tint="#2E7D32" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -221,16 +230,19 @@
 
         <!-- Hồ sơ -->
         <LinearLayout
+            android:id="@+id/nav_profile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_profile"
-                app:tint="@color/green_primary" />
+                app:tint="#2E7D32" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -40,6 +40,11 @@
         <activity android:name=".ui.VerifyCodeActivity"/>
         <activity android:name=".ui.ChangePasswordActivity"/>
         <activity android:name=".ui.GardenActivity"/>
+        <activity android:name=".ui.HomeActivity" />
+        <activity android:name=".ui.DiaryActivity" />
+        <activity android:name=".ui.ChatbotActivity" />
+        <activity android:name=".ui.ProfileActivity" />
+        <activity android:name=".ui.PlanActivity" />
     </application>
 
 </manifest>
