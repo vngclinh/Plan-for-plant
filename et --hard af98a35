@@ -1,0 +1,67 @@
+[33m3b9622a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/dl[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feature/dl[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #10 from vngclinh/datdong
+[33m9848e49[m[33m ([m[1;31morigin/datdong[m[33m)[m Merge branch 'main' into datdong
+[33maf98a35[m add create schedule
+[33m816eb01[m add garden item detail
+[33m7d29fb3[m Merge pull request #9 from vngclinh/datdong
+[33m17cbef0[m change search to recycle view
+[33me8422e5[m Merge branch 'main' of https://github.com/vngclinh/Plan-for-plant into datdong
+[33m18d7a7b[m update my garden
+[33ma617311[m add Disease
+[33m1c220d6[m Merge branch 'main' of https://github.com/vngclinh/Plan-for-plant into datdong
+[33m30fbda4[m add api call + change detail
+[33m974dbb7[m add api call + change detail
+[33m071f3c3[m[33m ([m[1;31morigin/tienanh[m[33m)[m Merge branch 'main' of https://github.com/vngclinh/Plan-for-plant into tienanh
+[33m3538b78[m vbvbvb
+[33m8692ba9[m kcj
+[33m087f21d[m Merge branch 'main' of https://github.com/vngclinh/Plan-for-plant into datdong
+[33md6547d2[m add api call + change detail
+[33mab2a2ef[m Merge remote-tracking branch 'origin/datdong' into datdong
+[33mc4cca3c[m add api call + change detail
+[33mbef67b1[m Merge pull request #8 from vngclinh/feature/dl
+[33m32ad74c[m thêm lại giao diện
+[33mf718015[m update
+[33m0ad5c6d[m Merge branch 'main' of https://github.com/vngclinh/Plan-for-plant
+[33m465c0a6[m Merge branch 'datdong' of https://github.com/vngclinh/Plan-for-plant
+[33m50f0b8f[m Merge pull request #7 from vngclinh/datdong
+[33mfd82a74[m Merge branch 'main' into datdong
+[33mec98d49[m .
+[33m57883e3[m add api call + change detail
+[33m7909fa8[m Merge branch 'datdong' of https://github.com/vngclinh/Plan-for-plant
+[33md8603c0[m Merge remote-tracking branch 'origin/main' into datdong
+[33m0cff7ad[m add forgot password
+[33m8bf09f0[m add to garden
+[33mbe0cba3[m .
+[33ma9ec5d2[m Merge pull request #6 from vngclinh/datdong
+[33mc7e6208[m add hide and show password
+[33m357342b[m Merge pull request #5 from vngclinh/datdong
+[33mcf94b73[m add weather to all xml show weather
+[33mdc9448f[m Merge branch 'main' of https://github.com/vngclinh/Plan-for-plant into datdong
+[33m50bb1ad[m change session
+[33m3657a52[m fix capture
+[33mca23feb[m Merge pull request #4 from vngclinh/datdong
+[33m8f09555[m change session
+[33m0ca4f57[m fix
+[33m40ff13e[m Merge pull request #3 from vngclinh/datdong
+[33mba3572c[m change session
+[33ma604837[m Merge remote-tracking branch 'origin/main' into datdong
+[33m961df49[m change session
+[33mf150143[m fix register
+[33m549eda1[m Merge branch 'tienanh' of https://github.com/vngclinh/Plan-for-plant into datdong
+[33me5f1a42[m authinterceptor change
+[33ma1a666b[m ttyyty
+[33m73d2e1b[m ttyyty
+[33m15068b9[m Merge branch 'main' of https://github.com/vngclinh/Plan-for-plant into datdong
+[33m3e1a147[m authinterceptor change
+[33m799dc4d[m add weather for the menu
+[33ma1b48da[m add rule for signup
+[33mb22ac52[m update dang nhap
+[33m35313e7[m Merge pull request #2 from vngclinh/datdong
+[33m1e8c1b4[m add login, signup
+[33me21d5f1[m add login, signup
+[33mc076e22[m Merge pull request #1 from vngclinh/datdong
+[33mae1a538[m add auto refresh token
+[33mdf7664a[m add search
+[33m8bc3b97[m add search
+[33m974c3ac[m fix update image from gallery
+[33m9fdaef3[m update
+[33mdd96d47[m First commit

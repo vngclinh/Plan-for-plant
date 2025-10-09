@@ -80,6 +80,31 @@ public class MainActivity extends AppCompatActivity {
         // view garden click
         MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
         viewGarden.setOnClickListener(  v -> startActivity(new android.content.Intent(this,GardenActivity.class )));
+
+        // --- Bottom Navigation ---
+        // Trang chủ
+        LinearLayout navHome = findViewById(R.id.nav_home);
+        navHome.setOnClickListener(v ->
+                startActivity(new Intent(this, HomeActivity.class))
+        );
+
+        // Nhật ký
+        LinearLayout navDiary = findViewById(R.id.nav_diary);
+        navDiary.setOnClickListener(v ->
+                startActivity(new Intent(this, PlanActivity.class))
+        );
+
+        // Chatbot
+        LinearLayout navChatbot = findViewById(R.id.nav_chatbot);
+        navChatbot.setOnClickListener(v ->
+                startActivity(new Intent(this, ChatbotActivity.class))
+        );
+
+        // Hồ sơ
+        LinearLayout navProfile = findViewById(R.id.nav_profile);
+        navProfile.setOnClickListener(v ->
+                startActivity(new Intent(this, ProfileActivity.class))
+        );
     }
 
     @Override

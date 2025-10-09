@@ -58,11 +58,8 @@ public interface ApiService {
     Call<List<Disease>> searchDiseases(@Query("keyword") String keyword);
 
     @GET("/garden/my")
-    Call<List<GardenResponse>> getMyGarden();
+    Call<List<GardenResponse>> getMyGarden(
+            @Header("Authorization") String token
+    );
 
-    @POST("api/schedules")
-    Call<GardenScheduleResponse> createSchedule(@Body GardenScheduleRequest request);
-
-    @GET("/api/schedules/exists")
-    Call<Boolean> checkScheduleExists(@Query("gardenId") Long gardenId, @Query("scheduledTime") String scheduledTime);
 }

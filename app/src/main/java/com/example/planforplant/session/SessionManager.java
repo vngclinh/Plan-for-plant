@@ -12,77 +12,61 @@ public class SessionManager {
     private static final String KEY_TOKEN = "JWT_TOKEN";
     private static final String KEY_REFRESH = "REFRESH_TOKEN";
 
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
+    private final SharedPreferences prefs;
+    private final SharedPreferences.Editor editor;
 
     public SessionManager(Context context) {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         editor = prefs.edit();
     }
 
-    // Lưu token
+    // ✅ Lưu token
     public void saveTokens(String token, String refreshToken) {
         editor.putString(KEY_TOKEN, token);
         editor.putString(KEY_REFRESH, refreshToken);
         editor.apply();
+        Log.d("SessionManager", "✅ Saved access token: " + token);
+        Log.d("SessionManager", "✅ Saved refresh token: " + refreshToken);
     }
 
-    // Lấy access token
+    // ✅ Lấy access token
     public String getToken() {
-        return prefs.getString(KEY_TOKEN, null);
+        String token = prefs.getString(KEY_TOKEN, null);
+        Log.d("SessionManager", "🔑 getToken() -> " + token);
+        return token;
     }
 
-    // Lấy refresh token
+    // ✅ Lấy refresh token
     public String getRefreshToken() {
-        return prefs.getString(KEY_REFRESH, null);
+        String refresh = prefs.getString(KEY_REFRESH, null);
+        Log.d("SessionManager", "🔁 getRefreshToken() -> " + refresh);
+        return refresh;
     }
 
-    // Check login
-    public boolean isLoggedIn() {
-        String accessToken = getToken();
-        String refreshToken = getRefreshToken();
-
-        if (accessToken != null && !isTokenExpired(accessToken)) {
-            // Access token still valid
-            return true;
-        }
-
-        if (refreshToken != null && !isTokenExpired(refreshToken)) {
-            // Access token expired but refresh token valid → can refresh
-            return true;
-        }
-
-        // Both invalid or missing
-        return false;
-    }
-
-
-    // Xóa token (logout)
+    // ✅ Xóa session
     public void clear() {
         editor.clear();
         editor.apply();
+        Log.d("SessionManager", "🧹 Session cleared");
     }
 
-    // 🕒 Kiểm tra access token có hết hạn chưa
+    // 🕒 Kiểm tra token hết hạn (không tự xóa)
     public boolean isTokenExpired(String token) {
         try {
-            String[] parts = token.split("\\."); // JWT có 3 phần
+            String[] parts = token.split("\\.");
             if (parts.length < 2) return true;
 
-            // Decode payload
             String payloadJson = new String(Base64.decode(parts[1], Base64.URL_SAFE));
             JSONObject payload = new JSONObject(payloadJson);
 
-            // Lấy claim exp (tính bằng giây)
             long exp = payload.getLong("exp");
+            long now = System.currentTimeMillis() / 1000;
 
-            long now = System.currentTimeMillis() / 1000; // giây hiện tại
-            Log.d("SessionManager", "Token exp: " + exp + ", now: " + now);
-
-            return exp < now; // hết hạn thì true
+            Log.d("SessionManager", "🕒 Token exp: " + exp + ", now: " + now);
+            return exp < now;
         } catch (Exception e) {
             e.printStackTrace();
-            return true; // lỗi parse thì coi như hết hạn
+            return true;
         }
     }
 }
