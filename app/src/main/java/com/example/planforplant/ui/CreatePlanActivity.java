@@ -161,7 +161,7 @@ public class CreatePlanActivity extends AppCompatActivity {
             spinnerCompletion.setEnabled(true);
         } else {
             // Today or future → Not Done
-            options.add("Not Done");
+            options.add("NotDone");
             spinnerCompletion.setEnabled(false);
         }
 

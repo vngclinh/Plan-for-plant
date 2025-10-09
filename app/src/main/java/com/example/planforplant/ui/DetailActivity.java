@@ -116,11 +116,6 @@ public class DetailActivity extends AppCompatActivity {
         }
         // Bind nút "Thêm vào vườn"
         MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
-        if (plant != null && plant.getId() != null) {
-            checkIfPlantInGarden(plant.getId(), btnAddToGarden);
-        } else {
-            Toast.makeText(this, "Không thể tải thông tin cây", Toast.LENGTH_SHORT).show();
-        }
         btnAddToGarden.setOnClickListener(v -> {
             if (plant != null && plant.getId() != null) {
                 addPlantToGarden(plant.getId());
@@ -129,13 +124,6 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void checkIfPlantInGarden(Long plantId, MaterialButton button) {
-        SessionManager sessionManager = new SessionManager(this);
-        String token = sessionManager.getToken();
-
-        ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
     }
 
     private void addPlantToGarden(Long plantId) {
@@ -263,10 +251,8 @@ public class DetailActivity extends AppCompatActivity {
         if (diseases != null && !diseases.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             for (Disease d : diseases) {
-                // Add emoji + name + newline
                 sb.append("🦠 ").append(d.getName()).append("\n");
             }
-            // Remove the last newline
             tvDiseases.setText(sb.toString().trim());
         } else {
             tvDiseases.setText("✅ Không có bệnh được ghi nhận");
