@@ -27,7 +27,6 @@ public class PlanActivity extends AppCompatActivity {
     private Button btnCreatePlan;
     private GardenScheduleApi scheduleApi;
 
-    // Giả sử test cho gardenId = 1 (sau này truyền thật qua Intent)
     private final Long gardenId = 1L;
 
     @Override
@@ -49,14 +48,11 @@ public class PlanActivity extends AppCompatActivity {
         etOtherTask = findViewById(R.id.etOtherTask);
         btnCreatePlan = findViewById(R.id.btnCreatePlan);
 
-        // Khởi tạo Retrofit client
         scheduleApi = ApiClient.getLocalClient(this).create(GardenScheduleApi.class);
 
-        // Hiển thị TimePicker khi click vào ô giờ
         etWaterTime.setFocusable(false);
         etWaterTime.setOnClickListener(v -> showTimePickerDialog());
 
-        // Nút lưu kế hoạch
         btnCreatePlan.setOnClickListener(v -> submitPlan());
     }
 
@@ -109,31 +105,30 @@ public class PlanActivity extends AppCompatActivity {
         request.type = type;
         request.note = note;
 
-        // Thời gian hiện tại (hoặc có thể dùng giờ người chọn)
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
         request.scheduledTime = sdf.format(calendar.getTime());
 
-        Log.d("PlanActivity", "➡️ Gửi kế hoạch: " + type + " | time=" + request.scheduledTime);
+        Log.d("PlanActivity", "Gửi kế hoạch: " + type + " | time=" + request.scheduledTime);
 
         scheduleApi.createSchedule(request).enqueue(new Callback<GardenScheduleResponse>() {
             @Override
             public void onResponse(Call<GardenScheduleResponse> call, Response<GardenScheduleResponse> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(PlanActivity.this,
-                            "✅ Đã lưu kế hoạch " + type + " thành công!", Toast.LENGTH_SHORT).show();
-                    Log.d("PlanActivity", "✅ API Response OK: " + response.body());
+                            "Đã lưu kế hoạch " + type + " thành công!", Toast.LENGTH_SHORT).show();
+                    Log.d("PlanActivity", "API Response OK: " + response.body());
                 } else {
                     Toast.makeText(PlanActivity.this,
-                            "✅ Đã lưu kế hoạch " + type + " thành công!", Toast.LENGTH_SHORT).show();
-                    Log.e("PlanActivity", "❌ Error: " + response.message());
+                            "Lưu kế hoạch " + type + "không thành công!", Toast.LENGTH_SHORT).show();
+                    Log.e("PlanActivity", "Error: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<GardenScheduleResponse> call, Throwable t) {
                 Toast.makeText(PlanActivity.this,
-                        "⚠️ Không thể kết nối tới server!", Toast.LENGTH_LONG).show();
+                        "Không thể kết nối tới server!", Toast.LENGTH_LONG).show();
                 Log.e("PlanActivity", "API Error: " + t.getMessage(), t);
             }
         });
