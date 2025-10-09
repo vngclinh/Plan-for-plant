@@ -1,6 +1,7 @@
 package com.example.planforplant.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
     @NonNull
     @Override
     public GardenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_garden_plant, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_garden_detail, parent, false);
         return new GardenViewHolder(view);
     }
 
@@ -38,10 +39,10 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
         GardenResponse item = gardenList.get(position);
 
         // --- Tên cây ---
-        if (item.getPlant() != null) {
+        if (item.getNickname() != null) {
             holder.tvPlantName.setText(
-                    item.getPlant().getCommonName() != null
-                            ? item.getPlant().getCommonName()
+                    item.getNickname() != null
+                            ? item.getNickname()
                             : "Không rõ tên cây"
             );
         } else {
@@ -55,7 +56,13 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
         holder.tvDateAdded.setText("Ngày thêm: " + date);
 
         // --- Trạng thái ---
-        holder.tvStatus.setText("Trạng thái: " + (item.getStatus() != null ? item.getStatus() : "Không xác định"));
+        if(item.getStatus().equals("ALIVE")){
+            holder.tvStatus.setText("Trạng thái: Đang phát triển");
+        } else if (item.getStatus().equals("DEAD")){
+            holder.tvStatus.setText("Trạng thái: Cây đã chết");
+        } else {
+            holder.tvStatus.setText("Trạng thái: Không xác định");
+        }
 
         // --- Ảnh ---
         if (item.getPlant() != null && item.getPlant().getImageUrl() != null) {
@@ -66,9 +73,23 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
         } else {
             holder.imgPlant.setImageResource(R.drawable.ic_plant);
         }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, GardenDetailActivity.class);
+
+            // Gửi dữ liệu cây sang Activity detail
+            intent.putExtra("gardenId", item.getId());
+            intent.putExtra("plant", item.getPlant());
+            intent.putExtra("nickname", item.getNickname());
+            intent.putExtra("status", item.getStatus());
+            intent.putExtra("imageUrl", item.getPlant().getImageUrl());
+            intent.putExtra("dateAdded", item.getDateAdded());
+
+            context.startActivity(intent);
+        });
     }
 
 
+    //hàm này để Recycleview biết tong so phan tu trong danh sach
     @Override
     public int getItemCount() {
         return gardenList != null ? gardenList.size() : 0;
@@ -80,7 +101,7 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
 
         public GardenViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgPlant = itemView.findViewById(R.id.imgPlant);
+            imgPlant = itemView.findViewById(R.id.ivPlant);
             tvPlantName = itemView.findViewById(R.id.tvPlantName);
             tvDateAdded = itemView.findViewById(R.id.tvDateAdded);
             tvStatus = itemView.findViewById(R.id.tvStatus);
