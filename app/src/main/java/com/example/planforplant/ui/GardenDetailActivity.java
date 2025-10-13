@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.planforplant.R;
+import com.example.planforplant.api.ApiClient;
+import com.example.planforplant.api.ApiService;
 import com.example.planforplant.model.Disease;
 import com.example.planforplant.model.Plant;
 
@@ -86,6 +88,9 @@ public class GardenDetailActivity extends AppCompatActivity {
                 } else if (id == R.id.action_add_photo) {
                     // TODO: xử lý thêm ảnh
                     return true;
+                } else if (id == R.id.action_delete){
+                    ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+
                 }
                 return false;
             });

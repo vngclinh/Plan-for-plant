@@ -15,6 +15,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -47,6 +48,9 @@ public interface ApiService {
     Call<GardenResponse> addPlantToGarden(
             @Body AddGardenRequest request
     );
+
+    @DELETE("/garden/{gardenId}")
+    Call<Void> removePlant(@Path("gardenId") long gardenId);
 
     @GET("api/diseases")
     Call<List<Disease>> getAllDiseases();
