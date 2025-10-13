@@ -20,4 +20,9 @@
         android:id="@+id/action_delete"
         android:title="Xoá cây khỏi vườn"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_auto_gen"
+        android:title="Lên lịch tự động cho tuần tới"
+        android:icon="@android:drawable/ic_menu_camera"
+        app:showAsAction="never" />
 </menu>

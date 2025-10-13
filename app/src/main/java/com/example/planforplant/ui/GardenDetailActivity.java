@@ -1,25 +1,43 @@
 package com.example.planforplant.ui;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.ContextThemeWrapper;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.planforplant.DTO.GardenScheduleResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
 import com.example.planforplant.model.Disease;
 import com.example.planforplant.model.Plant;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class GardenDetailActivity extends AppCompatActivity {
+
+    private static final int REQUEST_LOCATION_PERMISSION = 200;
+
+    private FusedLocationProviderClient fusedLocationClient;
+    private ProgressDialog progressDialog;
 
     private ImageView imgPlant;
     private TextView tvCommonName, tvNickname, tvStatus, tvDateAdded;
@@ -27,10 +45,16 @@ public class GardenDetailActivity extends AppCompatActivity {
     private TextView tvPhylum, tvClass, tvOrder;
     private TextView tvWater, tvLight, tvTemperature, tvCareGuide, tvDiseases;
 
+    private Long gardenId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_garden_detail);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+
 
         // === Bind các view chính ===
         imgPlant = findViewById(R.id.imgPlant);
@@ -58,6 +82,12 @@ public class GardenDetailActivity extends AppCompatActivity {
         String nickname = intent.getStringExtra("nickname");
         String status = intent.getStringExtra("status");
         String dateAdded = intent.getStringExtra("dateAdded");
+        gardenId = getIntent().getLongExtra("gardenId", -1);
+        if (gardenId == -1) {
+            Toast.makeText(this, "Invalid garden ID", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         Plant plant = (Plant) intent.getSerializableExtra("plant");
 
         // === Gán dữ liệu Garden ===
@@ -90,6 +120,9 @@ public class GardenDetailActivity extends AppCompatActivity {
                     return true;
                 } else if (id == R.id.action_delete){
                     ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+                } else if (id == R.id.action_auto_gen){
+                    generateAutoWateringSchedule();
+                    return true;
 
                 }
                 return false;
@@ -141,5 +174,66 @@ public class GardenDetailActivity extends AppCompatActivity {
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .into(imgPlant);
         }
+    }
+
+    private void generateAutoWateringSchedule() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION
+            );
+            return;
+        }
+
+        progressDialog.setMessage("Fetching GPS location...");
+        progressDialog.show();
+
+        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                double lat = location.getLatitude();
+                double lon = location.getLongitude();
+                callAutoGenerateApi(lat, lon);
+            } else {
+                progressDialog.dismiss();
+                Toast.makeText(this, "Could not get location. Try again.", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> {
+            progressDialog.dismiss();
+            Toast.makeText(this, "Failed to get location: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void callAutoGenerateApi(double lat, double lon) {
+        progressDialog.setMessage("Generating watering schedule...");
+        progressDialog.show();
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+
+        api.generateWeeklyWateringSchedule(gardenId, lat, lon)
+                .enqueue(new Callback<List<GardenScheduleResponse>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<GardenScheduleResponse>> call,
+                                           @NonNull Response<List<GardenScheduleResponse>> response) {
+                        progressDialog.dismiss();
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<GardenScheduleResponse> schedules = response.body();
+                            Toast.makeText(GardenDetailActivity.this,
+                                    "✅ Generated " + schedules.size() + "tasks!",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(GardenDetailActivity.this,
+                                    "❌ Failed to generate schedule", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<GardenScheduleResponse>> call,
+                                          @NonNull Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(GardenDetailActivity.this,
+                                "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
