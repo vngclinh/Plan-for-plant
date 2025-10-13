@@ -98,8 +98,8 @@ public class GardenDetailActivity extends AppCompatActivity {
         if (plant == null) return;
 
         // Thông tin cơ bản
-        tvCommonName.setText(plant.getCommonName() != null ? plant.getCommonName() : "Unknown");
-        tvOverview.setText(plant.getDescription() != null ? plant.getDescription() : "No description available");
+        tvCommonName.setText(plant.getCommonName() != null ? plant.getCommonName() : "Cây chưa xác định");
+        tvOverview.setText(plant.getDescription() != null ? plant.getDescription() : "Không có thông tin cơ bản");
 
         // Phân loại khoa học
         tvPhylum.setText(plant.getPhylum() != null ? plant.getPhylum() : "");

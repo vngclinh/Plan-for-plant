@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,9 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.planforplant.R;
 import com.example.planforplant.session.SessionManager;
@@ -79,34 +75,36 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton plantIdentifier = findViewById(R.id.plant_identifier);
         plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, CaptureActivity.class)));
 
+        MaterialButton addGarden = findViewById(R.id.btnCreatePlan);
+        addGarden.setOnClickListener(v -> startActivity(new android.content.Intent(this, CreatePlanActivity.class)));
         // view garden click
         MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
         viewGarden.setOnClickListener(  v -> startActivity(new android.content.Intent(this,GardenActivity.class )));
 
-        // --- Navigation Bar ---
-        Button navHome = findViewById(R.id.nav_home);
-        Button navJournal = findViewById(R.id.nav_journal);
-        Button navCamera = findViewById(R.id.nav_camera);
-        Button navChatbot = findViewById(R.id.nav_chatbot);
-        Button navProfile = findViewById(R.id.nav_profile);
+        // --- Bottom Navigation ---
+        // Trang chủ
+        LinearLayout navHome = findViewById(R.id.nav_home);
+        navHome.setOnClickListener(v ->
+                startActivity(new Intent(this, HomeActivity.class))
+        );
 
-        navHome.setOnClickListener(v -> switchFragment(new HomeFragment()));
-        navJournal.setOnClickListener(v -> switchFragment(new JournalFragment()));
-        navCamera.setOnClickListener(v -> switchFragment(new CameraFragment()));
-        navChatbot.setOnClickListener(v -> switchFragment(new ChatbotFragment()));
-        navProfile.setOnClickListener(v -> switchFragment(new ProfileFragment()));
+        // Nhật ký
+        LinearLayout navDiary = findViewById(R.id.nav_diary);
+        navDiary.setOnClickListener(v ->
+                startActivity(new Intent(this, PlanActivity.class))
+        );
 
-        // Hiển thị HomeFragment mặc định
-        if (savedInstanceState == null) {
-            switchFragment(new HomeFragment());
-        }
-    }
+        // Chatbot
+        LinearLayout navChatbot = findViewById(R.id.nav_chatbot);
+        navChatbot.setOnClickListener(v ->
+                startActivity(new Intent(this, ChatbotActivity.class))
+        );
 
-    private void switchFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
+        // Hồ sơ
+        LinearLayout navProfile = findViewById(R.id.nav_profile);
+        navProfile.setOnClickListener(v ->
+                startActivity(new Intent(this, ProfileActivity.class))
+        );
     }
 
     @Override

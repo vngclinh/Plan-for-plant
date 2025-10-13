@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -37,7 +38,7 @@
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 
-    <!-- Danh sách thẻ chăm sóc -->
+    <!-- Phần nội dung chính -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -54,104 +55,17 @@
             android:paddingTop="8dp"
             android:paddingBottom="16dp">
 
-            <!-- Card Tưới nước -->
-            <androidx.cardview.widget.CardView
+            <!-- Container hiển thị danh sách kế hoạch từ backend -->
+            <LinearLayout
+                android:id="@+id/layoutScheduleContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💧"
-                        android:textSize="18sp"
-                        android:layout_marginEnd="8dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tưới nước: 500ml"
-                        android:textSize="16sp"
-                        android:textColor="@color/text_primary"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Card Bón phân -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🌱"
-                        android:textSize="18sp"
-                        android:layout_marginEnd="8dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Bón phân: NPK hữu cơ"
-                        android:textSize="16sp"
-                        android:textColor="@color/text_primary"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Card Tỉa lá -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="✂️"
-                        android:textSize="18sp"
-                        android:layout_marginEnd="8dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tỉa lá vàng"
-                        android:textSize="16sp"
-                        android:textColor="@color/text_primary"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                android:orientation="vertical"
+                android:paddingBottom="8dp" />
 
             <!-- Card Thời tiết -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardWeather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -167,6 +81,7 @@
                     android:padding="12dp">
 
                     <TextView
+                        android:id="@+id/tvWeatherEmoji"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="☀️"
@@ -174,6 +89,7 @@
                         android:layout_marginEnd="8dp"/>
 
                     <TextView
+                        android:id="@+id/tvWeatherInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Thời tiết: Nắng nhẹ, 30°C"
@@ -200,6 +116,7 @@
                 android:scrollbars="none">
 
                 <LinearLayout
+                    android:id="@+id/albumContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
@@ -223,7 +140,7 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <!-- Text thay thế khi không có ảnh -->
+            <!-- Text khi không có ảnh -->
             <TextView
                 android:id="@+id/tvNoPhoto"
                 android:layout_width="match_parent"
@@ -244,7 +161,7 @@
         android:layout_height="64dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:elevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -252,6 +169,7 @@
 
         <!-- Trang chủ -->
         <LinearLayout
+            android:id="@+id/nav_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -262,7 +180,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                app:tint="#2E7D32" />
+                app:tint="@color/green_primary" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -272,8 +190,9 @@
                 android:textColor="@color/green_primary" />
         </LinearLayout>
 
-        <!-- Nhật ký trồng cây -->
+        <!-- Nhật ký -->
         <LinearLayout
+            android:id="@+id/nav_diary"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -284,7 +203,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_book"
-                app:tint="#2E7D32" />
+                app:tint="@color/green_primary" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -296,6 +215,7 @@
 
         <!-- Camera giữa -->
         <ImageView
+            android:id="@+id/nav_camera"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:src="@android:drawable/ic_menu_camera"
@@ -305,6 +225,7 @@
 
         <!-- Chatbot -->
         <LinearLayout
+            android:id="@+id/nav_chatbot"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -315,7 +236,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_chat"
-                app:tint="#2E7D32" />
+                app:tint="@color/green_primary" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -327,6 +248,7 @@
 
         <!-- Hồ sơ -->
         <LinearLayout
+            android:id="@+id/nav_profile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -337,7 +259,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_profile"
-                app:tint="#2E7D32" />
+                app:tint="@color/green_primary" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -347,4 +269,5 @@
                 android:textColor="@color/green_primary" />
         </LinearLayout>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

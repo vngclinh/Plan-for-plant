@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.play.services.location)
 
 
+
     // (tuỳ chọn) nếu IDE kêu thiếu ListenableFuture
     // implementation("com.google.guava:guava:32.1.3-android")
 
@@ -71,6 +72,4 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
-
-
 }
