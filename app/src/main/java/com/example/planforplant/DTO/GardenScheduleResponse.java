@@ -4,16 +4,19 @@ public class GardenScheduleResponse {
     private Long id;
     private Long gardenId;
     private String gardenNickname;
+    private Long plantId;
+    private String plantName;
     private String type;
-    private String scheduledTime;
+    private String scheduledTime;  // e.g., "2025-10-13T14:00:00"
+    private String completion;
     private String note;
     private Double waterAmount;
     private Double fertilityAmount;
     private String fertilityType;
+    private String createdAt;
+    private String updatedAt;
 
-    private String completion;
-
-    // ======= Getters =======
+    // --- Getters ---
     public Long getId() {
         return id;
     }
@@ -26,6 +29,14 @@ public class GardenScheduleResponse {
         return gardenNickname;
     }
 
+    public Long getPlantId() {
+        return plantId;
+    }
+
+    public String getPlantName() {
+        return plantName;
+    }
+
     public String getType() {
         return type;
     }
@@ -34,12 +45,12 @@ public class GardenScheduleResponse {
         return scheduledTime;
     }
 
-    public String getNote() {
-        return note;
-    }
-
     public String getCompletion() {
         return completion;
+    }
+
+    public String getNote() {
+        return note;
     }
 
     public Double getWaterAmount() {
@@ -54,7 +65,15 @@ public class GardenScheduleResponse {
         return fertilityType;
     }
 
-    // ======= Setters =======
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    // --- Setters ---
     public void setId(Long id) {
         this.id = id;
     }
@@ -67,12 +86,24 @@ public class GardenScheduleResponse {
         this.gardenNickname = gardenNickname;
     }
 
+    public void setPlantId(Long plantId) {
+        this.plantId = plantId;
+    }
+
+    public void setPlantName(String plantName) {
+        this.plantName = plantName;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
 
     public void setScheduledTime(String scheduledTime) {
         this.scheduledTime = scheduledTime;
+    }
+
+    public void setCompletion(String completion) {
+        this.completion = completion;
     }
 
     public void setNote(String note) {
@@ -91,9 +122,11 @@ public class GardenScheduleResponse {
         this.fertilityType = fertilityType;
     }
 
-    public void setCompletion(String completion) {
-        this.completion = completion;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
-
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
