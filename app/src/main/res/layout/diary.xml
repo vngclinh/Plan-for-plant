@@ -233,7 +233,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_book"
+                android:src="@drawable/ic_journal"
                 app:tint="#2E7D32" />
 
             <TextView
