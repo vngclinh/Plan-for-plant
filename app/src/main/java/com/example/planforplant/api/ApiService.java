@@ -83,4 +83,11 @@ public interface ApiService {
 
     @GET("api/schedules/by-date")
     Call<List<GardenScheduleResponse>> getSchedulesByDate(@Query("date") String date);
+
+    @POST("/api/schedules/garden/{gardenId}/generate")
+    Call<List<GardenScheduleResponse>> generateWeeklyWateringSchedule(
+            @Path("gardenId") Long gardenId,
+            @Query("lat") double lat,
+            @Query("lon") double lon
+    );
 }
