@@ -1,5 +1,6 @@
 package com.example.planforplant.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -55,6 +57,24 @@ public class CreatePlanActivity extends AppCompatActivity {
         setContentView(R.layout.care_plant);
 
         // --- Init views ---
+        TextView tabHistory = findViewById(R.id.tab_history);
+        TextView tabPlan = findViewById(R.id.tab_plan);
+
+// highlight current tab (Kế hoạch)
+        tabPlan.setBackgroundResource(R.drawable.bg_tab_selected);
+        tabPlan.setTextColor(getColor(R.color.white));
+
+        tabHistory.setBackgroundResource(R.drawable.bg_tab_unselected);
+        tabHistory.setTextColor(getColor(R.color.text_secondary));
+
+// when user clicks "Lịch sử"
+        tabHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(CreatePlanActivity.this, ScheduleHistoryActivity.class);
+            startActivity(intent);
+            finish(); // optional: close current activity
+        });
+
+
         spinnerPlant = findViewById(R.id.spinnerPlant);
         spinnerCompletion = findViewById(R.id.spinnerCompletion);
         timePicker = findViewById(R.id.timePickerAction);

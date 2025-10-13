@@ -80,4 +80,7 @@ public interface ApiService {
 
     @POST("/api/user/change-password")
     Call<String> changePassword(@Body ChangepasswordRequest request);
+
+    @GET("api/schedules/by-date")
+    Call<List<GardenScheduleResponse>> getSchedulesByDate(@Query("date") String date);
 }

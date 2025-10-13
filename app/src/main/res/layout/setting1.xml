@@ -22,7 +22,7 @@
             android:background="@drawable/avatar_circle_bg"
             android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            tools:src="@android:drawable/ic_menu_camera" />
+            android:src="@android:drawable/ic_menu_camera" />
 
         <!-- 👤 User Name -->
         <TextView
@@ -34,7 +34,7 @@
             android:textColor="#2E7D32"
             android:textSize="22sp"
             android:textStyle="bold"
-            tools:text="Nguyễn Văn A" />
+            android:text="Nguyễn Văn A" />
 
         <!-- 📧 Email -->
         <TextView
@@ -46,7 +46,7 @@
             android:fontFamily="sans-serif"
             android:layout_gravity="center"
             android:layout_marginBottom="32dp"
-            tools:text="nguyenvana@gmail.com" />
+            android:text="nguyenvana@gmail.com" />
 
         <!-- 📂 Card: Quản lý tài khoản -->
         <androidx.cardview.widget.CardView
@@ -69,7 +69,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     app:tint="#4CAF50"
-                    tools:src="@android:drawable/ic_menu_manage" />
+                    android:src="@android:drawable/ic_menu_manage" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    tools:text="Quản lý tài khoản" />
+                    android:text="Quản lý tài khoản" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -103,7 +103,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     app:tint="#81D4FA"
-                    tools:src="@android:drawable/ic_lock_lock" />
+                    android:src="@android:drawable/ic_lock_lock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    tools:text="Đổi mật khẩu" />
+                    android:text="Đổi mật khẩu" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -137,7 +137,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     app:tint="#8D6E63"
-                    tools:src="@android:drawable/ic_menu_help" />
+                    android:src="@android:drawable/ic_menu_help" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -146,7 +146,7 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    tools:text="Hỗ trợ" />
+                    android:text="Hỗ trợ" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
