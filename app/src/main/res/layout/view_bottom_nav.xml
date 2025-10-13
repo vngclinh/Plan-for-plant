@@ -3,10 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Nội dung chính phía trên thanh điều hướng -->
-    <!-- Thêm các layout khác ở đây -->
 
-    <!-- Floating Action Button (Camera/PT online) -->
+    <!-- Floating Action Button  -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/nav_camera"
         android:layout_width="64dp"
@@ -25,10 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="bottom"
-        android:orientation="horizontal"
         android:background="@color/green_primary"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:paddingHorizontal="12dp"
-        android:gravity="center">
+        app:layout_anchor="@+id/nav_camera"
+        app:layout_anchorGravity="end|bottom">
 
         <!-- Trang chủ -->
         <LinearLayout
@@ -37,17 +37,19 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
                 android:tint="@android:color/black" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Trang chủ"
-                android:textSize="10sp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
         </LinearLayout>
 
         <!-- Nhật ký -->
@@ -57,17 +59,19 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_journal"
                 android:tint="@android:color/black" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nhật ký"
-                android:textSize="10sp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
         </LinearLayout>
 
         <!-- Chừa chỗ cho FAB ở giữa -->
@@ -82,17 +86,19 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_chat"
                 android:tint="@android:color/black" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chatbot"
-                android:textSize="10sp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
         </LinearLayout>
 
         <!-- Hồ sơ -->
@@ -102,17 +108,19 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_profile"
                 android:tint="@android:color/black" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hồ sơ"
-                android:textSize="10sp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
