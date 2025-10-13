@@ -12,11 +12,9 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Avatar -->
-
-        <!-- User Name -->
-
+        <!-- 🖼 Avatar -->
         <ImageView
+            android:id="@+id/imgAvatar"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
@@ -26,9 +24,9 @@
             android:scaleType="centerCrop"
             tools:src="@android:drawable/ic_menu_camera" />
 
-        <!-- Email -->
-
+        <!-- 👤 User Name -->
         <TextView
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -38,18 +36,21 @@
             android:textStyle="bold"
             tools:text="Nguyễn Văn A" />
 
+        <!-- 📧 Email -->
         <TextView
+            android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#6D4C41"
             android:textSize="14sp"
             android:fontFamily="sans-serif"
             android:layout_gravity="center"
-            tools:text="nguyenvana@gmail.com"
-            android:layout_marginBottom="32dp" />
+            android:layout_marginBottom="32dp"
+            tools:text="nguyenvana@gmail.com" />
 
-        <!-- Card: Quản lý tài khoản -->
+        <!-- 📂 Card: Quản lý tài khoản -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardManageAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -81,8 +82,9 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Card: Đổi mật khẩu -->
+        <!-- 🔒 Card: Đổi mật khẩu -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardChangePassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -101,7 +103,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     app:tint="#81D4FA"
-                    tools:src="@android:drawable/ic_lock_lock"/>
+                    tools:src="@android:drawable/ic_lock_lock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -110,12 +112,13 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    tools:text="Đổi mật khẩu"/>
+                    tools:text="Đổi mật khẩu" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Card: Hỗ trợ -->
+        <!-- 💬 Card: Hỗ trợ -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardSupport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -134,7 +137,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     app:tint="#8D6E63"
-                    tools:src="@android:drawable/ic_menu_help"/>
+                    tools:src="@android:drawable/ic_menu_help" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -143,18 +146,18 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    tools:text="Hỗ trợ"/>
+                    tools:text="Hỗ trợ" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Nút Đăng xuất -->
+        <!-- 🚪 Nút Đăng xuất -->
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/btn_primary_green"
             android:backgroundTint="#2E7D32"
             android:fontFamily="sans-serif-medium"
             android:padding="14dp"
@@ -164,5 +167,6 @@
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:translationZ="0dp" />
+
     </LinearLayout>
 </ScrollView>
