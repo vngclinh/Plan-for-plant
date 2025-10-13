@@ -86,7 +86,7 @@ public class SettingActivity extends AppCompatActivity {
                     if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) {
                         Glide.with(SettingActivity.this)
                                 .load(user.getAvatarUrl())
-                                .placeholder(R.drawable.default_avatar) // default image
+                                .placeholder(R.drawable.ic_user) // default image
                                 .circleCrop()
                                 .into(imgAvatar);
                     }

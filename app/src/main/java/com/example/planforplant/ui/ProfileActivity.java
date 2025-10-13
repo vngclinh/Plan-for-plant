@@ -169,7 +169,7 @@ public class ProfileActivity extends AppCompatActivity {
                     if (currentAvatarUrl != null && !currentAvatarUrl.isEmpty()) {
                         Glide.with(ProfileActivity.this)
                                 .load(currentAvatarUrl)
-                                .placeholder(R.drawable.default_avatar)
+                                .placeholder(R.drawable.ic_user)
                                 .into(imgAvatar);
                     }
                 } else {
@@ -206,7 +206,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     Glide.with(ProfileActivity.this)
                             .load(newUrl)
-                            .placeholder(R.drawable.default_avatar)
+                            .placeholder(R.drawable.ic_user)
                             .into(imgAvatar);
 
                     Toast.makeText(ProfileActivity.this, "Avatar updated!", Toast.LENGTH_SHORT).show();
