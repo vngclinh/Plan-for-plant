@@ -78,10 +78,8 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton Setting = findViewById(R.id.btnSetting);
         Setting.setOnClickListener(v -> startActivity(new android.content.Intent(this, SettingActivity.class)));
 
-//        MaterialButton addPlan = findViewById(R.id.btnCreatePlan);
-//        addPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, PlanActivity.class)));
-
-
+        MaterialButton addPlan = findViewById(R.id.btnCreatePlan);
+        addPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, PlanActivity.class)));
         // view garden click
         MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
         viewGarden.setOnClickListener(  v -> startActivity(new android.content.Intent(this,GardenActivity.class )));
