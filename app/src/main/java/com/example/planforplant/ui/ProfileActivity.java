@@ -1,7 +1,6 @@
 package com.example.planforplant.ui;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,19 +8,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import android.view.View;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-
 import com.example.planforplant.DTO.UserResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
@@ -49,7 +47,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ApiService apiService;
     private ProgressDialog progressDialog;
     private Uri selectedImageUri;
-    private String currentAvatarUrl = null;  // 🔹 to store current avatar url
+    private String currentAvatarUrl = null;
+    private UserResponse currentUser; // ✅ store user globally
 
     private final ActivityResultLauncher<Intent> imagePickerLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -85,32 +84,37 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        // 🔹 Show options dialog when clicking avatar
         imgAvatar.setOnClickListener(v -> showAvatarOptionsDialog());
 
-        btnEditProfile.setOnClickListener(v ->
-                Toast.makeText(this, "Edit feature coming soon!", Toast.LENGTH_SHORT).show()
-        );
+        btnEditProfile.setOnClickListener(v -> {
+            if (currentUser == null) {
+                Toast.makeText(this, "Đang tải thông tin...", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+            intent.putExtra("fullname", currentUser.getFullname());
+            intent.putExtra("email", currentUser.getEmail());
+            intent.putExtra("phoneNumber", currentUser.getPhoneNumber());
+            startActivity(intent);
+        });
     }
 
-    // 🔹 Show dialog with 2 options
     private void showAvatarOptionsDialog() {
-        String[] options = {"View Avatar", "Change Avatar"};
+        String[] options = {"Xem ảnh đại diện", "Đổi ảnh đại diện"};
 
         new AlertDialog.Builder(this)
-                .setTitle("Profile Picture")
+                .setTitle("Ảnh đại diện")
                 .setItems(options, (dialog, which) -> {
                     if (which == 0) {
-                        // View Avatar
                         if (currentAvatarUrl != null && !currentAvatarUrl.isEmpty()) {
                             Intent intent = new Intent(this, ViewAvatarActivity.class);
                             intent.putExtra("avatarUrl", currentAvatarUrl);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(this, "No avatar to show", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Chưa có ảnh đại diện", Toast.LENGTH_SHORT).show();
                         }
                     } else if (which == 1) {
-                        // Change Avatar
                         checkPermissionAndPickImage();
                     }
                 })
@@ -119,26 +123,20 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void checkPermissionAndPickImage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
                     != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                        this,
+                ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_MEDIA_IMAGES},
-                        REQUEST_STORAGE_PERMISSION
-                );
+                        REQUEST_STORAGE_PERMISSION);
             } else {
                 openGallery();
             }
         } else {
-            // Android 12 and below
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                        this,
+                ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        REQUEST_STORAGE_PERMISSION
-                );
+                        REQUEST_STORAGE_PERMISSION);
             } else {
                 openGallery();
             }
@@ -151,7 +149,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void fetchProfile() {
-        progressDialog.setMessage("Loading profile...");
+        progressDialog.setMessage("Đang tải thông tin cá nhân...");
         progressDialog.show();
 
         apiService.getProfile().enqueue(new Callback<UserResponse>() {
@@ -160,12 +158,12 @@ public class ProfileActivity extends AppCompatActivity {
                                    @NonNull Response<UserResponse> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
-                    UserResponse user = response.body();
-                    tvFullname.setText(user.getFullname());
-                    tvUsername.setText("@" + user.getUsername());
-                    tvEmail.setText(user.getEmail());
-                    tvPhone.setText(user.getPhoneNumber());
-                    currentAvatarUrl = user.getAvatarUrl(); // 🔹 store for later
+                    currentUser = response.body(); // ✅ store globally
+                    tvFullname.setText(currentUser.getFullname());
+                    tvUsername.setText("@" + currentUser.getUsername());
+                    tvEmail.setText(currentUser.getEmail());
+                    tvPhone.setText(currentUser.getPhoneNumber());
+                    currentAvatarUrl = currentUser.getAvatarUrl();
 
                     if (currentAvatarUrl != null && !currentAvatarUrl.isEmpty()) {
                         Glide.with(ProfileActivity.this)
@@ -174,14 +172,14 @@ public class ProfileActivity extends AppCompatActivity {
                                 .into(imgAvatar);
                     }
                 } else {
-                    Toast.makeText(ProfileActivity.this, "Failed to load profile", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Không thể tải thông tin người dùng", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(ProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -189,7 +187,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void uploadAvatar() {
         if (selectedImageUri == null) return;
 
-        progressDialog.setMessage("Uploading avatar...");
+        progressDialog.setMessage("Đang tải ảnh lên...");
         progressDialog.show();
 
         File file = new File(FileUtils.getPath(this, selectedImageUri));
@@ -203,23 +201,23 @@ public class ProfileActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
                     String newUrl = response.body().get("avatarUrl");
-                    currentAvatarUrl = newUrl; // 🔹 update the new avatar URL
+                    currentAvatarUrl = newUrl;
 
                     Glide.with(ProfileActivity.this)
                             .load(newUrl)
                             .placeholder(R.drawable.default_avatar)
                             .into(imgAvatar);
 
-                    Toast.makeText(ProfileActivity.this, "Avatar updated!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Cập nhật ảnh đại diện thành công!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ProfileActivity.this, "Upload failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Tải ảnh thất bại", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Map<String, String>> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(ProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -233,7 +231,7 @@ public class ProfileActivity extends AppCompatActivity {
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             openGallery();
         } else {
-            Toast.makeText(this, "Storage permission denied", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Từ chối quyền truy cập thư viện ảnh", Toast.LENGTH_SHORT).show();
         }
     }
 }
