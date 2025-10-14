@@ -26,7 +26,7 @@
             android:hint="Họ và tên"
             android:inputType="textPersonName"
             android:padding="12dp"
-            android:background="@drawable/bg_edittext" />
+            />
 
         <EditText
             android:id="@+id/etEmail"
@@ -36,7 +36,7 @@
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/bg_edittext" />
+            />
 
         <EditText
             android:id="@+id/etPhone"
@@ -46,7 +46,7 @@
             android:inputType="phone"
             android:padding="12dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/bg_edittext" />
+           />
 
 
         <Button
