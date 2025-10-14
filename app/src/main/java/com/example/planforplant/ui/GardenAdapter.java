@@ -1,5 +1,6 @@
 package com.example.planforplant.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -76,7 +77,7 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, GardenDetailActivity.class);
 
-            // Gửi dữ liệu cây sang Activity detail
+            // Gửi dữ liệu cây sang GardenDetailActivity
             intent.putExtra("gardenId", item.getId());
             intent.putExtra("plant", item.getPlant());
             intent.putExtra("nickname", item.getNickname());
@@ -84,7 +85,8 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
             intent.putExtra("imageUrl", item.getPlant().getImageUrl());
             intent.putExtra("dateAdded", item.getDateAdded());
 
-            context.startActivity(intent);
+            // Mở bằng startActivityForResult để có thể nhận kết quả xoá
+            ((Activity) context).startActivityForResult(intent, 100);
         });
     }
 

@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hoa dâm bụt"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/green_primary" />
 
@@ -53,9 +53,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tên riêng: Bụt đỏ"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="#757575"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="2dp" />
 
             <!-- Trạng thái -->
             <TextView
@@ -63,9 +63,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Trạng thái: ALIVE"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="#2E7D32"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="2dp" />
 
             <!-- Ngày thêm -->
             <TextView
@@ -73,9 +73,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ngày thêm: 01/10/2025"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:textColor="#666"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="2dp" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
