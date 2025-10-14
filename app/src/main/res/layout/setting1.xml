@@ -12,22 +12,22 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Avatar -->
-
-        <!-- User Name -->
-        <ImageView
+        <!-- 🖼 Avatar -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgAvatar"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/avatar_circle_bg"
-            android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            tools:src="@android:drawable/ic_menu_camera" />
+            android:src="@drawable/default_avatar"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            app:strokeColor="#E0E0E0"
+            app:strokeWidth="2dp" />
 
-        <!-- Email -->
-
+        <!-- 👤 User Name -->
         <TextView
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -35,20 +35,23 @@
             android:textColor="#2E7D32"
             android:textSize="22sp"
             android:textStyle="bold"
-            tools:text="Nguyễn Văn A" />
+            android:text="Nguyễn Văn A" />
 
+        <!-- 📧 Email -->
         <TextView
+            android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#6D4C41"
             android:textSize="14sp"
             android:fontFamily="sans-serif"
             android:layout_gravity="center"
-            tools:text="nguyenvana@gmail.com"
-            android:layout_marginBottom="32dp" />
+            android:layout_marginBottom="32dp"
+            android:text="nguyenvana@gmail.com" />
 
-        <!-- Card: Quản lý tài khoản -->
+        <!-- 📂 Card: Quản lý tài khoản -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardManageAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -67,7 +70,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     app:tint="#4CAF50"
-                    tools:src="@android:drawable/ic_menu_manage" />
+                    android:src="@android:drawable/ic_menu_manage" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -76,12 +79,13 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    tools:text="Quản lý tài khoản" />
+                    android:text="Quản lý tài khoản" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Card: Đổi mật khẩu -->
+        <!-- 🔒 Card: Đổi mật khẩu -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardChangePassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -100,7 +104,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     app:tint="#81D4FA"
-                    tools:src="@android:drawable/ic_lock_lock"/>
+                    android:src="@android:drawable/ic_lock_lock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -109,12 +113,13 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    tools:text="Đổi mật khẩu"/>
+                    android:text="Đổi mật khẩu" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Card: Hỗ trợ -->
+        <!-- 💬 Card: Hỗ trợ -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardSupport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -133,7 +138,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     app:tint="#8D6E63"
-                    tools:src="@android:drawable/ic_menu_help"/>
+                    android:src="@android:drawable/ic_menu_mylocation" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -142,18 +147,18 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    tools:text="Hỗ trợ"/>
+                    android:text="Đặt vị trí" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Nút Đăng xuất -->
+        <!-- 🚪 Nút Đăng xuất -->
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/btn_primary_green"
             android:backgroundTint="#2E7D32"
             android:fontFamily="sans-serif-medium"
             android:padding="14dp"
@@ -163,120 +168,6 @@
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:translationZ="0dp" />
-    </LinearLayout>
 
-    <!-- Thanh điều hướng dưới -->
-    <LinearLayout
-        android:id="@+id/bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="#FFFFFF"
-        android:elevation="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- Trang chủ -->
-        <LinearLayout
-            android:id="@+id/nav_home"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_home"
-                app:tint="#2E7D32" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Trang chủ"
-                android:textSize="10sp"
-                android:textColor="@color/green_primary" />
-        </LinearLayout>
-
-        <!-- Nhật ký trồng cây -->
-        <LinearLayout
-            android:id="@+id/nav_diary"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_journal"
-                app:tint="#2E7D32" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nhật ký"
-                android:textSize="10sp"
-                android:textColor="@color/green_primary" />
-        </LinearLayout>
-
-        <!-- Camera giữa -->
-        <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@android:drawable/ic_menu_camera"
-            android:background="@drawable/bg_circle_green"
-            android:padding="12dp"
-            android:layout_marginHorizontal="12dp" />
-
-        <!-- Chatbot -->
-        <LinearLayout
-            android:id="@+id/nav_chatbot"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_chat"
-                app:tint="#2E7D32" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chatbot"
-                android:textSize="10sp"
-                android:textColor="@color/green_primary" />
-        </LinearLayout>
-
-        <!-- Hồ sơ -->
-        <LinearLayout
-            android:id="@+id/nav_profile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_profile"
-                app:tint="#2E7D32" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hồ sơ"
-                android:textSize="10sp"
-                android:textColor="@color/green_primary" />
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>

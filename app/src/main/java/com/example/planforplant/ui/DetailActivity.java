@@ -51,7 +51,8 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail);
-
+        ImageView btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> finish());
         // Bind plant views
         plantImage = findViewById(R.id.plantImage);
         tvPlantName = findViewById(R.id.tvPlantName);

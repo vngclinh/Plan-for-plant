@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="12dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="10dp"
+        android:background="#B3E5FC"
         app:layout_constraintTop_toTopOf="parent">
 
         <!-- Nút back -->
@@ -22,7 +24,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
-            android:src="@android:drawable/ic_media_previous"
+            android:src="@drawable/outline_arrow_back_ios_24"
             android:contentDescription="Quay lại"
             app:tint="@color/green_primary" />
 
@@ -52,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="8dp"
+            android:paddingTop="12dp"
             android:paddingBottom="16dp">
 
             <!-- Container hiển thị danh sách kế hoạch từ backend -->

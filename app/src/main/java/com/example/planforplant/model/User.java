@@ -6,6 +6,7 @@ public class User {
     private String phonenumber;
     private String email;
     private String name;
+
     public String getUsername(){
         return this.username;
     };

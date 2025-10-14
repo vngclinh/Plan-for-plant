@@ -63,6 +63,8 @@
             android:layout_height="wrap_content">
 
             <!-- Ảnh -->
+
+            <!-- Tên cây -->
             <ImageView
                 android:id="@+id/imgPlant"
                 android:layout_width="match_parent"
@@ -71,7 +73,6 @@
                 android:contentDescription="Ảnh cây"
                 android:scaleType="centerCrop" />
 
-            <!-- Tên cây -->
             <TextView
                 android:id="@+id/tvCommonName"
                 android:layout_width="wrap_content"
@@ -99,8 +100,7 @@
                 android:layout_height="wrap_content"
                 android:text="Trạng thái: ALIVE"
                 android:textSize="16sp"
-                android:textColor="#2E7D32"
-                android:layout_marginTop="8dp"/>
+                android:textColor="#2E7D32"/>
 
             <!-- Ngày thêm -->
             <TextView
@@ -465,23 +465,91 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ========== THƯ VIỆN ẢNH ========== -->
-            <TextView
-                android:id="@+id/tvGalleryLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ảnh của tôi"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/green_primary"
-                android:layout_marginTop="16dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_gallery"
+            <!-- === GALLERY CARD === -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_gallery"
                 android:layout_width="match_parent"
-                android:layout_height="97dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <!-- Header: tiêu đề + actions -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvGalleryTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Ảnh của tôi"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/green_primary"/>
+
+                        <!-- Nút chụp ảnh -->
+                        <ImageView
+                            android:id="@+id/btnCamera"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:padding="6dp"
+                            android:contentDescription="Chụp ảnh"
+                            app:srcCompat="@drawable/ic_camera_alt_24"/>
+
+                        <!-- Nút thêm ảnh từ thư viện -->
+                        <ImageView
+                            android:id="@+id/btnAdd"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:padding="6dp"
+                            android:contentDescription="Thêm ảnh"
+                            app:srcCompat="@drawable/ic_add_photo_24"/>
+
+                        <!-- Nút xoá (chỉ sáng khi đang chọn) -->
+                        <ImageView
+                            android:id="@+id/btnDelete"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:padding="6dp"
+                            android:contentDescription="Xoá ảnh"
+                            app:srcCompat="@drawable/ic_delete_24"
+                            android:alpha="0.3"/>
+                    </LinearLayout>
+
+                    <!-- Grid ảnh 3 cột -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_gallery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        android:nestedScrollingEnabled="false"
+                        android:layout_marginTop="8dp"/>
+
+                    <TextView
+                        android:id="@+id/tvEmptyGallery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🌱 Cây chưa có ảnh nào"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:textColor="@android:color/darker_gray"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
     </ScrollView>
 

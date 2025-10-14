@@ -27,9 +27,8 @@ public class AuthInterceptor implements Interceptor {
     public AuthInterceptor(Context context) {
         this.sessionManager = new SessionManager(context);
 
-        // ✅ Dùng localhost của Android Emulator
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/") // ⚙️ KHÔNG DÙNG 192.168.x.x
+                .baseUrl("http://10.0.2.2:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -45,18 +44,15 @@ public class AuthInterceptor implements Interceptor {
         Log.i(TAG, "================ NEW REQUEST ================");
         Log.i(TAG, "URL: " + originalRequest.url());
         Log.i(TAG, "Method: " + originalRequest.method());
+        Log.i(TAG, "Original Headers: " + originalRequest.headers());
         Log.i(TAG, "Token from session: " + jwt);
 
         Request requestToSend = originalRequest;
-
-        // ✅ Nếu có token thì thêm header Authorization
-        if (jwt != null && !jwt.isEmpty()) {
+        if (jwt != null) {
             requestToSend = originalRequest.newBuilder()
                     .addHeader("Authorization", "Bearer " + jwt)
                     .build();
-            Log.i(TAG, "✅ Added Authorization header with JWT");
-        } else {
-            Log.w(TAG, "⚠️ Token from session is null or empty");
+            Log.i(TAG, "Added Authorization header with JWT");
         }
 
         Response response;
@@ -70,39 +66,46 @@ public class AuthInterceptor implements Interceptor {
         Log.i(TAG, "Response Code: " + response.code());
         Log.i(TAG, "Response Headers: " + response.headers());
 
-        // ✅ Nếu BE trả về 401 hoặc 403 → thử refresh token
-        if ((response.code() == 401 || response.code() == 403) && sessionManager.getRefreshToken() != null) {
-            Log.w(TAG, "Unauthorized detected, attempting token refresh...");
-            response.close(); // đóng response cũ để tránh leak
+        // Retry on 401 or 403
+        if (response.code() == 401 || response.code() == 403) {
+            Log.w(TAG, "Unauthorized or Forbidden detected, attempting refresh...");
+            response.close();
 
             String refreshToken = sessionManager.getRefreshToken();
             Log.i(TAG, "Refresh token from session: " + refreshToken);
 
-            try {
-                Map<String, String> body = new HashMap<>();
-                body.put("refreshToken", refreshToken);
+            if (refreshToken != null) {
+                try {
+                    Map<String, String> body = new HashMap<>();
+                    body.put("refreshToken", refreshToken);
 
-                retrofit2.Response<JwtResponse> refreshResponse = authApi.refreshToken(body).execute();
+                    retrofit2.Response<JwtResponse> refreshResponse = authApi.refreshToken(body).execute();
+                    if (refreshResponse.isSuccessful() && refreshResponse.body() != null) {
+                        JwtResponse newTokens = refreshResponse.body();
+                        sessionManager.saveTokens(newTokens.getToken(), newTokens.getRefreshToken());
 
-                if (refreshResponse.isSuccessful() && refreshResponse.body() != null) {
-                    JwtResponse newTokens = refreshResponse.body();
+                        Log.i(TAG, "Refresh successful. New token: " + newTokens.getToken());
 
-                    sessionManager.saveTokens(newTokens.getToken(), newTokens.getRefreshToken());
-                    Log.i(TAG, "✅ Token refresh successful, retrying original request...");
+                        Request newRequest = originalRequest.newBuilder()
+                                .removeHeader("Authorization")
+                                .addHeader("Authorization", "Bearer " + newTokens.getToken())
+                                .build();
 
-                    // Gửi lại request với token mới
-                    Request newRequest = originalRequest.newBuilder()
-                            .removeHeader("Authorization")
-                            .addHeader("Authorization", "Bearer " + newTokens.getToken())
-                            .build();
-
-                    return chain.proceed(newRequest);
-                } else {
-                    Log.w(TAG, "❌ Refresh token invalid or expired. Clearing session...");
+                        Log.i(TAG, "Retrying original request with new token...");
+                        Response retryResponse = chain.proceed(newRequest);
+                        Log.i(TAG, "Retry Response Code: " + retryResponse.code());
+                        Log.i(TAG, "Retry Response Headers: " + retryResponse.headers());
+                        return retryResponse;
+                    } else {
+                        Log.w(TAG, "Refresh token invalid or expired. Clearing session...");
+                        handleSessionExpired();
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Exception during refresh token call: " + e.getMessage(), e);
                     handleSessionExpired();
                 }
-            } catch (Exception e) {
-                Log.e(TAG, "❌ Exception during refresh token call: " + e.getMessage(), e);
+            } else {
+                Log.w(TAG, "No refresh token available. Clearing session...");
                 handleSessionExpired();
             }
         }
@@ -112,6 +115,6 @@ public class AuthInterceptor implements Interceptor {
 
     private void handleSessionExpired() {
         sessionManager.clear();
-        Log.i(TAG, "🧹 Session cleared due to expired/invalid token");
+        Log.i(TAG, "Session cleared due to expired/invalid token");
     }
 }

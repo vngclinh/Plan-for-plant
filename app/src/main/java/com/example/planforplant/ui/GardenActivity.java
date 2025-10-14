@@ -1,5 +1,6 @@
 package com.example.planforplant.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -38,6 +39,16 @@ public class GardenActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
         loadGardenData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            // Reload lại danh sách sau khi xoá thành công
+            loadGardenData();
+        }
     }
 
     private void loadGardenData() {
