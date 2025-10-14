@@ -50,7 +50,6 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
 
 
-
     // (tuỳ chọn) nếu IDE kêu thiếu ListenableFuture
     // implementation("com.google.guava:guava:32.1.3-android")
 

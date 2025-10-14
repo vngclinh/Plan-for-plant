@@ -18,12 +18,20 @@
         android:gravity="center_vertical"
         android:elevation="2dp">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_back"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/outline_arrow_back_ios_24"
+            android:tint="@color/green_primary"
+            android:padding="4dp"/>
+
         <TextView
             android:id="@+id/tvLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="📍 Hà Nội"
+            android:text=" Hà Nội 📍"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#6D4C41" />
