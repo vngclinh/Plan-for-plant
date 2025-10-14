@@ -38,6 +38,8 @@ public class ScheduleHistoryActivity extends AppCompatActivity {
     private ApiService apiService;
     private String token;
 
+    private String lastSelectedDate = "";
+
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
 
     @Override
@@ -55,6 +57,15 @@ public class ScheduleHistoryActivity extends AppCompatActivity {
         apiService = ApiClient.getLocalClient(this).create(ApiService.class);
         token = getSharedPreferences("MyApp", MODE_PRIVATE)
                 .getString("token", "");
+
+        Calendar calendar = Calendar.getInstance();
+        String today = String.format(Locale.US, "%04d-%02d-%02d",
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH));
+
+        lastSelectedDate = today;
+        loadSchedules(today);
 
         // ✅ When user selects a date
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
@@ -103,7 +114,7 @@ public class ScheduleHistoryActivity extends AppCompatActivity {
     private List<HourGroup> groupByHour(List<GardenScheduleResponse> schedules) {
         Map<String, List<GardenScheduleResponse>> grouped = new TreeMap<>();
 
-        // Example input format: "2025-10-13T14:00:00"
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
 
         for (GardenScheduleResponse s : schedules) {
