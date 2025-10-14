@@ -49,7 +49,6 @@ dependencies {
     implementation(libs.play.services.location)
 
 
-
     // (tuỳ chọn) nếu IDE kêu thiếu ListenableFuture
     // implementation("com.google.guava:guava:32.1.3-android")
 

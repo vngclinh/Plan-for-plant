@@ -2,9 +2,11 @@ package com.example.planforplant.api;
 
 import com.example.planforplant.DTO.AddGardenRequest;
 import com.example.planforplant.DTO.ChangepasswordRequest;
+import com.example.planforplant.DTO.GardenImageResponse;
 import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.GardenScheduleRequest;
 import com.example.planforplant.DTO.GardenScheduleResponse;
+import com.example.planforplant.DTO.GardenUpdateRequest;
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.DTO.LoginRequest;
 import com.example.planforplant.DTO.RegisterRequest;
@@ -23,6 +25,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -69,6 +72,20 @@ public interface ApiService {
     @GET("/garden/my")
     Call<List<GardenResponse>> getMyGarden();
 
+    @PUT("/garden/{gardenId}/")
+    Call<GardenResponse> updateGarden(@Path("gardenId") long gardenId, @Body GardenUpdateRequest request);
+
+    @GET("garden/{id}/images")
+    Call<List<GardenImageResponse>> getGardenImages(@Path("id") Long gardenId);
+
+    @Multipart
+    @POST("garden/{id}/images")
+    Call<GardenImageResponse> uploadGardenImage(
+            @Path("id") Long gardenId,
+            @Part MultipartBody.Part file
+    );
+    @DELETE("garden/images/{id}")
+    Call<Void> deleteGardenImage(@Path("id") Long imageId);
     @POST("api/schedules")
     Call<GardenScheduleResponse> createSchedule(@Body GardenScheduleRequest request);
 

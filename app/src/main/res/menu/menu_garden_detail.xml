@@ -3,18 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_edit_name"
-        android:title="Đổi tên"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_update_status"
-        android:title="Cập nhật trạng thái"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_add_photo"
-        android:title="Thêm ảnh"
+        android:id="@+id/action_edit"
+        android:title="Cập nhật thông tin"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_delete"
