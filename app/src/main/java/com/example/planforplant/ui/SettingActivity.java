@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
-import com.example.planforplant.DTO.UserProfileResponse;
+import com.example.planforplant.DTO.UserResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
@@ -73,11 +73,11 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void loadUserProfile() {
-        apiService.getProfile().enqueue(new Callback<UserProfileResponse>() {
+        apiService.getProfile().enqueue(new Callback<UserResponse>() {
             @Override
-            public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    UserProfileResponse user = response.body();
+                    UserResponse user = response.body();
 
                     tvName.setText(user.getFullname());
                     tvEmail.setText(user.getEmail());
@@ -97,7 +97,7 @@ public class SettingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+            public void onFailure(Call<UserResponse> call, Throwable t) {
                 Toast.makeText(SettingActivity.this, "Lỗi kết nối server", Toast.LENGTH_SHORT).show();
                 Log.e("SettingActivity", "Failure: " + t.getMessage(), t);
             }

@@ -12,16 +12,17 @@
         android:padding="20dp">
 
         <!-- Avatar -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgAvatar"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/ic_user"
-            android:background="@drawable/avatar_circle_bg"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
             android:scaleType="centerCrop"
-            android:clickable="true"
-            android:focusable="true" />
+            android:src="@drawable/default_avatar"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            app:strokeColor="#E0E0E0"
+            app:strokeWidth="2dp" />
 
         <!-- Full name -->
         <TextView
@@ -38,7 +39,7 @@
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@nguyenvana"
+            android:text="nguyenvana"
             android:textSize="14sp"
             android:textColor="#777777"
             android:layout_marginBottom="24dp" />

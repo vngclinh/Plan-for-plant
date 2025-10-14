@@ -10,7 +10,9 @@ import com.example.planforplant.DTO.GardenUpdateRequest;
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.DTO.LoginRequest;
 import com.example.planforplant.DTO.RegisterRequest;
-import com.example.planforplant.DTO.UserProfileResponse;
+import com.example.planforplant.DTO.UpdateUserRequest;
+
+import com.example.planforplant.DTO.UserResponse;
 import com.example.planforplant.model.Disease;
 import com.example.planforplant.model.Plant;
 
@@ -93,7 +95,7 @@ public interface ApiService {
     Call<Boolean> checkScheduleExists(@Query("gardenId") Long gardenId, @Query("scheduledTime") String scheduledTime);
 
     @GET("/api/user/me")
-    Call<UserProfileResponse> getProfile();
+    Call<UserResponse> getProfile();
 
     @Multipart
     @POST("api/user/avatar")
@@ -111,4 +113,7 @@ public interface ApiService {
             @Query("lat") double lat,
             @Query("lon") double lon
     );
+
+    @PUT("/api/user/me")
+    Call<UserResponse> updateUserProfile(@Body UpdateUserRequest request);
 }

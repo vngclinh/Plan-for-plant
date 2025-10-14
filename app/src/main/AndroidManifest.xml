@@ -49,6 +49,9 @@
         <activity android:name=".ui.EditPasswordActivity" />
         <activity android:name=".ui.ViewAvatarActivity" />
         <activity android:name=".ui.ProfileActivity" />
+        <activity android:name=".ui.LocationActivity" />
+        <activity android:name=".ui.EditProfileActivity"/>
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
