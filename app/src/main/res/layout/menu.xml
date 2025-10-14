@@ -8,7 +8,6 @@
     tools:context=".ui.MainActivity">
 
     <!-- Thanh trên: vị trí + thời tiết -->
-    <!-- Thanh trên: vị trí + thời tiết -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
