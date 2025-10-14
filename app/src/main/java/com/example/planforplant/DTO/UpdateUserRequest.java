@@ -1,33 +1,37 @@
 package com.example.planforplant.DTO;
 
-public class UserProfileResponse {
-    private Long id;
+public class UpdateUserRequest {
+
     private String fullname;
     private String username;
+    private String password;
     private String email;
     private String phoneNumber;
     private String avatarUrl;
+    private Double lat;
+    private Double lon;
 
-    public UserProfileResponse() {
+    public UpdateUserRequest() {
     }
 
-    public UserProfileResponse(Long id, String fullname, String username, String email, String phoneNumber, String avatarUrl) {
-        this.id = id;
+    public UpdateUserRequest(String fullname, String username, String password, String email,
+                             String phoneNumber, String avatarUrl, Double lat, Double lon) {
         this.fullname = fullname;
         this.username = username;
+        this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.avatarUrl = avatarUrl;
+        this.lat = lat;
+        this.lon = lon;
     }
 
-    public Long getId() {
-        return id;
+    public UpdateUserRequest(Double lat, Double lon) {
+        this.lat = lat;
+        this.lon = lon;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    // Getters and setters
     public String getFullname() {
         return fullname;
     }
@@ -42,6 +46,14 @@ public class UserProfileResponse {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -66,5 +78,21 @@ public class UserProfileResponse {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLon() {
+        return lon;
+    }
+
+    public void setLon(Double lon) {
+        this.lon = lon;
     }
 }

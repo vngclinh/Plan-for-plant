@@ -21,7 +21,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.planforplant.DTO.UserProfileResponse;
+
+import com.example.planforplant.DTO.UserResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
@@ -153,13 +154,13 @@ public class ProfileActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading profile...");
         progressDialog.show();
 
-        apiService.getProfile().enqueue(new Callback<UserProfileResponse>() {
+        apiService.getProfile().enqueue(new Callback<UserResponse>() {
             @Override
-            public void onResponse(@NonNull Call<UserProfileResponse> call,
-                                   @NonNull Response<UserProfileResponse> response) {
+            public void onResponse(@NonNull Call<UserResponse> call,
+                                   @NonNull Response<UserResponse> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
-                    UserProfileResponse user = response.body();
+                    UserResponse user = response.body();
                     tvFullname.setText(user.getFullname());
                     tvUsername.setText("@" + user.getUsername());
                     tvEmail.setText(user.getEmail());
@@ -178,7 +179,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<UserProfileResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(ProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
