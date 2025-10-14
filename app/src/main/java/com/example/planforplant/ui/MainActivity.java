@@ -75,44 +75,16 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton plantIdentifier = findViewById(R.id.plant_identifier);
         plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, CaptureActivity.class)));
 
-        MaterialButton addPlan = findViewById(R.id.btnCreatePlan);
-        addPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, PlanActivity.class)));
-
-        MaterialButton ViewPlan = findViewById(R.id.btnViewPlan);
-        ViewPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, ScheduleHistoryActivity.class)));
-
         MaterialButton Setting = findViewById(R.id.btnSetting);
         Setting.setOnClickListener(v -> startActivity(new android.content.Intent(this, SettingActivity.class)));
+
+//        MaterialButton addPlan = findViewById(R.id.btnCreatePlan);
+//        addPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, PlanActivity.class)));
 
 
         // view garden click
         MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
         viewGarden.setOnClickListener(  v -> startActivity(new android.content.Intent(this,GardenActivity.class )));
-
-        // --- Bottom Navigation ---
-        // Trang chủ
-        LinearLayout navHome = findViewById(R.id.nav_home);
-        navHome.setOnClickListener(v ->
-                startActivity(new Intent(this, HomeActivity.class))
-        );
-
-        // Nhật ký
-        LinearLayout navDiary = findViewById(R.id.nav_diary);
-        navDiary.setOnClickListener(v ->
-                startActivity(new Intent(this, PlanActivity.class))
-        );
-
-        // Chatbot
-        LinearLayout navChatbot = findViewById(R.id.nav_chatbot);
-        navChatbot.setOnClickListener(v ->
-                startActivity(new Intent(this, ChatbotActivity.class))
-        );
-
-        // Hồ sơ
-        LinearLayout navProfile = findViewById(R.id.nav_profile);
-        navProfile.setOnClickListener(v ->
-                startActivity(new Intent(this, ProfileActivity.class))
-        );
     }
 
     @Override

@@ -42,21 +42,12 @@
         <activity android:name=".ui.VerifyCodeActivity"/>
         <activity android:name=".ui.ChangePasswordActivity"/>
         <activity android:name=".ui.GardenActivity"/>
-        <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".ui.DiaryActivity" />
-        <activity android:name=".ui.ChatbotActivity" />
-        <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.PlanActivity" />
-        <activity android:name=".ui.CreatePlanActivity" />
-        <activity android:name=".ui.ScheduleHistoryActivity" />
         <activity android:name=".ui.GardenDetailActivity"/>
         <activity android:name=".ui.SettingActivity"/>
         <activity android:name=".ui.EditPasswordActivity" />
         <activity android:name=".ui.ViewAvatarActivity" />
         <activity android:name=".ui.ProfileActivity" />
-        <activity android:name=".ui.LocationActivity" />
-        <activity android:name=".ui.EditProfileActivity"/>
-
 
         <provider
             android:name="androidx.core.content.FileProvider"

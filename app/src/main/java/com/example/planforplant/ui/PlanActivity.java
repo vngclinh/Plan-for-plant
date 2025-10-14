@@ -1,24 +1,25 @@
 package com.example.planforplant.ui;
 
+import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioGroup;
-import android.widget.TimePicker;
-import android.widget.Toast;
+import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.planforplant.R;
-import com.example.planforplant.api.ApiClient;
-import com.example.planforplant.api.GardenScheduleApi;
+
 import com.example.planforplant.DTO.GardenScheduleRequest;
 import com.example.planforplant.DTO.GardenScheduleResponse;
+import com.example.planforplant.R;
+import com.example.planforplant.api.ApiClient;
+import com.example.planforplant.api.ApiService;
+import com.example.planforplant.session.SessionManager;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -27,117 +28,142 @@ import retrofit2.Response;
 
 public class PlanActivity extends AppCompatActivity {
 
-    private TimePicker timePickerAction;
-    private RadioGroup radioActivityGroup;
-    private LinearLayout layoutWatering, layoutFertilizing, layoutPruning;
-    private EditText etWaterAmount, etFertilizerType, etFertilizerAmount, etPruningNote, etNote;
+    private CalendarView calendarView;
+    private TextView timePickerAction;
+    private EditText etWaterDuration, etFertilizerType, etFertilizerAmount, etPruningNote, etNote;
+    private Spinner spinnerCompletion;
     private Button btnCreatePlan;
-    private GardenScheduleApi scheduleApi;
 
-    private final Long gardenId = 1L; // Hardcoded garden ID
+    private int selectedHour = 8;
+    private int selectedMinute = 0;
+    private long selectedDateMillis;
+    private ProgressDialog progressDialog;
+    private SessionManager sessionManager;
+    private Long gardenId;  // lấy từ Intent (khi tạo kế hoạch cho cây cụ thể)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.care_plant);
 
-        // Ánh xạ View
+        // === Gán view ===
+        calendarView = findViewById(R.id.calendarView);
         timePickerAction = findViewById(R.id.timePickerAction);
-        radioActivityGroup = findViewById(R.id.radioActivityGroup);
-        layoutWatering = findViewById(R.id.layoutWateringInputs);
-        layoutFertilizing = findViewById(R.id.layoutFertilizingInputs);
-        layoutPruning = findViewById(R.id.layoutPruningInputs);
-        etWaterAmount = findViewById(R.id.etWaterAmount);
+        etWaterDuration = findViewById(R.id.etWaterDuration);
         etFertilizerType = findViewById(R.id.etFertilizerType);
         etFertilizerAmount = findViewById(R.id.etFertilizerAmount);
         etPruningNote = findViewById(R.id.etPruningNote);
+        spinnerCompletion = findViewById(R.id.spinnerCompletion);
         etNote = findViewById(R.id.etNote);
         btnCreatePlan = findViewById(R.id.btnCreatePlan);
 
-        scheduleApi = ApiClient.getLocalClient(this).create(GardenScheduleApi.class);
-        timePickerAction.setIs24HourView(true);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        sessionManager = new SessionManager(this);
 
-        radioActivityGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            layoutWatering.setVisibility(View.GONE);
-            layoutFertilizing.setVisibility(View.GONE);
-            layoutPruning.setVisibility(View.GONE);
-
-            if (checkedId == R.id.rbWatering) {
-                layoutWatering.setVisibility(View.VISIBLE);
-            } else if (checkedId == R.id.rbFertilizing) {
-                layoutFertilizing.setVisibility(View.VISIBLE);
-            } else if (checkedId == R.id.rbPruning) {
-                layoutPruning.setVisibility(View.VISIBLE);
-            }
-        });
-
-        btnCreatePlan.setOnClickListener(v -> submitPlan());
-    }
-
-    private void submitPlan() {
-        int checkedId = radioActivityGroup.getCheckedRadioButtonId();
-        if (checkedId == -1) {
-            Toast.makeText(this, "Vui lòng chọn một công việc", Toast.LENGTH_SHORT).show();
+        // === Lấy gardenId từ Intent (nếu có) ===
+        gardenId = getIntent().getLongExtra("gardenId", -1);
+        if (gardenId == -1) {
+            Toast.makeText(this, "Thiếu thông tin vườn 🌱", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 
-        GardenScheduleRequest request = new GardenScheduleRequest();
-        request.setGardenId(gardenId);
-        request.setNote(etNote.getText().toString());
 
-        if (checkedId == R.id.rbWatering) {
-            request.setType("WATERING");
-            try {
-                request.setWaterAmount(Double.parseDouble(etWaterAmount.getText().toString()));
-            } catch (NumberFormatException e) {
-                Toast.makeText(this, "Vui lòng nhập lượng nước hợp lệ", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        } else if (checkedId == R.id.rbFertilizing) {
-            request.setType("FERTILIZER");
-            request.setFertilityType(etFertilizerType.getText().toString());
-            try {
-                request.setFertilityAmount(Double.parseDouble(etFertilizerAmount.getText().toString()));
-            } catch (NumberFormatException e) {
-                Toast.makeText(this, "Vui lòng nhập lượng phân bón hợp lệ", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        } else if (checkedId == R.id.rbPruning) {
-            request.setType("PRUNING");
-            // Ghi chú tỉa lá có thể được thêm vào ghi chú chung
-            request.setNote(etPruningNote.getText().toString() + ". " + etNote.getText().toString());
-        }
+        // === Ngày mặc định ===
+        selectedDateMillis = calendarView.getDate();
+        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            Calendar cal = Calendar.getInstance();
+            cal.set(year, month, dayOfMonth);
+            selectedDateMillis = cal.getTimeInMillis();
+        });
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, timePickerAction.getHour());
-        calendar.set(Calendar.MINUTE, timePickerAction.getMinute());
-        calendar.set(Calendar.SECOND, 0);
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-        request.setScheduledTime(sdf.format(calendar.getTime()));
+        // === Chọn giờ ===
+        timePickerAction.setOnClickListener(v -> openTimePickerDialog());
 
-        sendSchedule(request);
+        // === Chọn trạng thái ===
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                new String[]{"NotDone", "Done", "Skipped"});
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCompletion.setAdapter(adapter);
+
+        // === Nút tạo kế hoạch ===
+        btnCreatePlan.setOnClickListener(v -> createSchedule());
     }
 
-    private void sendSchedule(GardenScheduleRequest request) {
-        Log.d("PlanActivity", "Gửi kế hoạch: " + request.getType() + " | time=" + request.getScheduledTime());
+    private void openTimePickerDialog() {
+        MaterialTimePicker picker = new MaterialTimePicker.Builder()
+                .setTitleText("🕒 Chọn giờ thực hiện")
+                .setHour(selectedHour)
+                .setMinute(selectedMinute)
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .build();
 
-        scheduleApi.createSchedule(request).enqueue(new Callback<GardenScheduleResponse>() {
+        picker.addOnPositiveButtonClickListener(v -> {
+            selectedHour = picker.getHour();
+            selectedMinute = picker.getMinute();
+            timePickerAction.setText(String.format(Locale.getDefault(),
+                    "Giờ thực hiện: %02d:%02d", selectedHour, selectedMinute));
+        });
+
+        picker.show(getSupportFragmentManager(), "material_time_picker");
+    }
+
+    private void createSchedule() {
+        // === Kiểm tra gardenId ===
+        if (gardenId == null || gardenId <= 0) {
+            Toast.makeText(this, "Không xác định được vườn!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // === Tạo request ===
+        GardenScheduleRequest req = new GardenScheduleRequest();
+        req.setGardenId(gardenId);
+        req.setCompletion(spinnerCompletion.getSelectedItem().toString());
+        req.setNote(etNote.getText().toString());
+        req.setType("WATERING");
+
+        String waterStr = etWaterDuration.getText().toString();
+        if (!waterStr.isEmpty()) req.setWaterAmount(Double.valueOf(waterStr));
+
+        String fertType = etFertilizerType.getText().toString();
+        if (!fertType.isEmpty()) req.setFertilityType(fertType);
+
+        String fertAmt = etFertilizerAmount.getText().toString();
+        if (!fertAmt.isEmpty()) req.setFertilityAmount(Double.valueOf(fertAmt));
+
+        // === Gộp ngày + giờ ===
+        Date date = new Date(selectedDateMillis);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String datePart = df.format(date);
+        String timePart = String.format(Locale.getDefault(), "%02d:%02d:00", selectedHour, selectedMinute);
+        String isoDateTime = datePart + "T" + timePart;
+        req.setScheduledTime(isoDateTime);
+
+        // === Gọi API ===
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+
+        progressDialog.setMessage("Đang tạo lịch chăm cây...");
+        progressDialog.show();
+
+        api.createSchedule(req).enqueue(new Callback<GardenScheduleResponse>() {
             @Override
-            public void onResponse(Call<GardenScheduleResponse> call, Response<GardenScheduleResponse> response) {
+            public void onResponse(@NonNull Call<GardenScheduleResponse> call, @NonNull Response<GardenScheduleResponse> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
-                    Toast.makeText(PlanActivity.this, "Đã lưu kế hoạch thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlanActivity.this, "Tạo kế hoạch chăm cây thành công 🌿", Toast.LENGTH_LONG).show();
                     finish();
                 } else {
-                    Toast.makeText(PlanActivity.this, "Lưu kế hoạch không thành công!", Toast.LENGTH_SHORT).show();
-                    Log.e("PlanActivity", "API Error: " + response.code() + " " + response.message());
+                    Toast.makeText(PlanActivity.this, "Không thể tạo kế hoạch (" + response.code() + ")", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<GardenScheduleResponse> call, Throwable t) {
-                Toast.makeText(PlanActivity.this, "Không thể kết nối tới server!", Toast.LENGTH_LONG).show();
-                Log.e("PlanActivity", "API Failure: " + t.getMessage(), t);
+            public void onFailure(@NonNull Call<GardenScheduleResponse> call, @NonNull Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(PlanActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
