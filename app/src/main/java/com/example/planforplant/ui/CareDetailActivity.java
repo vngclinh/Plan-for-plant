@@ -61,7 +61,7 @@ public class CareDetailActivity extends AppCompatActivity {
 
         boolean hasWork = false;
         for (GardenScheduleResponse s : schedules) {
-            if (s.scheduledTime != null && s.scheduledTime.startsWith(selectedDate)) {
+            if (s.getScheduledTime() != null && s.getScheduledTime().startsWith(selectedDate)) {
                 hasWork = true;
 
                 CardView card = new CardView(this);
@@ -80,22 +80,22 @@ public class CareDetailActivity extends AppCompatActivity {
                 text.setTextSize(16);
                 text.setPadding(16, 0, 0, 0);
 
-                switch (s.type) {
+                switch (s.getType()) {
                     case "WATERING":
                         emoji.setText("💧");
-                        text.setText("Tưới nước: " + (s.waterAmount != null ? s.waterAmount + " ml" : "Không rõ"));
+                        text.setText("Tưới nước: " + (s.getWaterAmount() != null ? s.getWaterAmount() + " ml" : "Không rõ"));
                         break;
                     case "FERTILIZER":
                         emoji.setText("🌱");
-                        text.setText("Bón phân: " + (s.note != null ? s.note : "Không rõ"));
+                        text.setText("Bón phân: " + (s.getNote() != null ? s.getNote() : "Không rõ"));
                         break;
                     case "PRUNING":
                         emoji.setText("✂️");
-                        text.setText("Tỉa lá: " + (s.note != null ? s.note : "Không có ghi chú"));
+                        text.setText("Tỉa lá: " + (s.getNote() != null ? s.getNote() : "Không có ghi chú"));
                         break;
                     default:
                         emoji.setText("🪴");
-                        text.setText("Công việc khác: " + (s.note != null ? s.note : ""));
+                        text.setText("Công việc khác: " + (s.getNote() != null ? s.getNote() : ""));
                         break;
                 }
 

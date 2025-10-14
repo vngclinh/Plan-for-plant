@@ -69,4 +69,10 @@ public class SessionManager {
             return true;
         }
     }
+
+    // Thêm phương thức isLoggedIn
+    public boolean isLoggedIn() {
+        String token = getToken();
+        return token != null && !token.isEmpty();
+    }
 }

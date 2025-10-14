@@ -55,6 +55,7 @@
 
             <!-- Nhật ký -->
             <LinearLayout
+                android:id="@+id/nav_diary"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -82,6 +83,7 @@
 
             <!-- Chatbot -->
             <LinearLayout
+                android:id="@+id/nav_chatbot"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -104,6 +106,7 @@
 
             <!-- Hồ sơ -->
             <LinearLayout
+                android:id="@+id/nav_profile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

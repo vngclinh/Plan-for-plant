@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, CaptureActivity.class)));
 
         MaterialButton addPlan = findViewById(R.id.btnCreatePlan);
-        addPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, CreatePlanActivity.class)));
+        addPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, PlanActivity.class)));
 
         MaterialButton ViewPlan = findViewById(R.id.btnViewPlan);
         ViewPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, ScheduleHistoryActivity.class)));

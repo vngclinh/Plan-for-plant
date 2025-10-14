@@ -1,29 +1,32 @@
-package com.example.tenproject; // đổi thành tên package của bạn
+package com.example.planforplant.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.planforplant.R;
 import com.example.planforplant.ui.DiaryActivity;
 import com.example.planforplant.ui.HomeActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class NavigationBarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        // Sử dụng đúng layout
+        setContentView(R.layout.view_bottom_nav);
 
-        Button btnTrangChu = findViewById(R.id.btnTrangChu);
-        Button btnNhatKy = findViewById(R.id.btnNhatKy);
+        // Tìm các mục menu bằng ID của LinearLayout
+        View btnTrangChu = findViewById(R.id.nav_home);
+        View btnNhatKy = findViewById(R.id.nav_diary);
 
         btnTrangChu.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            Intent intent = new Intent(NavigationBarActivity.this, HomeActivity.class);
             startActivity(intent);
         });
 
         btnNhatKy.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, DiaryActivity.class);
+            Intent intent = new Intent(NavigationBarActivity.this, DiaryActivity.class);
             startActivity(intent);
         });
     }
