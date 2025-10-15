@@ -1,41 +1,53 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@drawable/bg_card_item"
-    android:padding="12dp"
-    android:layout_margin="8dp"
-    android:elevation="3dp"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardSchedule"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginBottom="10dp"
+    android:elevation="4dp"
+    android:radius="12dp"
+    android:backgroundTint="@android:color/white"
+    android:padding="12dp">
 
-    <!-- Header -->
-    <TextView
-        android:id="@+id/tvHeader"
-        android:text="🪴 Kế hoạch chăm cây – 01/10/2025"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:layout_marginBottom="8dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvType"
-        android:text="🌿 Loại: Tưới nước"
-        android:layout_marginBottom="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvType"
+            android:text="💧 Tưới nước"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/green_primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"  />
 
-    <TextView
-        android:id="@+id/tvNote"
-        android:text="📝 Ghi chú: Tưới buổi sáng"
-        android:layout_marginBottom="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvPlant"
+            android:text="🌿 Cây: Dâu tây"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp" />
 
-    <TextView
-        android:id="@+id/tvCompletion"
-        android:text="📌 Trạng thái: NotDone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tvTime"
+            android:text="🕒 07:30 15/10/2025"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvNote"
+            android:text="Ghi chú: Tưới nhẹ vào sáng sớm"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

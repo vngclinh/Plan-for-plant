@@ -2,6 +2,7 @@ package com.example.planforplant.ui;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.widget.CalendarView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,28 +15,42 @@ import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ScheduleListActivity extends AppCompatActivity {
 
+    private CalendarView calendarView;
     private RecyclerView recyclerSchedules;
     private ProgressDialog progressDialog;
-    private ScheduleListGroupedAdapter adapter;
+    private ScheduleAdapter adapter;
+    private List<GardenScheduleResponse> allSchedules = new ArrayList<>();
+
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.schedule_list);
+        setContentView(R.layout.schedule_list); // layout cũ nhưng có CalendarView ở trên
 
+        calendarView = findViewById(R.id.calendarView);
         recyclerSchedules = findViewById(R.id.recyclerSchedules);
         recyclerSchedules.setLayoutManager(new LinearLayoutManager(this));
 
         loadSchedules();
+
+        // ✅ Khi chọn ngày
+        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            String selectedDate = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth);
+            showSchedulesForDate(selectedDate);
+        });
     }
 
+    /** 🔹 Tải toàn bộ kế hoạch */
     private void loadSchedules() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang tải danh sách kế hoạch...");
@@ -49,12 +64,12 @@ public class ScheduleListActivity extends AppCompatActivity {
                                    @NonNull Response<List<GardenScheduleResponse>> response) {
                 progressDialog.dismiss();
                 if (response.isSuccessful() && response.body() != null) {
-                    List<GardenScheduleResponse> schedules = response.body();
-                    List<GroupedSchedule> grouped = groupByDay(schedules);
-                    adapter = new ScheduleListGroupedAdapter(grouped, scheduledTime -> {
-                        ScheduleDetailActivity.start(ScheduleListActivity.this, scheduledTime);
-                    });
-                    recyclerSchedules.setAdapter(adapter);
+                    allSchedules = response.body();
+
+                    // 👉 Hiển thị lịch hôm nay trước
+                    String today = dateFormat.format(new Date());
+                    showSchedulesForDate(today);
+                    calendarView.setDate(System.currentTimeMillis(), false, true);
                 } else {
                     Toast.makeText(ScheduleListActivity.this, "Không tải được dữ liệu", Toast.LENGTH_SHORT).show();
                 }
@@ -68,21 +83,43 @@ public class ScheduleListActivity extends AppCompatActivity {
         });
     }
 
-    /** 🔹 Gom nhóm kế hoạch theo NGÀY (yyyy-MM-dd) */
-    private List<GroupedSchedule> groupByDay(List<GardenScheduleResponse> schedules) {
-        Map<String, List<GardenScheduleResponse>> map = new LinkedHashMap<>();
-
-        for (GardenScheduleResponse s : schedules) {
-            if (s.getScheduledTime() == null) continue;
-            String key = s.getScheduledTime().substring(0, 10); // chỉ lấy ngày
-            map.computeIfAbsent(key, k -> new ArrayList<>()).add(s);
+    /** 🔹 Lọc & hiển thị kế hoạch của ngày được chọn */
+    private void showSchedulesForDate(String date) {
+        List<GardenScheduleResponse> filtered = new ArrayList<>();
+        for (GardenScheduleResponse s : allSchedules) {
+            if (s.getScheduledTime() != null && s.getScheduledTime().startsWith(date)) {
+                filtered.add(s);
+            }
         }
 
-        List<GroupedSchedule> result = new ArrayList<>();
-        for (Map.Entry<String, List<GardenScheduleResponse>> entry : map.entrySet()) {
-            result.add(new GroupedSchedule(entry.getKey(), entry.getValue()));
+        if (filtered.isEmpty()) {
+            recyclerSchedules.setAdapter(null);
+            Toast.makeText(this, "🌿 Không có lịch cho ngày " + date, Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        return result;
+        // 🔹 Giữ bản mới nhất mỗi loại (Watering, Fertilizing, ...)
+        Map<String, GardenScheduleResponse> latestByType = new LinkedHashMap<>();
+        for (GardenScheduleResponse s : filtered) {
+            if (s.getType() == null) continue;
+            String type = s.getType();
+
+            if (!latestByType.containsKey(type)) {
+                latestByType.put(type, s);
+            } else {
+                GardenScheduleResponse existing = latestByType.get(type);
+                if (s.getUpdatedAt() != null && existing.getUpdatedAt() != null
+                        && s.getUpdatedAt().compareTo(existing.getUpdatedAt()) > 0) {
+                    latestByType.put(type, s);
+                }
+            }
+        }
+
+        List<GardenScheduleResponse> latestList = new ArrayList<>(latestByType.values());
+
+        // 🔹 Hiển thị từng loại dưới dạng card riêng
+        adapter = new ScheduleAdapter(latestList, schedule ->
+                ScheduleDetailActivity.start(ScheduleListActivity.this, schedule.getScheduledTime()));
+        recyclerSchedules.setAdapter(adapter);
     }
 }
