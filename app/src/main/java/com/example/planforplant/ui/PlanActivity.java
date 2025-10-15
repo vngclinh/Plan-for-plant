@@ -346,9 +346,13 @@ public class PlanActivity extends AppCompatActivity {
         if (success >= total) {
             progressDialog.dismiss();
             Toast.makeText(this, "Đã xử lý " + success + "/" + total + " kế hoạch 🌿", Toast.LENGTH_LONG).show();
+
+            // Gửi tín hiệu thành công về cho ScheduleDetailActivity
+            setResult(RESULT_OK);
             finish();
         }
     }
+
 
     private GardenScheduleRequest makeReq(String type, String scheduledTime, String completion) {
         GardenScheduleRequest req = new GardenScheduleRequest();
