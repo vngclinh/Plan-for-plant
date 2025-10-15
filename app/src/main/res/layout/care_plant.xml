@@ -83,6 +83,7 @@
             android:layout_margin="8dp"/>
     </androidx.cardview.widget.CardView>
 
+
     <!-- Nội dung chính -->
     <ScrollView
         android:layout_width="0dp"
@@ -97,6 +98,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌿 Chọn cây trong vườn"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/earth_brown_dark"
+                android:layout_marginBottom="4dp" />
+
+            <Spinner
+                android:id="@+id/spinnerGarden"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card"
+                android:padding="8dp"
+                android:layout_marginBottom="16dp" />
 
             <!-- Thời gian -->
             <TextView
@@ -149,13 +167,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💧 Lượng nước tưới (ml)"
-                        android:textColor="@color/green_primary"
-                        android:textStyle="bold"
-                        android:textSize="15sp" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <CheckBox
+                            android:id="@+id/cbWatering"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/green_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="💧 Tưới nước"
+                            android:textColor="@color/green_primary"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
 
                     <EditText
                         android:id="@+id/etWaterDuration"
@@ -164,9 +196,11 @@
                         android:hint="Nhập lượng nước tưới (ml)"
                         android:inputType="number"
                         android:background="@drawable/bg_input"
-                        android:padding="8dp" />
+                        android:padding="8dp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
 
             <!-- BÓN PHÂN -->
             <androidx.cardview.widget.CardView
@@ -184,13 +218,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🌱 Phân bón"
-                        android:textColor="@color/green_primary"
-                        android:textStyle="bold"
-                        android:textSize="15sp" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <CheckBox
+                            android:id="@+id/cbFertilizing"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/green_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🌱 Phân bón"
+                            android:textColor="@color/green_primary"
+                            android:textStyle="bold"
+                            android:textSize="15sp" />
+                    </LinearLayout>
 
                     <EditText
                         android:id="@+id/etFertilizerType"
@@ -210,7 +257,6 @@
                         android:padding="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <!-- TỈA LÁ -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/layoutPruningInputs"
@@ -227,13 +273,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="✂️ Ghi chú tỉa lá"
-                        android:textColor="@color/green_primary"
-                        android:textStyle="bold"
-                        android:textSize="15sp" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <CheckBox
+                            android:id="@+id/cbPruning"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/green_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="✂️ Ghi chú tỉa lá"
+                            android:textColor="@color/green_primary"
+                            android:textStyle="bold"
+                            android:textSize="15sp" />
+                    </LinearLayout>
 
                     <EditText
                         android:id="@+id/etPruningNote"
@@ -244,7 +303,6 @@
                         android:padding="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <!-- Trạng thái -->
             <TextView
                 android:layout_width="wrap_content"
@@ -284,6 +342,17 @@
                 android:textColor="@color/white"
                 android:backgroundTint="@color/green_primary"
                 android:layout_marginBottom="16dp" />
+
+            <!-- nút quay về -->
+            <Button
+                android:id="@+id/btnBackHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🏠 Quay về trang chủ"
+                android:backgroundTint="@color/gray_light"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp" />
         </LinearLayout>
     </ScrollView>
 
