@@ -20,6 +20,10 @@
     <color name="sky_blue">#81D4FA</color>
     <color name="sky_blue_dark">#0288D1</color>
 
+    <!-- Gray -->
+    <color name="gray_light">#F4F4F4</color>
+    <color name="gray_dark">#666666</color>
+
     <!-- text -->
     <color name="text_primary">#263238</color>
     <color name="text_secondary">#455A64</color>

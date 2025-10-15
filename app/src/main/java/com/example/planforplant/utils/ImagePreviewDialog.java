@@ -21,8 +21,8 @@ public class ImagePreviewDialog {
         dialog.setContentView(R.layout.dialog_full_image);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         dialog.getWindow().setLayout(
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT, //chiều rộng
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT //chiều cao
         );
 
         ImageView fullImage = dialog.findViewById(R.id.fullImage);

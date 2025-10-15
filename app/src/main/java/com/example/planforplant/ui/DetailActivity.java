@@ -5,7 +5,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,7 +88,6 @@ public class DetailActivity extends AppCompatActivity {
         String json = intent.getStringExtra("plantResponseJson");
         if (json != null) {
             PlantResponse response = new Gson().fromJson(json, PlantResponse.class);
-            bindPlantData(response);
 
             if (response != null && response.results != null && !response.results.isEmpty()) {
                 Result first = response.results.get(0);
@@ -117,14 +120,9 @@ public class DetailActivity extends AppCompatActivity {
         }
         // Bind nút "Thêm vào vườn"
         MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
-        if (plant != null && plant.getId() != null) {
-            checkIfPlantInGarden(plant.getId(), btnAddToGarden);
-        } else {
-            Toast.makeText(this, "Không thể tải thông tin cây", Toast.LENGTH_SHORT).show();
-        }
         btnAddToGarden.setOnClickListener(v -> {
             if (plant != null && plant.getId() != null) {
-                addPlantToGarden(plant.getId());
+                showAddGardenDialog(plant.getId());
             } else {
                 Toast.makeText(this, "Không tìm thấy ID của cây", Toast.LENGTH_SHORT).show();
             }
@@ -132,15 +130,53 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    private void checkIfPlantInGarden(Long plantId, MaterialButton button) {
-        SessionManager sessionManager = new SessionManager(this);
-        String token = sessionManager.getToken();
+    private void showAddGardenDialog(Long plantId) {
+        // Inflate layout
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_garden, null);
 
-        ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
+        EditText etNickname = dialogView.findViewById(R.id.etNickname);
+        Spinner spType = dialogView.findViewById(R.id.spType);
+        Spinner spPotType = dialogView.findViewById(R.id.spPotType);
+
+        // Adapter cho loại vườn
+        String[] positionDisplay = {"Trong nhà", "Ngoài trời"};
+        String[] positionValue = {"Indoor", "Outdoor"};
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                positionDisplay
+        );
+        spType.setAdapter(typeAdapter);
+
+        // Adapter cho loại chậu
+        String[] potDisplay = {"Chậu nhỏ", "Chậu trung bình", "Chậu to"};
+        String[] potValue = {"SMALL", "MEDIUM", "LARGE"};
+        ArrayAdapter<String> potAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                potDisplay
+        );
+        spPotType.setAdapter(potAdapter);
+
+        // Tạo dialog
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Thêm cây vào vườn 🌿")
+                .setView(dialogView)
+                .setPositiveButton("Hoàn thành", (dialog, which) -> {
+                    String nickname = etNickname.getText().toString().trim();
+                    int selectedPosition = spType.getSelectedItemPosition();
+                    String type = positionValue[selectedPosition];
+
+                    int selectedPot = spPotType.getSelectedItemPosition();
+                    String potType = potValue[selectedPot];
+
+                    addPlantToGarden(plantId, nickname, type, potType);
+                })
+                .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
-    private void addPlantToGarden(Long plantId) {
-        // Lấy token đã lưu
+    private void addPlantToGarden(Long plantId, String nickname, String type, String potType) {
         SessionManager sessionManager = new SessionManager(this);
         String token = sessionManager.getToken();
 
@@ -150,7 +186,12 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         ApiService apiService = ApiClient.getLocalClient(this).create(ApiService.class);
-        AddGardenRequest request = new AddGardenRequest(plantId);
+
+        AddGardenRequest request = new AddGardenRequest();
+        request.setPlantId(plantId);
+        request.setNickname(nickname);
+        request.setType(type);
+        request.setPotType(potType);
 
         apiService.addPlantToGarden(request).enqueue(new Callback<GardenResponse>() {
             @Override
@@ -158,7 +199,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(
                             DetailActivity.this,
-                            "🌱 Đã thêm cây vào vườn của bạn!",
+                            "🌱 Đã thêm cây '" + nickname + "' vào vườn!",
                             Toast.LENGTH_SHORT
                     ).show();
                 } else {
@@ -179,6 +220,7 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -208,7 +250,11 @@ public class DetailActivity extends AppCompatActivity {
 
                         // Sau khi có plant (từ backend) mới cho phép thêm vào vườn
                         MaterialButton btnAddToGarden = findViewById(R.id.btnAddToGarden);
-                        btnAddToGarden.setOnClickListener(v -> addPlantToGarden(plant.getId()));
+                        btnAddToGarden.setOnClickListener(v -> {
+                            if (plant != null && plant.getId() != null) {
+                                showAddGardenDialog(plant.getId());
+                            }
+                        });
                     }
                 }
 
@@ -217,28 +263,6 @@ public class DetailActivity extends AppCompatActivity {
                     Toast.makeText(DetailActivity.this, "Không thể tìm thấy cây trong cơ sở dữ liệu", Toast.LENGTH_SHORT).show();
                 }
             });
-        }
-    }
-
-
-
-    private void bindPlantData(PlantResponse response) {
-        if (response == null) return;
-        tvPlantName.setText(response.bestMatch != null ? response.bestMatch : "Unknown");
-
-        if (response.results != null && !response.results.isEmpty()) {
-            Result first = response.results.get(0);
-            if (first.species != null) {
-                tvSpecies.setText(first.species.scientificName);
-                if (first.species.family != null)
-                    tvFamily.setText(first.species.family.scientificName);
-                if (first.species.genus != null)
-                    tvGenus.setText(first.species.genus.scientificName);
-
-                if (first.species.commonNames != null && !first.species.commonNames.isEmpty())
-                    tvOverview.setText("Common names: " + String.join(", ", first.species.commonNames));
-                else tvOverview.setText("No common names available");
-            }
         }
     }
 
@@ -279,18 +303,5 @@ public class DetailActivity extends AppCompatActivity {
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .into(plantImage);
         }
-    }
-
-    private Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
-        if (bitmap == null) return null;
-        Matrix matrix = new Matrix();
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90: matrix.postRotate(90); break;
-            case ExifInterface.ORIENTATION_ROTATE_180: matrix.postRotate(180); break;
-            case ExifInterface.ORIENTATION_ROTATE_270: matrix.postRotate(270); break;
-            default: return bitmap;
-        }
-        return Bitmap.createBitmap(bitmap, 0, 0,
-                bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 }

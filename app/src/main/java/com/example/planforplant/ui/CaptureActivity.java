@@ -52,6 +52,7 @@ public class CaptureActivity extends AppCompatActivity {
 
     private static final String TAG = "CaptureActivity";
 
+    private View loadingLayout;
     private PreviewView previewView;
     private ImageCapture imageCapture;
     private ExecutorService cameraExecutor;
@@ -102,6 +103,7 @@ public class CaptureActivity extends AppCompatActivity {
                         .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                         .build())
         );
+        loadingLayout = findViewById(R.id.loadingLayout);
     }
 
     private void setupActivityResultLaunchers() {
@@ -183,7 +185,7 @@ public class CaptureActivity extends AppCompatActivity {
 
         imageCapture.takePicture(
                 outputOptions,
-                ContextCompat.getMainExecutor(this),
+                cameraExecutor, //chạy ở background thay vì main thread
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
@@ -242,6 +244,7 @@ public class CaptureActivity extends AppCompatActivity {
             Toast.makeText(this, "Không thể đọc ảnh", Toast.LENGTH_SHORT).show();
             return;
         }
+        runOnUiThread(() -> loadingLayout.setVisibility(View.VISIBLE));
 
         // Chuẩn bị multipart file
         RequestBody requestFile = RequestBody.create(file, okhttp3.MediaType.parse("image/*"));
@@ -265,6 +268,7 @@ public class CaptureActivity extends AppCompatActivity {
                     if (plantResponse.getResults() == null || plantResponse.getResults().isEmpty()) {
                         Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
                         intent.putExtra("message", "Không tìm thấy loài cây nào khớp với ảnh bạn chọn.");
+                        runOnUiThread(() -> loadingLayout.setVisibility(View.GONE));
                         startActivity(intent);
                         finish();
                     } else {
@@ -272,10 +276,12 @@ public class CaptureActivity extends AppCompatActivity {
                         Intent intent = new Intent(CaptureActivity.this, DetailActivity.class);
                         intent.putExtra("imageUri", imageUri.toString());
                         intent.putExtra("plantResponseJson", new Gson().toJson(plantResponse));
+                        runOnUiThread(() -> loadingLayout.setVisibility(View.GONE));
                         startActivity(intent);
                     }
                 } else {
                     Toast.makeText(CaptureActivity.this, "API trả về lỗi", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "null";
                         Log.e(TAG, "API error: " + response.code() + " - " + response.message() + " - " + errorBody);
@@ -289,6 +295,7 @@ public class CaptureActivity extends AppCompatActivity {
             public void onFailure(Call<PlantResponse> call, Throwable t) {
                 Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
                 intent.putExtra("message", "Lỗi khi gọi API: " + t.getMessage());
+                runOnUiThread(() -> loadingLayout.setVisibility(View.GONE));
                 startActivity(intent);
                 finish();
             }
