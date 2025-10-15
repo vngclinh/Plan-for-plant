@@ -42,8 +42,6 @@
         <activity android:name=".ui.VerifyCodeActivity"/>
         <activity android:name=".ui.ChangePasswordActivity"/>
         <activity android:name=".ui.GardenActivity"/>
-        <activity android:name=".ui.CreatePlanActivity" />
-        <activity android:name=".ui.ScheduleHistoryActivity" />
         <activity android:name=".ui.GardenDetailActivity"/>
         <activity android:name=".ui.SettingActivity"/>
         <activity android:name=".ui.EditPasswordActivity" />
