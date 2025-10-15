@@ -13,16 +13,17 @@
         android:padding="20dp">
 
         <!-- 🖼 Avatar -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgAvatar"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/avatar_circle_bg"
-            android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_camera" />
+            android:src="@drawable/default_avatar"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            app:strokeColor="#E0E0E0"
+            app:strokeWidth="2dp" />
 
         <!-- 👤 User Name -->
         <TextView
@@ -137,7 +138,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     app:tint="#8D6E63"
-                    android:src="@android:drawable/ic_menu_help" />
+                    android:src="@android:drawable/ic_menu_mylocation" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -146,7 +147,7 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Hỗ trợ" />
+                    android:text="Đặt vị trí" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
