@@ -18,7 +18,7 @@ import java.util.Locale;
 
 /**
  * Adapter hiển thị danh sách kế hoạch được nhóm theo ngày.
- * 🔹 Nếu có nhiều kế hoạch cùng ngày → chỉ hiển thị bản cập nhật mới nhất của mỗi loại.
+ * Nếu có nhiều kế hoạch cùng ngày → chỉ hiển thị bản cập nhật mới nhất của mỗi loại.
  */
 public class ScheduleListGroupedAdapter extends RecyclerView.Adapter<ScheduleListGroupedAdapter.ViewHolder> {
 
@@ -73,7 +73,7 @@ public class ScheduleListGroupedAdapter extends RecyclerView.Adapter<ScheduleLis
         }
     }
 
-    /** 🔍 Giữ bản cập nhật mới nhất cho mỗi loại trong cùng ngày */
+    /** Giữ bản cập nhật mới nhất cho mỗi loại trong cùng ngày */
     private List<GroupedSchedule> filterLatestByType(List<GroupedSchedule> originalGroups) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
         List<GroupedSchedule> filtered = new ArrayList<>();

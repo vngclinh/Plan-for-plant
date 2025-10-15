@@ -72,7 +72,7 @@ public class PlanActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         sessionManager = new SessionManager(this);
 
-        // 🔹 Nhận dữ liệu từ Intent
+        // Nhận dữ liệu từ Intent
         Intent intent = getIntent();
         isEditMode = intent.getBooleanExtra("editMode", false);
         pendingSchedulesToEdit = (List<GardenScheduleResponse>) intent.getSerializableExtra("schedulesToEdit");
@@ -142,14 +142,13 @@ public class PlanActivity extends AppCompatActivity {
                         public void onItemSelected(AdapterView<?> parent, android.view.View view, int position, long id) {
                             selectedGardenId = myGardens.get(position).getId();
                         }
-
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
                             selectedGardenId = null;
                         }
                     });
 
-                    // 🔹 Nếu là chế độ chỉnh sửa → điền dữ liệu sau khi load danh sách cây
+                    // Nếu là chế độ chỉnh sửa → điền dữ liệu sau khi load danh sách cây
                     if (isEditMode && pendingSchedulesToEdit != null && !pendingSchedulesToEdit.isEmpty()) {
                         populateFieldsFromExistingSchedules(pendingSchedulesToEdit);
                     }
@@ -346,7 +345,6 @@ public class PlanActivity extends AppCompatActivity {
         if (success >= total) {
             progressDialog.dismiss();
             Toast.makeText(this, "Đã xử lý " + success + "/" + total + " kế hoạch 🌿", Toast.LENGTH_LONG).show();
-
             // Gửi tín hiệu thành công về cho ScheduleDetailActivity
             setResult(RESULT_OK);
             finish();

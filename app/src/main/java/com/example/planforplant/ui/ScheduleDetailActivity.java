@@ -39,7 +39,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     // Lưu kế hoạch mới nhất mỗi loại
     private Map<String, GardenScheduleResponse> latestByType = new LinkedHashMap<>();
 
-    // 🔹 Launcher để chờ kết quả từ PlanActivity
+    // Launcher để chờ kết quả từ PlanActivity
     private ActivityResultLauncher<Intent> editLauncher;
 
     public static void start(Context context, String scheduledTime) {
@@ -69,7 +69,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // ✅ Khởi tạo launcher để reload khi PlanActivity trả về kết quả
+        // Khởi tạo launcher để reload khi PlanActivity trả về kết quả
         editLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -87,7 +87,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
         btnBackBottom.setOnClickListener(v -> finish());
 
-        // 🔹 Khi bấm chỉnh sửa → mở PlanActivity (chờ kết quả)
+        // Khi bấm chỉnh sửa → mở PlanActivity (chờ kết quả)
         btnEdit.setOnClickListener(v -> {
             if (latestByType.isEmpty()) {
                 Toast.makeText(this, "Không có kế hoạch nào để chỉnh sửa 🌿", Toast.LENGTH_SHORT).show();
@@ -122,7 +122,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<GardenScheduleResponse> schedules = response.body();
 
-                    // 🔹 Lọc cùng ngày
+                    // Lọc cùng ngày
                     List<GardenScheduleResponse> sameDay = new ArrayList<>();
                     for (GardenScheduleResponse s : schedules) {
                         if (s.getScheduledTime() != null && s.getScheduledTime().startsWith(datePart)) {
@@ -130,7 +130,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
                         }
                     }
 
-                    // 🔹 Giữ bản mới nhất theo loại
+                    // Giữ bản mới nhất theo loại
                     latestByType.clear();
                     for (GardenScheduleResponse s : sameDay) {
                         String type = s.getType();
@@ -150,7 +150,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
                         }
                     }
 
-                    // 🔹 Hiển thị ra màn hình
+                    // Hiển thị ra màn hình
                     layoutContainer.removeAllViews();
                     SimpleDateFormat inFmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
                     SimpleDateFormat outFmt = new SimpleDateFormat("HH:mm", Locale.getDefault());

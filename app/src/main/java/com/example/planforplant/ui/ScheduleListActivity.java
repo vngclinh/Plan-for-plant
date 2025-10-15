@@ -35,7 +35,7 @@ public class ScheduleListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.schedule_list); // layout cũ nhưng có CalendarView ở trên
+        setContentView(R.layout.schedule_list);
 
         calendarView = findViewById(R.id.calendarView);
         recyclerSchedules = findViewById(R.id.recyclerSchedules);
@@ -43,14 +43,14 @@ public class ScheduleListActivity extends AppCompatActivity {
 
         loadSchedules();
 
-        // ✅ Khi chọn ngày
+        // Khi chọn ngày
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             String selectedDate = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth);
             showSchedulesForDate(selectedDate);
         });
     }
 
-    /** 🔹 Tải toàn bộ kế hoạch */
+    /** Tải toàn bộ kế hoạch */
     private void loadSchedules() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang tải danh sách kế hoạch...");
@@ -66,7 +66,7 @@ public class ScheduleListActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     allSchedules = response.body();
 
-                    // 👉 Hiển thị lịch hôm nay trước
+                    // Hiển thị lịch hôm nay trước
                     String today = dateFormat.format(new Date());
                     showSchedulesForDate(today);
                     calendarView.setDate(System.currentTimeMillis(), false, true);
@@ -83,7 +83,7 @@ public class ScheduleListActivity extends AppCompatActivity {
         });
     }
 
-    /** 🔹 Lọc & hiển thị kế hoạch của ngày được chọn */
+    /** Lọc & hiển thị kế hoạch của ngày được chọn */
     private void showSchedulesForDate(String date) {
         List<GardenScheduleResponse> filtered = new ArrayList<>();
         for (GardenScheduleResponse s : allSchedules) {
@@ -98,7 +98,7 @@ public class ScheduleListActivity extends AppCompatActivity {
             return;
         }
 
-        // 🔹 Giữ bản mới nhất mỗi loại (Watering, Fertilizing, ...)
+        // Giữ bản mới nhất mỗi loại
         Map<String, GardenScheduleResponse> latestByType = new LinkedHashMap<>();
         for (GardenScheduleResponse s : filtered) {
             if (s.getType() == null) continue;
@@ -117,7 +117,7 @@ public class ScheduleListActivity extends AppCompatActivity {
 
         List<GardenScheduleResponse> latestList = new ArrayList<>(latestByType.values());
 
-        // 🔹 Hiển thị từng loại dưới dạng card riêng
+        // Hiển thị từng loại dưới dạng card riêng
         adapter = new ScheduleAdapter(latestList, schedule ->
                 ScheduleDetailActivity.start(ScheduleListActivity.this, schedule.getScheduledTime()));
         recyclerSchedules.setAdapter(adapter);
