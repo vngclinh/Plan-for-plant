@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,7 +39,9 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     // Lưu kế hoạch mới nhất mỗi loại
     private Map<String, GardenScheduleResponse> latestByType = new LinkedHashMap<>();
 
-    // Dùng để mở từ adapter
+    // 🔹 Launcher để chờ kết quả từ PlanActivity
+    private ActivityResultLauncher<Intent> editLauncher;
+
     public static void start(Context context, String scheduledTime) {
         Intent intent = new Intent(context, ScheduleDetailActivity.class);
         intent.putExtra("scheduledTime", scheduledTime);
@@ -65,12 +69,25 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             return;
         }
 
+        // ✅ Khởi tạo launcher để reload khi PlanActivity trả về kết quả
+        editLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        progressDialog.setMessage("Đang tải lại kế hoạch...");
+                        progressDialog.show();
+                        loadSchedulesByDate(scheduledTime);
+                        Toast.makeText(this, "Đã cập nhật thành công 🌿", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
         loadSchedulesByDate(scheduledTime);
 
         btnBack.setOnClickListener(v -> finish());
         btnBackBottom.setOnClickListener(v -> finish());
 
-        // 🔹 Khi bấm chỉnh sửa → gửi sang PlanActivity
+        // 🔹 Khi bấm chỉnh sửa → mở PlanActivity (chờ kết quả)
         btnEdit.setOnClickListener(v -> {
             if (latestByType.isEmpty()) {
                 Toast.makeText(this, "Không có kế hoạch nào để chỉnh sửa 🌿", Toast.LENGTH_SHORT).show();
@@ -79,12 +96,10 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, PlanActivity.class);
             intent.putExtra("editMode", true);
-
-            //  Gửi danh sách kế hoạch mới nhất từng loại
             ArrayList<GardenScheduleResponse> editableList = new ArrayList<>(latestByType.values());
             intent.putExtra("schedulesToEdit", editableList);
 
-            startActivity(intent);
+            editLauncher.launch(intent);
         });
     }
 
