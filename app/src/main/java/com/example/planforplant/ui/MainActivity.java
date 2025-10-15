@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton plantIdentifier = findViewById(R.id.plant_identifier);
         plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, CaptureActivity.class)));
 
+        // --- Disease capture click ---
+        MaterialButton diseaseCapture = findViewById(R.id.btn_capture_disease);
+        diseaseCapture.setOnClickListener(v -> startActivity(new android.content.Intent(this, DiseaseCaptureActivity.class)));
+
         MaterialButton Setting = findViewById(R.id.btnSetting);
         Setting.setOnClickListener(v -> startActivity(new android.content.Intent(this, SettingActivity.class)));
 
