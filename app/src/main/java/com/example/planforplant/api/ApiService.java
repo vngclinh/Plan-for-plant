@@ -116,4 +116,11 @@ public interface ApiService {
 
     @PUT("/api/user/me")
     Call<UserResponse> updateUserProfile(@Body UpdateUserRequest request);
+
+    @PUT("/api/schedules/{id}")
+    Call<GardenScheduleResponse> updateSchedule(Long Id,@Body GardenScheduleRequest request);
+
+
+    @GET("/api/schedules")
+    Call<List<GardenScheduleResponse>> getAllSchedules();
 }
