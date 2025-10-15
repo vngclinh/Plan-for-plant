@@ -66,7 +66,7 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         cardSupport.setOnClickListener(v ->
-                Toast.makeText(this, "Chuyển đến Hỗ trợ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, LocationActivity.class)
         );
 
         btnLogout.setOnClickListener(v -> logout());
