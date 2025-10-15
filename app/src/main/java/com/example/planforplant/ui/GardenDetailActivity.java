@@ -385,7 +385,6 @@ public class GardenDetailActivity extends AppCompatActivity {
         });
     }
 
-
     private void bindPlantEntity(Plant plant) {
         if (plant == null) return;
 

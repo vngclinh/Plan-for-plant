@@ -1,6 +1,14 @@
 package com.example.planforplant.DTO;
 
-public class GardenScheduleResponse {
+import java.io.Serializable;
+
+/**
+ * Dữ liệu phản hồi cho kế hoạch chăm sóc cây.
+ * ⚙️ Được implement Serializable để truyền qua Intent giữa Activity mà không bị crash.
+ */
+public class GardenScheduleResponse implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private Long gardenId;
     private String gardenNickname;
