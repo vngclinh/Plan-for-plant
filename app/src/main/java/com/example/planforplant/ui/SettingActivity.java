@@ -65,8 +65,9 @@ public class SettingActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        cardSupport.setOnClickListener(v ->
-                Toast.makeText(this, LocationActivity.class)
+        cardSupport.setOnClickListener(v ->{
+                Intent intent = new Intent(SettingActivity.this, LocationActivity.class);
+        startActivity(intent);}
         );
 
         btnLogout.setOnClickListener(v -> logout());
