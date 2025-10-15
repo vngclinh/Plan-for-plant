@@ -145,8 +145,6 @@ public class GardenDetailActivity extends AppCompatActivity {
             PopupMenu popupMenu = new PopupMenu(this, v);
             popupMenu.getMenuInflater().inflate(R.menu.menu_garden_detail, popupMenu.getMenu());
 
-            // Gắn menu resource
-
             popupMenu.setOnMenuItemClickListener(item -> {
                 int id = item.getItemId();
                 if (id == R.id.action_edit) {
@@ -165,7 +163,6 @@ public class GardenDetailActivity extends AppCompatActivity {
                 } else if (id == R.id.action_auto_gen){
                     generateAutoWateringSchedule();
                     return true;
-
                 }
                 return false;
             });
