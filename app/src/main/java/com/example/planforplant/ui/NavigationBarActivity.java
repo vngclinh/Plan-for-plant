@@ -3,31 +3,63 @@ package com.example.planforplant.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.planforplant.R;
-import com.example.planforplant.ui.DiaryActivity;
-import com.example.planforplant.ui.HomeActivity;
 
-public class NavigationBarActivity extends AppCompatActivity {
+/**
+ * Lớp cha trừu tượng để quản lý thanh điều hướng.
+ * Bất kỳ Activity nào kế thừa từ lớp này sẽ tự động có thanh điều hướng.
+ */
+public abstract class NavigationBarActivity extends AppCompatActivity {
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Sử dụng đúng layout
-        setContentView(R.layout.view_bottom_nav);
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+        setupBottomNavigation();
+    }
 
-        // Tìm các mục menu bằng ID của LinearLayout
-        View btnTrangChu = findViewById(R.id.nav_home);
-        View btnNhatKy = findViewById(R.id.nav_diary);
+    protected void setupBottomNavigation() {
+        View navHome = findViewById(R.id.nav_home);
+        View navDiary = findViewById(R.id.nav_diary);
+        View navCamera = findViewById(R.id.nav_camera);
+        View navChatbot = findViewById(R.id.nav_chatbot);
+        View navProfile = findViewById(R.id.nav_profile);
 
-        btnTrangChu.setOnClickListener(v -> {
-            Intent intent = new Intent(NavigationBarActivity.this, HomeActivity.class);
-            startActivity(intent);
-        });
+        // Trang chủ -> Mở MainActivity (menu.xml)
+        if (navHome != null) {
+            navHome.setOnClickListener(v -> {
+                if (!(this instanceof MainActivity)) {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intent);
+                }
+            });
+        }
 
-        btnNhatKy.setOnClickListener(v -> {
-            Intent intent = new Intent(NavigationBarActivity.this, DiaryActivity.class);
-            startActivity(intent);
-        });
+        // Nhật ký -> Mở DiaryActivity (care_calendar.xml)
+        if (navDiary != null) {
+            navDiary.setOnClickListener(v -> {
+                if (!(this instanceof DiaryActivity)) {
+                    startActivity(new Intent(this, DiaryActivity.class));
+                }
+            });
+        }
+
+
+
+        // Chatbot -> Mở ChatbotActivity
+        if (navChatbot != null) {
+            navChatbot.setOnClickListener(v -> {
+                if (!(this instanceof ChatbotActivity)) {
+                    startActivity(new Intent(this, ChatbotActivity.class));
+                }
+            });
+        }
+
+        // Hồ sơ -> Tạm thời không làm gì
+        if (navProfile != null) {
+            navProfile.setOnClickListener(null);
+        }
     }
 }
