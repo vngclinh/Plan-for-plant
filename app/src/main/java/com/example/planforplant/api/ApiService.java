@@ -111,4 +111,17 @@ public interface ApiService {
             @Query("lat") double lat,
             @Query("lon") double lon
     );
+
+    @GET("/api/schedules/{id}")
+    Call<GardenScheduleResponse> getScheduleById(@Path("id") Long id);
+    @GET("/api/schedules")
+    Call<List<GardenScheduleResponse>> getAllSchedules();
+
+    @PUT("api/schedules/{id}")
+    Call<GardenScheduleResponse> updateSchedule(
+            @Path("id") Long id,
+            @Body GardenScheduleRequest request
+    );
+
+
 }
