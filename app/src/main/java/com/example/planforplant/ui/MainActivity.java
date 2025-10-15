@@ -80,10 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         MaterialButton addPlan = findViewById(R.id.btnCreatePlan);
         addPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, PlanActivity.class)));
-
-        MaterialButton viewPlan = findViewById(R.id.btnViewPlan);
-        viewPlan.setOnClickListener(v -> startActivity(new Intent(this, ScheduleListActivity.class)));
-
         // view garden click
         MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
         viewGarden.setOnClickListener(  v -> startActivity(new android.content.Intent(this,GardenActivity.class )));
