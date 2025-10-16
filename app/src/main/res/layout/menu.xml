@@ -185,7 +185,7 @@
             app:cardBackgroundColor="#FFFFFF"/>
     </LinearLayout>
 
-    <!-- Thanh điều hướng dưới (được nhúng từ file riêng) -->
+    <!-- Thanh điều hướng dưới  -->
     <FrameLayout
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"

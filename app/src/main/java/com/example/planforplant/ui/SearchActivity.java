@@ -49,14 +49,14 @@ public class SearchActivity extends AppCompatActivity {
 
         ImageView btnBack = findViewById(R.id.btn_back);
         btnBack.setOnClickListener(v -> finish());
-        // Weather setup
+
         TextView tvLocation = findViewById(R.id.tvLocation);
         TextView tvWeather = findViewById(R.id.tvWeather);
         ImageView ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
         weatherManager = new WeatherManager(this, tvLocation, tvWeather, ivWeatherIcon);
         weatherManager.start();
 
-        // Initialize views
+
         searchBox = findViewById(R.id.search_box);
         btnSearchIcon = findViewById(R.id.btnSearchIcon);
         recyclerView = findViewById(R.id.recyclerSearchResults);
@@ -68,10 +68,10 @@ public class SearchActivity extends AppCompatActivity {
 
         apiService = ApiClient.getLocalClient(this).create(ApiService.class);
 
-        // Handle search icon click
+
         btnSearchIcon.setOnClickListener(v -> triggerSearch(searchBox.getText().toString()));
 
-        // Handle "search" key on keyboard
+
         searchBox.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 triggerSearch(searchBox.getText().toString());
@@ -80,7 +80,7 @@ public class SearchActivity extends AppCompatActivity {
             return false;
         });
 
-        // Check if keyword passed from another Activity
+
         String keyword = getIntent().getStringExtra("keyword");
         if (keyword != null && !keyword.isEmpty()) {
             searchBox.setText(keyword);

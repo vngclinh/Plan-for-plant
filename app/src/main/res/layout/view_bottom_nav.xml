@@ -76,7 +76,6 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Chừa chỗ cho FAB ở giữa -->
         <Space
             android:layout_width="64dp"
             android:layout_height="1dp" />

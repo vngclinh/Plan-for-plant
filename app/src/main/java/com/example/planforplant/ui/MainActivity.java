@@ -13,10 +13,7 @@ import com.example.planforplant.R;
 import com.example.planforplant.session.SessionManager;
 import com.example.planforplant.weather.WeatherManager;
 
-/**
- * MainActivity giờ đây kế thừa từ NavigationBarActivity
- * và không cần chứa bất kỳ code nào về thanh điều hướng nữa.
- */
+
 public class MainActivity extends NavigationBarActivity {
 
     private EditText searchBox;
@@ -37,23 +34,23 @@ public class MainActivity extends NavigationBarActivity {
             return;
         }
 
-        // Layout menu.xml sẽ tự động được gắn thanh điều hướng thông qua lớp cha
+
         setContentView(R.layout.menu);
 
         setupMainContent();
     }
 
     private void setupMainContent() {
-        // --- Header views ---
+
         tvLocation = findViewById(R.id.tvLocation);
         tvWeather = findViewById(R.id.tvWeather);
         ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
 
-        // --- Weather manager ---
+
         weatherManager = new WeatherManager(this, tvLocation, tvWeather, ivWeatherIcon);
         weatherManager.start();
 
-        // --- Search box ---
+
         searchBox = findViewById(R.id.search_box);
         searchBox.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH
@@ -68,7 +65,7 @@ public class MainActivity extends NavigationBarActivity {
             return false;
         });
 
-        // --- Các nút trên màn hình chính ---
+
         findViewById(R.id.plant_identifier).setOnClickListener(v -> startActivity(new Intent(this, CaptureActivity.class)));
         findViewById(R.id.btn_capture_disease).setOnClickListener(v -> startActivity(new Intent(this, DiseaseCaptureActivity.class)));
         findViewById(R.id.btnSetting).setOnClickListener(v -> startActivity(new Intent(this, SettingActivity.class)));

@@ -69,10 +69,9 @@ public class DiseaseCaptureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.disease_capture);
 
-        // Find the ViewStub
+
         ViewStub stub = findViewById(R.id.stubPreview);
-        // Inflate the stub. The inflate() method returns the root View of the inflated layout.
-        // Assuming part_previewview.xml has PreviewView as its root, we can cast it.
+
         previewView = (PreviewView) stub.inflate();
 
         cameraCaptureButton = findViewById(R.id.btnCamera);
@@ -130,7 +129,7 @@ public class DiseaseCaptureActivity extends AppCompatActivity {
     }
 
     private void startCamera() {
-        // The previewView is now initialized in onCreate. We just use it here.
+
         if (previewView == null) {
             Log.e(TAG, "PreviewView is null. Check ID and layout files.");
             return;

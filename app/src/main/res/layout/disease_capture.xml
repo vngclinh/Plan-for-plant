@@ -23,7 +23,7 @@
         tools:scaleType="centerCrop"
         tools:contentDescription="Preview placeholder (editor only)" />
 
-    <!-- ViewStub: KHÔNG inflate trong Editor; runtime mình gọi inflate() -->
+
     <ViewStub
         android:id="@+id/stubPreview"
         android:layout_width="0dp"
@@ -51,7 +51,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="20dp" />
-    <!-- Khung chọn loại chụp -->
+
     <LinearLayout
         android:id="@+id/captureOptions"
         android:layout_width="wrap_content"

@@ -7,10 +7,7 @@ import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.planforplant.R;
 
-/**
- * Lớp cha trừu tượng để quản lý thanh điều hướng.
- * Bất kỳ Activity nào kế thừa từ lớp này sẽ tự động có thanh điều hướng.
- */
+
 public abstract class NavigationBarActivity extends AppCompatActivity {
 
     @Override
@@ -57,7 +54,7 @@ public abstract class NavigationBarActivity extends AppCompatActivity {
             });
         }
 
-        // Hồ sơ -> Tạm thời không làm gì
+        // Hồ sơ
         if (navProfile != null) {
             navProfile.setOnClickListener(null);
         }
