@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/beige"
+    android:padding="16dp">
+
+    <!-- AutoCompleteTextView for city search -->
+    <AutoCompleteTextView
+        android:id="@+id/autoCity"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Nhập tên thành phố"
+        android:inputType="text"
+        android:padding="12dp"
+        android:textColor="#333"
+        android:textColorHint="#999"
+        android:background="@drawable/bg_search"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Use current location button -->
+    <Button
+        android:id="@+id/btnUseCurrentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Sử dụng vị trí hiện tại"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <!-- TextView to show result -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:textColor="#333"
+        android:paddingTop="12dp"/>
+
+</LinearLayout>

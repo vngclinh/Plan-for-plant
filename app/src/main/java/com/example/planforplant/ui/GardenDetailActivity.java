@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -33,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.example.planforplant.DTO.GardenImageResponse;
 import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.GardenScheduleResponse;
+import com.example.planforplant.DTO.UserResponse;
 import com.example.planforplant.DTO.GardenUpdateRequest;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
@@ -145,8 +147,6 @@ public class GardenDetailActivity extends AppCompatActivity {
             PopupMenu popupMenu = new PopupMenu(this, v);
             popupMenu.getMenuInflater().inflate(R.menu.menu_garden_detail, popupMenu.getMenu());
 
-            // Gắn menu resource
-
             popupMenu.setOnMenuItemClickListener(item -> {
                 int id = item.getItemId();
                 if (id == R.id.action_edit) {
@@ -165,7 +165,6 @@ public class GardenDetailActivity extends AppCompatActivity {
                 } else if (id == R.id.action_auto_gen){
                     generateAutoWateringSchedule();
                     return true;
-
                 }
                 return false;
             });
@@ -428,13 +427,61 @@ public class GardenDetailActivity extends AppCompatActivity {
     }
 
     private void generateAutoWateringSchedule() {
+        progressDialog.setMessage("Checking your saved location...");
+        progressDialog.show();
+
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+
+        // 1. Fetch user info from backend
+        api.getProfile().enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                progressDialog.dismiss();
+                if (response.isSuccessful() && response.body() != null) {
+                    UserResponse user = response.body();
+                    if (user.getLat() == null || user.getLon() == null) {
+                        // No location set → show dialog
+                        showLocationDialog();
+                    } else {
+                        // Use saved location
+                        callAutoGenerateApi(user.getLat(), user.getLon());
+                    }
+                } else {
+                    Toast.makeText(GardenDetailActivity.this,
+                            "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(GardenDetailActivity.this,
+                        "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showLocationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Chưa đặt vị trí")
+                .setMessage("Bạn chưa đặt vị trí nhà. Bạn có muốn đặt bây giờ không?")
+                .setPositiveButton("Đặt vị trí nhà", (dialog, which) -> {
+                    // Open LocationActivity
+                    Intent intent = new Intent(this, LocationActivity.class);
+                    startActivity(intent);
+                })
+                .setNegativeButton("Sử dụng vị trí hiện tại", (dialog, which) -> {
+                    fetchCurrentLocationForWatering();
+                })
+                .show();
+    }
+
+    private void fetchCurrentLocationForWatering() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
+            ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSION
-            );
+                    REQUEST_LOCATION_PERMISSION);
             return;
         }
 
@@ -442,17 +489,19 @@ public class GardenDetailActivity extends AppCompatActivity {
         progressDialog.show();
 
         fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            progressDialog.dismiss();
             if (location != null) {
                 double lat = location.getLatitude();
                 double lon = location.getLongitude();
                 callAutoGenerateApi(lat, lon);
             } else {
-                progressDialog.dismiss();
-                Toast.makeText(this, "Could not get location. Try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,
+                        "Không lấy được vị trí hiện tại. Hãy thử lại.", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(e -> {
             progressDialog.dismiss();
-            Toast.makeText(this, "Failed to get location: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Lỗi khi lấy vị trí: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -470,7 +519,7 @@ public class GardenDetailActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null) {
                             List<GardenScheduleResponse> schedules = response.body();
                             Toast.makeText(GardenDetailActivity.this,
-                                    "✅ Generated " + schedules.size() + "tasks!",
+                                    "✅ Generated " + schedules.size() + " tasks!",
                                     Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(GardenDetailActivity.this,

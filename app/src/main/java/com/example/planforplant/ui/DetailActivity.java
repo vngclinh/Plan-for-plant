@@ -88,7 +88,6 @@ public class DetailActivity extends AppCompatActivity {
         String json = intent.getStringExtra("plantResponseJson");
         if (json != null) {
             PlantResponse response = new Gson().fromJson(json, PlantResponse.class);
-            bindPlantData(response);
 
             if (response != null && response.results != null && !response.results.isEmpty()) {
                 Result first = response.results.get(0);
@@ -264,26 +263,6 @@ public class DetailActivity extends AppCompatActivity {
                     Toast.makeText(DetailActivity.this, "Không thể tìm thấy cây trong cơ sở dữ liệu", Toast.LENGTH_SHORT).show();
                 }
             });
-        }
-    }
-
-    private void bindPlantData(PlantResponse response) {
-        if (response == null) return;
-        tvPlantName.setText(response.bestMatch != null ? response.bestMatch : "Unknown");
-
-        if (response.results != null && !response.results.isEmpty()) {
-            Result first = response.results.get(0);
-            if (first.species != null) {
-                tvSpecies.setText(first.species.scientificName);
-                if (first.species.family != null)
-                    tvFamily.setText(first.species.family.scientificName);
-                if (first.species.genus != null)
-                    tvGenus.setText(first.species.genus.scientificName);
-
-                if (first.species.commonNames != null && !first.species.commonNames.isEmpty())
-                    tvOverview.setText("Common names: " + String.join(", ", first.species.commonNames));
-                else tvOverview.setText("No common names available");
-            }
         }
     }
 

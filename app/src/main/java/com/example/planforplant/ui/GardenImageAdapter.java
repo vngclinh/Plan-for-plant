@@ -51,7 +51,6 @@ public class GardenImageAdapter extends RecyclerView.Adapter<GardenImageAdapter.
         selectionMode = false;
         notifyDataSetChanged();
     }
-
     public List<Long> getSelectedIds() {
         return new ArrayList<>(selectedIds);
     }
@@ -77,24 +76,25 @@ public class GardenImageAdapter extends RecyclerView.Adapter<GardenImageAdapter.
         holder.viewScrim.setVisibility(isSelected ? View.VISIBLE : View.GONE);
         holder.imgChecked.setVisibility(isSelected ? View.VISIBLE : View.GONE);
 
+        // --- CLICK ---
         holder.itemView.setOnClickListener(v -> {
             if (selectionMode) {
                 toggleSelection(image, position);
             } else {
-                // Chế độ xem ảnh
+                // Click bình thường -> xem ảnh
                 if (imageClickListener != null) {
                     imageClickListener.onImageClick(image);
                 }
             }
         });
 
+        // --- GIỮ LÂU ---
         holder.itemView.setOnLongClickListener(v -> {
             if (!selectionMode) {
                 selectionMode = true;
                 toggleSelection(image, position);
-                Toast.makeText(context, "Chế độ chọn ảnh", Toast.LENGTH_SHORT).show();
             }
-            return true; // đã xử lý
+            return true;
         });
     }
 
@@ -104,8 +104,17 @@ public class GardenImageAdapter extends RecyclerView.Adapter<GardenImageAdapter.
         } else {
             selectedIds.add(image.getId());
         }
+
         notifyItemChanged(position);
-        if (listener != null) listener.onSelectionChanged(selectedIds.size());
+
+        // Nếu không còn ảnh nào được chọn -> thoát chế độ chọn
+        if (selectedIds.isEmpty()) {
+            selectionMode = false;
+        }
+
+        if (listener != null) {
+            listener.onSelectionChanged(selectedIds.size());
+        }
     }
 
     @Override
