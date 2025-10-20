@@ -9,7 +9,6 @@ public class WeatherResponse {
     public static class Current {
         public double temperature;
         public int icon_num;      // numeric code
-        public String icon;       // string name (optional)
         public String summary;
     }
 }

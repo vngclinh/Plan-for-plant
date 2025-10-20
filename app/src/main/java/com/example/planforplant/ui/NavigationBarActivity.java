@@ -37,8 +37,8 @@ public abstract class NavigationBarActivity extends AppCompatActivity {
         // Nút Nhật ký -> Mở DiaryActivity (hiển thị care_calendar.xml)
         if (navDiary != null) {
             navDiary.setOnClickListener(v -> {
-                if (!(this instanceof DiaryActivity)) {
-                    Intent intent = new Intent(this, DiaryActivity.class);
+                if (!(this instanceof ScheduleListActivity)) {
+                    Intent intent = new Intent(this, ScheduleListActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
                 }
@@ -69,7 +69,13 @@ public abstract class NavigationBarActivity extends AppCompatActivity {
 
         // Nút Hồ sơ (tạm thời không làm gì)
         if (navProfile != null) {
-            navProfile.setOnClickListener(null);
+            navProfile.setOnClickListener(v -> {
+                if (!(this instanceof SettingActivity)) {
+                    Intent intent = new Intent(this, SettingActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intent);
+                }
+            });
         }
     }
 }
