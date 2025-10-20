@@ -12,10 +12,10 @@ public interface MeteosourceApi {
                 @Query("lat") double latitude,
                 @Query("lon") double longitude,
                 @Query("key") String apiKey,
-                @Query("sections") String sections, // e.g., "current,hourly,daily"
-                @Query("timezone") String timezone, // e.g., "Asia/Ho_Chi_Minh"
-                @Query("language") String language, // e.g., "en"
-                @Query("units") String units // e.g., "metric"
+                @Query("sections") String sections,
+                @Query("timezone") String timezone,
+                @Query("language") String language,
+                @Query("units") String units
         );
 
 }
