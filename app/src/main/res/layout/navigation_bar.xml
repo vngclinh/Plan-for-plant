@@ -1,129 +1,146 @@
+<!--
+    File: navigation_bar.xml
+    Tác giả: Gemini
+    Mô tả: Thanh điều hướng chung với nền trắng, icon xanh và nút camera ở giữa.
+-->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom">
 
+    <!-- Thanh điều hướng dưới cùng -->
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_app_bar"
+        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@android:color/white"
+        app:fabCradleMargin="8dp"
+        app:fabCradleRoundedCornerRadius="40dp"
+        app:fabCradleVerticalOffset="0dp">
 
-    <!-- Floating Action Button  -->
+        <!-- Container cho các mục menu -->
+        <LinearLayout
+            android:id="@+id/bottom_nav_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <!-- Trang chủ -->
+            <LinearLayout
+                android:id="@+id/nav_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_home"
+                    app:tint="@color/green_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trang chủ"
+                    android:textColor="@color/green_primary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- Nhật ký -->
+            <LinearLayout
+                android:id="@+id/nav_diary"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_journal"
+                    app:tint="@color/green_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nhật ký"
+                    android:textColor="@color/green_primary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- Khoảng trống cho nút Camera -->
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <!-- Chatbot -->
+            <LinearLayout
+                android:id="@+id/nav_chatbot"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chat"
+                    app:tint="@color/green_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chatbot"
+                    android:textColor="@color/green_primary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- Hồ sơ -->
+            <LinearLayout
+                android:id="@+id/nav_profile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile"
+                    app:tint="@color/green_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hồ sơ"
+                    android:textColor="@color/green_primary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <!-- Nút Camera nổi -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/nav_camera"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_gravity="center|bottom"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/ic_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="Camera"
+        android:src="@drawable/ic_camera"
         app:backgroundTint="@color/green_primary"
-        app:tint="@android:color/white"
-        app:elevation="8dp" />
+        app:layout_anchor="@id/bottom_app_bar"
+        app:tint="@android:color/white" />
 
-    <!-- Bottom Navigation Bar -->
-    <LinearLayout
-        android:id="@+id/bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_gravity="bottom"
-        android:background="@color/green_primary"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingHorizontal="12dp"
-        app:layout_anchor="@+id/nav_camera"
-        app:layout_anchorGravity="end|bottom">
-
-        <!-- Trang chủ -->
-        <LinearLayout
-            android:id="@+id/nav_home"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_home"
-                android:tint="@android:color/black" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Trang chủ"
-                android:textColor="@android:color/black"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <!-- Nhật ký -->
-        <LinearLayout
-            android:id="@+id/nav_diary"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_journal"
-                android:tint="@android:color/black" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nhật ký"
-                android:textColor="@android:color/black"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <Space
-            android:layout_width="64dp"
-            android:layout_height="1dp" />
-
-        <!-- Chatbot -->
-        <LinearLayout
-            android:id="@+id/nav_chatbot"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_chat"
-                android:tint="@android:color/black" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chatbot"
-                android:textColor="@android:color/black"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <!-- Hồ sơ -->
-        <LinearLayout
-            android:id="@+id/nav_profile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_profile"
-                android:tint="@android:color/black" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hồ sơ"
-                android:textColor="@android:color/black"
-                android:textSize="10sp" />
-        </LinearLayout>
-    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
