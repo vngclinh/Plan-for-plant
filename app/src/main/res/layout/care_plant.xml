@@ -19,24 +19,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tab_history"
+            android:id="@+id/tab_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Lịch sử"
+            android:text="Xem kế hoạch"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/text_secondary"
             android:background="@drawable/bg_tab_unselected" />
 
         <TextView
-            android:id="@+id/tab_plan"
+            android:id="@+id/tab_create"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Kế hoạch"
+            android:text="Tạo kế hoạch"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -253,52 +253,6 @@
                         android:layout_height="wrap_content"
                         android:hint="Lượng phân bón (g)"
                         android:inputType="number"
-                        android:background="@drawable/bg_input"
-                        android:padding="8dp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-            <!-- TỈA LÁ -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/layoutPruningInputs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="3dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="12dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <CheckBox
-                            android:id="@+id/cbPruning"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:buttonTint="@color/green_primary" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="✂️ Ghi chú tỉa lá"
-                            android:textColor="@color/green_primary"
-                            android:textStyle="bold"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-
-                    <EditText
-                        android:id="@+id/etPruningNote"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Nhập mô tả công việc tỉa lá"
                         android:background="@drawable/bg_input"
                         android:padding="8dp" />
                 </LinearLayout>
