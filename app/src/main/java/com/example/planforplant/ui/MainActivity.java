@@ -18,7 +18,7 @@ import com.example.planforplant.weather.WeatherManager;
 import com.example.planforplant.weather.WeatherUtils;
 import com.google.android.material.button.MaterialButton;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends NavigationBarActivity {
 
     private EditText searchBox;
     private SessionManager sessionManager;

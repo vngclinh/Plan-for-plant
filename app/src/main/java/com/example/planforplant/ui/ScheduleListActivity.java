@@ -22,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScheduleListActivity extends AppCompatActivity {
+public class ScheduleListActivity extends NavigationBarActivity {
 
     private CalendarView calendarView;
     private RecyclerView recyclerSchedules;

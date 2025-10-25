@@ -23,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends NavigationBarActivity {
 
     private SessionManager sessionManager;
     private TextView tvName, tvEmail;

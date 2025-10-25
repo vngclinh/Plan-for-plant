@@ -48,7 +48,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CaptureActivity extends AppCompatActivity {
+public class CaptureActivity extends NavigationBarActivity {
 
     private static final String TAG = "CaptureActivity";
 
