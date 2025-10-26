@@ -2,9 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/beige">
+    android:background="@color/beige"
+    tools:context=".ui.ScheduleListActivity">
 
     <!-- Tabs trên -->
     <LinearLayout
@@ -14,84 +16,130 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
         android:elevation="4dp"
-        android:padding="4dp"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="4dp">
 
         <TextView
-            android:id="@+id/tab_history"
+            android:id="@+id/tab_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Lịch sử"
+            android:text="Xem kế hoạch"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:background="@drawable/bg_tab_selected"/>
 
         <TextView
-            android:id="@+id/tab_plan"
+            android:id="@+id/tab_create"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Kế hoạch"
+            android:text="Tạo kế hoạch"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/text_secondary"
             android:background="@drawable/bg_tab_unselected"/>
     </LinearLayout>
 
-    <!-- Tiêu đề -->
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="📅 Lịch sử chăm sóc cây"
-        android:textColor="@color/green_primary"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Calendar -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/calendarCard"
+    <!-- Nội dung chính -->
+    <LinearLayout
+        android:id="@+id/content"
+        android:orientation="vertical"
+        android:background="@color/beige"
+        android:padding="12dp"
         android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:layout_marginHorizontal="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- 📅 Tiêu đề -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📅 Lịch chăm cây"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/green_primary"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Lịch  -->
         <CalendarView
             android:id="@+id/calendarView"
+            android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusedMonthDateColor="@color/green_primary"
-            android:unfocusedMonthDateColor="@color/text_secondary"
-            android:weekSeparatorLineColor="@color/green_light" />
-    </androidx.cardview.widget.CardView>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:weekNumberColor="@color/gray"
+            android:focusedMonthDateColor="@color/black"
+            android:unfocusedMonthDateColor="@color/gray"
+            android:weekSeparatorLineColor="@android:color/transparent"
+            android:showWeekNumber="false"/>
 
-    <!-- Danh sách item ngay dưới Calendar -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintTop_toBottomOf="@id/calendarCard"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- Chú thích -->
+        <LinearLayout
+            android:id="@+id/legendLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="4dp">
 
-    <!-- Thanh điều hướng được tái sử dụng -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⬜ Không có kế hoạch"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginEnd="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🟨 Kế hoạch chưa hoàn thành"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginEnd="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🟩 Kế hoạch đã hoàn thành"
+                android:textSize="13sp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <!-- Trạng thái ngày được chọn -->
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            android:text="Chọn ngày để xem kế hoạch 🌱"/>
+
+        <!-- Danh sách kế hoạch -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerSchedules"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingBottom="8dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_schedule" />
+
+    </LinearLayout>
+
+    <!-- Thanh điều hướng -->
     <FrameLayout
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
@@ -99,7 +147,6 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <include layout="@layout/navigation_bar" />
-
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

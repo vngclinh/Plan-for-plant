@@ -118,9 +118,31 @@ public interface ApiService {
     Call<UserResponse> updateUserProfile(@Body UpdateUserRequest request);
 
     @PUT("/api/schedules/{id}")
-    Call<GardenScheduleResponse> updateSchedule(Long Id,@Body GardenScheduleRequest request);
-
+    Call<GardenScheduleResponse> updateSchedule(@Path("id") Long id, @Body GardenScheduleRequest request);
 
     @GET("/api/schedules")
     Call<List<GardenScheduleResponse>> getAllSchedules();
+
+    /** Lấy kế hoạch theo ID */
+    @GET("/api/schedules/{id}")
+    Call<GardenScheduleResponse> getScheduleById(@Path("id") Long id);
+
+    /** Xóa kế hoạch */
+    @DELETE("/api/schedules/{id}")
+    Call<Void> deleteSchedule(@Path("id") Long id);
+
+    /** Lấy kế hoạch theo ID vườn */
+    @GET("/api/schedules/garden/{gardenId}")
+    Call<List<GardenScheduleResponse>> getSchedulesByGarden(@Path("gardenId") Long gardenId);
+
+    /** Lấy kế hoạch theo trạng thái (Done / NotDone) */
+    @GET("/api/schedules/completion/{status}")
+    Call<List<GardenScheduleResponse>> getSchedulesByCompletion(@Path("status") String status);
+
+    /** Lấy kế hoạch theo vườn + ngày */
+    @GET("/api/schedules/garden/{gardenId}/date")
+    Call<List<GardenScheduleResponse>> getSchedulesByGardenAndDate(
+            @Path("gardenId") Long gardenId,
+            @Query("date") String date
+    );
 }
