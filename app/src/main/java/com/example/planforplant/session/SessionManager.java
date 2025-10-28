@@ -70,7 +70,7 @@ public class SessionManager {
         Log.d("SessionManager", "Clearing all WorkManager tasks on logout");
     }
 
-    // 🕒 Kiểm tra access token có hết hạn chưa
+
     public boolean isTokenExpired(String token) {
         try {
             String[] parts = token.split("\\."); // JWT có 3 phần
