@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Base64;
 import android.util.Log;
 
+import androidx.work.WorkManager;
+
 import org.json.JSONObject;
 
 public class SessionManager {
@@ -15,7 +17,10 @@ public class SessionManager {
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
+    private Context context;
+
     public SessionManager(Context context) {
+        this.context = context.getApplicationContext();
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         editor = prefs.edit();
     }
@@ -61,9 +66,11 @@ public class SessionManager {
     public void clear() {
         editor.clear();
         editor.apply();
+        WorkManager.getInstance(context).cancelAllWork();
+        Log.d("SessionManager", "Clearing all WorkManager tasks on logout");
     }
 
-    // 🕒 Kiểm tra access token có hết hạn chưa
+
     public boolean isTokenExpired(String token) {
         try {
             String[] parts = token.split("\\."); // JWT có 3 phần
