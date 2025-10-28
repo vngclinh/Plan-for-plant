@@ -48,6 +48,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(libs.play.services.location)
     implementation("com.google.android.material:material:1.9.0")
+    implementation(libs.recyclerview)
 
 
     // (tuỳ chọn) nếu IDE kêu thiếu ListenableFuture
@@ -73,5 +74,6 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
+    implementation("io.noties.markwon:core:4.6.2")
 
 }
