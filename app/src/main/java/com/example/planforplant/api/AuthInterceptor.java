@@ -1,16 +1,22 @@
 package com.example.planforplant.api;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.session.SessionManager;
+import com.example.planforplant.ui.LoginActivity;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -24,7 +30,10 @@ public class AuthInterceptor implements Interceptor {
     private final SessionManager sessionManager;
     private final ApiService authApi;
 
+    private final Context appContext;
+
     public AuthInterceptor(Context context) {
+        this.appContext = context.getApplicationContext();
         this.sessionManager = new SessionManager(context);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -116,5 +125,14 @@ public class AuthInterceptor implements Interceptor {
     private void handleSessionExpired() {
         sessionManager.clear();
         Log.i(TAG, "Session cleared due to expired/invalid token");
+
+        // Vì interceptor không chạy trong main thread → cần post ra main looper
+        new Handler(Looper.getMainLooper()).post(() -> {
+            Toast.makeText(appContext, "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.", Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(appContext, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            appContext.startActivity(intent);
+        });
     }
 }

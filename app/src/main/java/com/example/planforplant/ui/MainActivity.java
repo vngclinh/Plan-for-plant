@@ -1,6 +1,9 @@
 package com.example.planforplant.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -8,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +49,13 @@ public class MainActivity extends NavigationBarActivity {
         }
 
         setContentView(R.layout.menu);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
+            }
+        }
 
         // --- Header views ---
         tvLocation = findViewById(R.id.tvLocation);
@@ -91,6 +102,13 @@ public class MainActivity extends NavigationBarActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 100) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Thông báo đã được bật 🌿", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Ứng dụng cần quyền để hiển thị thông báo 🌿", Toast.LENGTH_LONG).show();
+            }
+        }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // Delegate to WeatherManager
         weatherManager.onRequestPermissionsResult(requestCode, permissions, grantResults);

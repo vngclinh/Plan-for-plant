@@ -2,14 +2,19 @@ package com.example.planforplant.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.GardenScheduleRequest;
 import com.example.planforplant.DTO.GardenScheduleResponse;
+import com.example.planforplant.Notification.NotificationWorker;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
@@ -24,13 +29,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+import java.util.concurrent.TimeUnit;
+
 public class PlanActivity extends AppCompatActivity {
 
     private Spinner spinnerGarden, spinnerCompletion;
     private CalendarView calendarView;
     private TextView timePickerAction;
     private EditText etWaterDuration, etFertilizerType, etFertilizerAmount, etNote;
-    private CheckBox cbWatering, cbFertilizing;
+    private CheckBox cbWatering, cbFertilizing, cbPruning, cbMisting, cbOther;
     private Button btnCreatePlan, btnBackHome;
 
     private List<GardenResponse> myGardens = new ArrayList<>();
@@ -39,8 +50,13 @@ public class PlanActivity extends AppCompatActivity {
     private int selectedMinute = 0;
     private long selectedDateMillis;
 
-    private final String[] displayOptions = {"🌱 Chưa thực hiện", "🌿 Đã hoàn thành", "🍂 Bỏ qua"};
-    private final String[] apiValues = {"NotDone", "Complete", "Skipped"};
+    private final String[] displayOptionsNotDone = {"🌱 Chưa thực hiện", "🌿 Đã hoàn thành"};
+    private final String[] apiValuesNotDone = {"NotDone", "Complete"};
+
+    private final String[] displayOptionsComplete = {"🌿 Đã hoàn thành"};
+    private final String[] apiValuesComplete = {"Complete"};
+
+    private String[] apiValuesCurrent = apiValuesNotDone;
 
     private ProgressDialog progressDialog;
     private SessionManager sessionManager;
@@ -62,19 +78,36 @@ public class PlanActivity extends AppCompatActivity {
         cbFertilizing = findViewById(R.id.cbFertilizing);
         btnCreatePlan = findViewById(R.id.btnCreatePlan);
         btnBackHome = findViewById(R.id.btnBackHome);
+        cbPruning = findViewById(R.id.cbPruning);
+        cbMisting = findViewById(R.id.cbMist);
+        cbOther = findViewById(R.id.cbOther);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         sessionManager = new SessionManager(this);
 
-        // Không cho chọn ngày quá khứ
+        TextView tabView = findViewById(R.id.tab_view);
+        TextView tabCreate = findViewById(R.id.tab_create);
+
+
+        tabView.setBackgroundResource(R.drawable.bg_tab_unselected);
+        tabView.setTextColor(getColor(R.color.text_secondary));
+        tabCreate.setBackgroundResource(R.drawable.bg_tab_selected);
+        tabCreate.setTextColor(getColor(R.color.white));
+
+        tabView.setOnClickListener(v -> {
+            Intent intent = new Intent(PlanActivity.this, ScheduleListActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+        });
+
+
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);
         today.set(Calendar.SECOND, 0);
         today.set(Calendar.MILLISECOND, 0);
-        calendarView.setMinDate(today.getTimeInMillis());
-
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, year);
@@ -84,23 +117,18 @@ public class PlanActivity extends AppCompatActivity {
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
+            selectedDateMillis = cal.getTimeInMillis();
 
-            if (cal.before(today)) {
-                Toast.makeText(this, "Không thể lập kế hoạch cho ngày đã qua 🌿", Toast.LENGTH_SHORT).show();
-                calendarView.setDate(today.getTimeInMillis(), true, true);
-            } else {
-                selectedDateMillis = cal.getTimeInMillis();
-                SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                Toast.makeText(this, "Đã chọn ngày: " + fmt.format(cal.getTime()), Toast.LENGTH_SHORT).show();
-            }
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Toast.makeText(this, "Đã chọn ngày: " + fmt.format(cal.getTime()), Toast.LENGTH_SHORT).show();
+
+            // Cập nhật spinner Completion theo ngày
+            updateCompletionSpinnerForDate(cal);
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, displayOptions);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCompletion.setAdapter(adapter);
-
         selectedDateMillis = calendarView.getDate();
+        updateCompletionSpinnerForDate(Calendar.getInstance()); // mặc định hôm nay
+
         timePickerAction.setOnClickListener(v -> openTimePickerDialog());
         loadMyGardens();
 
@@ -111,6 +139,65 @@ public class PlanActivity extends AppCompatActivity {
             startActivity(i);
             finish();
         });
+    }
+
+    private void updateCompletionSpinnerForDate(Calendar selectedDate) {
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+
+        String[] displayOptions;
+        boolean enabled;
+
+        if (selectedDate.before(today)) { // ngày đã qua
+            displayOptions = displayOptionsComplete;
+            apiValuesCurrent = apiValuesComplete;
+            enabled = false;
+        } else if (selectedDate.equals(today)) { // hôm nay
+            displayOptions = displayOptionsNotDone;
+            apiValuesCurrent = apiValuesNotDone;
+            enabled = true;
+        } else { // ngày tương lai
+            displayOptions = new String[]{"🌱 Chưa thực hiện"};
+            apiValuesCurrent = new String[]{"NotDone"};
+            enabled = false;
+        }
+
+        spinnerCompletion.setEnabled(enabled);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, displayOptions) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView view = (TextView) super.getView(position, convertView, parent);
+                styleSpinnerItem(view, selectedDate, position);
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView view = (TextView) super.getDropDownView(position, convertView, parent);
+                styleSpinnerItem(view, selectedDate, position);
+                return view;
+            }
+
+            private void styleSpinnerItem(TextView view, Calendar date, int position) {
+                if (date.before(today)) {
+                    view.setTextColor(Color.GRAY);
+                } else if (date.equals(today)) {
+                    view.setTextColor(Color.parseColor("#388E3C"));
+                } else {
+                    view.setTextColor(Color.GRAY);
+                }
+                view.setTextSize(16);
+            }
+        };
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCompletion.setAdapter(adapter);
+        spinnerCompletion.setSelection(0);
     }
 
     /*Tải danh sách cây */
@@ -196,7 +283,7 @@ public class PlanActivity extends AppCompatActivity {
 
         List<GardenScheduleRequest> requests = new ArrayList<>();
         int selectedIndex = spinnerCompletion.getSelectedItemPosition();
-        String completion = apiValues[selectedIndex];
+        String completion = apiValuesCurrent[selectedIndex];
 
         Date date = new Date(selectedDateMillis);
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -206,8 +293,13 @@ public class PlanActivity extends AppCompatActivity {
 
         if (cbWatering.isChecked()) requests.add(makeReq("WATERING", scheduledTime, completion));
         if (cbFertilizing.isChecked()) requests.add(makeReq("FERTILIZING", scheduledTime, completion));
-        if (!cbWatering.isChecked() && !cbFertilizing.isChecked() &&
-                !etNote.getText().toString().trim().isEmpty()) {
+        if (cbPruning.isChecked()) requests.add(makeReq("PRUNING", scheduledTime, completion));
+        if (cbMisting.isChecked()) requests.add(makeReq("MIST", scheduledTime, completion));
+        if (cbOther.isChecked()) requests.add(makeReq("OTHER", scheduledTime, completion));
+
+        if (!cbWatering.isChecked() && !cbFertilizing.isChecked() && !cbPruning.isChecked()
+                && !cbMisting.isChecked() && !cbOther.isChecked()
+                && !etNote.getText().toString().trim().isEmpty()) {
             requests.add(makeReq("NOTE", scheduledTime, completion));
         }
 
@@ -244,6 +336,20 @@ public class PlanActivity extends AppCompatActivity {
         if (success >= total) {
             progressDialog.dismiss();
             Toast.makeText(this, "Đã lưu kế hoạch thành công 🌿", Toast.LENGTH_LONG).show();
+            String gardenName = spinnerGarden.getSelectedItem().toString();
+            long triggerTimeMillis = selectedDateMillis + selectedHour * 3600000L + selectedMinute * 60000L;
+
+            List<String> actions = new ArrayList<>();
+            if (cbWatering.isChecked()) actions.add("tưới cây");
+            if (cbFertilizing.isChecked()) actions.add("bón phân");
+            if (cbPruning.isChecked()) actions.add("tỉa lá");
+            if (cbMisting.isChecked()) actions.add("phun ẩm");
+            if (cbOther.isChecked()) actions.add("hoạt động khác");
+            if (actions.isEmpty()) actions.add("ghi chú");
+
+            String actionText = String.join(" và ", actions);
+            scheduleWorkNotification(gardenName, actionText, triggerTimeMillis);
+
             setResult(RESULT_OK);
             finish();
         }
@@ -267,5 +373,22 @@ public class PlanActivity extends AppCompatActivity {
             if (!amt.isEmpty()) req.setFertilityAmount(Double.valueOf(amt));
         }
         return req;
+    }
+
+    private void scheduleWorkNotification(String gardenName, String type, long triggerTimeMillis) {
+        long delay = triggerTimeMillis - System.currentTimeMillis();
+        if (delay < 0) delay = 0; // tránh lỗi nếu người dùng chọn giờ quá khứ
+
+        Data data = new Data.Builder()
+                .putString("gardenName", gardenName)
+                .putString("type", type)
+                .build();
+
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .setInputData(data)
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                .build();
+
+        WorkManager.getInstance(this).enqueue(workRequest);
     }
 }

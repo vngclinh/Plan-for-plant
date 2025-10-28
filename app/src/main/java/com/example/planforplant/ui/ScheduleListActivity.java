@@ -2,6 +2,7 @@ package com.example.planforplant.ui;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -47,6 +48,22 @@ public class ScheduleListActivity extends NavigationBarActivity {
         calendarView = findViewById(R.id.calendarView);
         recyclerSchedules = findViewById(R.id.recyclerSchedules);
         tvStatus = findViewById(R.id.tvStatus);
+        TextView tabView = findViewById(R.id.tab_view);
+        TextView tabCreate = findViewById(R.id.tab_create);
+
+
+        tabView.setBackgroundResource(R.drawable.bg_tab_selected);
+        tabView.setTextColor(getColor(R.color.white));
+        tabCreate.setBackgroundResource(R.drawable.bg_tab_unselected);
+        tabCreate.setTextColor(getColor(R.color.text_secondary));
+
+
+        tabCreate.setOnClickListener(v -> {
+            Intent intent = new Intent(ScheduleListActivity.this, PlanActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+        });
         recyclerSchedules.setLayoutManager(new LinearLayoutManager(this));
 
         loadSchedules();
