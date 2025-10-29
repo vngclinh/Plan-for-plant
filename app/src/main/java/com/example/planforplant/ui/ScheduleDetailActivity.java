@@ -225,8 +225,9 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         switch (type.toUpperCase(Locale.ROOT)) {
             case "WATERING": return "Tưới nước 💧";
             case "FERTILIZING": return "Bón phân 🌱";
+            case "MIST" : return "Phun ẩm";
             case "PRUNING": return "Tỉa lá ✂️";
-            case "NOTE": return "Ghi chú 📝";
+            case "OTHER": return "Hoạt động khác 📝";
             default: return type;
         }
     }
