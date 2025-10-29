@@ -53,6 +53,7 @@
         <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.LocationActivity" />
         <activity android:name=".ui.EditProfileActivity"/>
+        <activity android:name=".ui.ChatActivity"/>
 
 
         <provider
