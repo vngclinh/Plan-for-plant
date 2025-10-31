@@ -1,9 +1,13 @@
 package com.example.planforplant.ui;
 
+import android.graphics.text.LineBreaker;
 import android.os.Bundle;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.planforplant.R;
@@ -18,6 +22,8 @@ import retrofit2.Response;
 public class ChatActivity extends NavigationBarActivity{
 
     private EditText etMessage;
+    private boolean isSending = false;
+
     private ImageButton btnSend;
     private ScrollView chatScroll;
     private LinearLayout chatContainer;
@@ -28,7 +34,9 @@ public class ChatActivity extends NavigationBarActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chatbot); // thay bằng layout xml của bạn
+        setContentView(R.layout.chatbot);
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
 
         etMessage = findViewById(R.id.etMessage);
         btnSend = findViewById(R.id.btnSend);
@@ -37,62 +45,91 @@ public class ChatActivity extends NavigationBarActivity{
 
         // Markwon render Markdown
         markwon = Markwon.create(this);
-        // Retrofit local client (đã có Scalars + Gson + interceptor)
         chatApi = ApiClient.getLocalClient(this).create(ChatApi.class);
 
+        btnSend.setEnabled(false);
+        etMessage.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                updateSendEnabled();
+            }
+        });
         btnSend.setOnClickListener(v -> {
             String text = etMessage.getText().toString().trim();
-            if (TextUtils.isEmpty(text)) return;
+            if (text.isEmpty() || isSending) return;
 
-            // 1) Bubble user
+            isSending = true;
+            updateSendEnabled();
+
             addUserBubble(text);
             etMessage.setText("");
 
-            // 2) Hiển thị typing
             View typingView = addBotTyping();
-            btnSend.setEnabled(false);
 
-            // 3) Call API
             chatApi.sendMessage(new ChatApi.MessageRequest(text)).enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
+                @Override public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     removeView(typingView);
-                    btnSend.setEnabled(true);
-
-                    if (response.isSuccessful() && response.body() != null) {
-                        addBotBubbleMarkdown(response.body());
-                    } else {
-                        addBotBubbleMarkdown("**⚠️ Lỗi:** " + response.code() + " - " + response.message());
-                    }
+                    addBotBubbleMarkdown(response.isSuccessful() && response.body()!=null
+                            ? response.body()
+                            : "**⚠️ Lỗi:** " + response.code() + " - " + response.message());
+                    isSending = false;
+                    updateSendEnabled();
                     scrollToBottom();
                 }
-
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                @Override public void onFailure(Call<String> call, Throwable t) {
                     removeView(typingView);
-                    btnSend.setEnabled(true);
                     addBotBubbleMarkdown("**⚠️ Mạng lỗi:** " + t.getMessage());
+                    isSending = false;
+                    updateSendEnabled();
                     scrollToBottom();
                 }
             });
-
-            scrollToBottom();
         });
     }
 
+    private void updateSendEnabled() {
+        boolean hasText = etMessage.getText().toString().trim().length() > 0;
+        boolean enabled = hasText && !isSending;
+        btnSend.setEnabled(enabled);
+
+//        btnSend.setImageAlpha(enabled ? 255 : 120);
+    }
     private void addUserBubble(String text) {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setGravity(android.view.Gravity.END);
-        row.setPadding(0, dp(6), 0, dp(6));
+        row.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        row.setGravity(android.view.Gravity.END | android.view.Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(6), dp(6), dp(6), dp(6)); // chừa mép màn
 
         TextView tv = new TextView(this);
         tv.setBackground(getDrawable(R.drawable.bg_chat_user));
         tv.setTextColor(getColor(R.color.white));
-        tv.setPadding(dp(12), dp(12), dp(12), dp(12));
+        tv.setTextSize(16);
+        tv.setPadding(dp(12), dp(10), dp(12), dp(10));
+        tv.setIncludeFontPadding(true); // tránh bị cắt mép trên/dưới
+        tv.setBreakStrategy(LineBreaker.BREAK_STRATEGY_SIMPLE);
+        tv.setHyphenationFrequency(android.text.Layout.HYPHENATION_FREQUENCY_NORMAL);
+        tv.setMaxWidth((int) (getResources().getDisplayMetrics().widthPixels * 0.72f)); // ~72% màn
         tv.setText(text);
 
+        LinearLayout.LayoutParams tvLp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        tvLp.setMargins(0, 0, dp(8), 0); // cách avatar
+        tv.setLayoutParams(tvLp);
+
+        ImageView avatar = new ImageView(this);
+        LinearLayout.LayoutParams avaLp = new LinearLayout.LayoutParams(dp(40), dp(40));
+        avatar.setLayoutParams(avaLp);
+        avatar.setImageResource(R.drawable.ic_user);
+        avatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         row.addView(tv);
+        row.addView(avatar);
         chatContainer.addView(row);
         scrollToBottom();
     }

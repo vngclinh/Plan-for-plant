@@ -130,9 +130,11 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/bg_circle_green"
-            android:src="@android:drawable/ic_menu_send"
+            app:srcCompat="@drawable/ic_send_24"
             android:contentDescription="Gửi"
-            app:tint="@color/white"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            app:tint="@color/btn_send_tint"
+            android:enabled="false"
+            android:scaleType="centerInside"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

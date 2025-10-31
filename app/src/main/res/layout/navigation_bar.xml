@@ -136,7 +136,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/nav_camera"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="67dp"
         android:contentDescription="Camera"
         android:src="@drawable/ic_camera"
         app:backgroundTint="@color/green_primary"
