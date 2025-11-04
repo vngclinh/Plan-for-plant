@@ -4,7 +4,7 @@ import java.util.List;
 
 public class GardenUpdateRequest {
     private String nickname;
-    private String status;    // String để Retrofit tự serialize enum
+    private String status;
     private String type;
     private String potType;
     private List<Long> diseaseIds;
