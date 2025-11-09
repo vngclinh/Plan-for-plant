@@ -36,9 +36,6 @@
             android:textColor="@color/green_primary"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
-
-    <!-- Ngày hôm nay -->
-
     <!-- Danh sách thông báo -->
     <TextView
         android:id="@+id/tvDate"

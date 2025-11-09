@@ -19,6 +19,8 @@ public class GardenResponse {
     private List<String> diseaseNames;
     @SerializedName("dateAdded")
     private String dateAdded;
+    @SerializedName("diaries")
+    private List<DiaryResponse> diaries;
 
     // --- Getter ---
     public Long getId() { return id; }
@@ -29,4 +31,6 @@ public class GardenResponse {
     public String getType() { return type; }
     public String getPotType() { return potType; }
     public List<String> getDiseaseNames() { return diseaseNames; }
+    public List<DiaryResponse> getDiaries() { return diaries; }
+    public void setDiaries(List<DiaryResponse> diaries) { this.diaries = diaries; }
 }

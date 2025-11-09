@@ -28,9 +28,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.planforplant.DTO.AddDiaryRequest;
+import com.example.planforplant.DTO.DiaryResponse;
 import com.example.planforplant.DTO.GardenImageResponse;
 import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.GardenScheduleResponse;
@@ -84,6 +87,11 @@ public class GardenDetailActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Uri> takePictureLauncher;
     private Uri photoUri;
+    // === Diary ===
+    private RecyclerView recyclerDiary;
+    private TextView tvEmptyDiary;
+    private ImageView btnAddDiary, btnDeleteDiary;
+    private DiaryAdapter diaryAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,7 +232,135 @@ public class GardenDetailActivity extends AppCompatActivity {
                     .setNegativeButton("Huỷ", null)
                     .show();
         });
+        // === Setup Diary ===
+        recyclerDiary = findViewById(R.id.recycler_diary);
+        tvEmptyDiary = findViewById(R.id.tvEmptyDiary);
+        btnAddDiary = findViewById(R.id.btnAddDiary);
+        btnDeleteDiary = findViewById(R.id.btnDeleteDiary);
+        btnDeleteDiary.setAlpha(0.3f);
+        btnDeleteDiary.setEnabled(false);
+
+        recyclerDiary.setLayoutManager(new LinearLayoutManager(this));
+        diaryAdapter = new DiaryAdapter(
+                this,
+                new ArrayList<>(),
+                count -> {
+                    boolean hasSelection = count > 0;
+                    btnDeleteDiary.setAlpha(hasSelection ? 1f : 0.3f);
+                    btnDeleteDiary.setEnabled(hasSelection);
+                }
+        );
+        recyclerDiary.setAdapter(diaryAdapter);
+
+// Load danh sách nhật ký
+        loadGardenDiaries();
+
+// Thêm nhật ký
+        btnAddDiary.setOnClickListener(v -> showAddDiaryDialog());
+
+// Xoá nhật ký
+        btnDeleteDiary.setOnClickListener(v -> {
+            List<Long> selectedIds = diaryAdapter.getSelectedIds();
+            if (selectedIds.isEmpty()) return;
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Xoá nhật ký")
+                    .setMessage("Bạn có chắc muốn xoá " + selectedIds.size() + " nhật ký không?")
+                    .setPositiveButton("Xoá", (dialog, which) -> deleteSelectedDiaries(selectedIds))
+                    .setNegativeButton("Huỷ", null)
+                    .show();
+        });
+
     }
+
+    private void loadGardenDiaries() {
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+        api.getDiariesByGardenId(gardenId).enqueue(new Callback<List<DiaryResponse>>() {
+            @Override
+            public void onResponse(Call<List<DiaryResponse>> call, Response<List<DiaryResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<DiaryResponse> list = response.body();
+                    if (list.isEmpty()) {
+                        recyclerDiary.setVisibility(View.GONE);
+                        tvEmptyDiary.setVisibility(View.VISIBLE);
+                    } else {
+                        recyclerDiary.setVisibility(View.VISIBLE);
+                        tvEmptyDiary.setVisibility(View.GONE);
+                        diaryAdapter.setData(list);
+                    }
+                } else {
+                    Toast.makeText(GardenDetailActivity.this, "Không tải được nhật ký", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DiaryResponse>> call, Throwable t) {
+                Toast.makeText(GardenDetailActivity.this, "Lỗi tải nhật ký: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void showAddDiaryDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_diary, null);
+        EditText etContent = dialogView.findViewById(R.id.etDiaryContent);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Thêm nhật ký mới")
+                .setView(dialogView)
+                .setPositiveButton("Lưu", (dialog, which) -> {
+                    String content = etContent.getText().toString().trim();
+                    if (content.isEmpty()) {
+                        Toast.makeText(this, "Vui lòng nhập nội dung", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    addDiaryEntry(content);
+                })
+                .setNegativeButton("Huỷ", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void addDiaryEntry(String content) {
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+        AddDiaryRequest request = new AddDiaryRequest(content);
+
+        api.addDiaryEntry(gardenId, request).enqueue(new Callback<GardenResponse>() {
+            @Override
+            public void onResponse(Call<GardenResponse> call, Response<GardenResponse> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(GardenDetailActivity.this, "Đã thêm nhật ký 🌿", Toast.LENGTH_SHORT).show();
+                    loadGardenDiaries();
+                } else {
+                    Toast.makeText(GardenDetailActivity.this, "Lỗi khi thêm nhật ký", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GardenResponse> call, Throwable t) {
+                Toast.makeText(GardenDetailActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void deleteSelectedDiaries(List<Long> diaryIds) {
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+
+        for (Long id : diaryIds) {
+            api.removeDiaryEntry(gardenId, id).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        loadGardenDiaries(); // Refresh danh sách
+                    } else {
+                        Toast.makeText(GardenDetailActivity.this, "Không xoá được nhật ký", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(GardenDetailActivity.this, "Lỗi xoá: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     private String getStatusDisplay(String status) {
         if (status == null) return "Không xác định";
         switch (status.toUpperCase()) {

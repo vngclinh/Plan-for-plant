@@ -1,7 +1,9 @@
 package com.example.planforplant.api;
 
+import com.example.planforplant.DTO.AddDiaryRequest;
 import com.example.planforplant.DTO.AddGardenRequest;
 import com.example.planforplant.DTO.ChangepasswordRequest;
+import com.example.planforplant.DTO.DiaryResponse;
 import com.example.planforplant.DTO.GardenImageResponse;
 import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.GardenScheduleRequest;
@@ -144,5 +146,19 @@ public interface ApiService {
     Call<List<GardenScheduleResponse>> getSchedulesByGardenAndDate(
             @Path("gardenId") Long gardenId,
             @Query("date") String date
+    );
+    @POST("garden/{gardenId}/diaries")
+    Call<GardenResponse> addDiaryEntry(
+            @Path("gardenId") Long gardenId,
+            @Body AddDiaryRequest request
+    );
+    @DELETE("garden/{gardenId}/diaries/{diaryId}")
+    Call<Void> removeDiaryEntry(
+            @Path("gardenId") Long gardenId,
+            @Path("diaryId") Long diaryId
+    );
+    @GET("garden/{gardenId}/diaries")
+    Call<List<DiaryResponse>> getDiariesByGardenId(
+            @Path("gardenId") Long gardenId
     );
 }

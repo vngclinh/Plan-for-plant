@@ -48,6 +48,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(libs.play.services.location)
     implementation("com.google.android.material:material:1.9.0")
+    implementation(libs.recyclerview)
+    implementation(libs.work.runtime)
 
 
     // (tuỳ chọn) nếu IDE kêu thiếu ListenableFuture
@@ -76,5 +78,6 @@ dependencies {
 
 
 
+    implementation("io.noties.markwon:core:4.6.2")
 
 }

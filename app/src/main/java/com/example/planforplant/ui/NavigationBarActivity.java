@@ -59,8 +59,8 @@ public abstract class NavigationBarActivity extends AppCompatActivity {
         // Nút Chatbot -> Mở ChatbotActivity
         if (navChatbot != null) {
             navChatbot.setOnClickListener(v -> {
-                if (!(this instanceof ChatbotActivity)) {
-                    Intent intent = new Intent(this, ChatbotActivity.class);
+                if (!(this instanceof ChatActivity)) {
+                    Intent intent = new Intent(this, ChatActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
                 }
