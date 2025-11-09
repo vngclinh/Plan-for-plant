@@ -9,4 +9,11 @@
     <string name="back_home_button">Quay về trang chủ</string>
     <string name="toggle_password_visibility">Toggle password visibility</string>
 
+    <!-- Navigation bar strings -->
+    <string name="nav_home">Trang chủ</string>
+    <string name="nav_diary">Nhật ký</string>
+    <string name="nav_chatbot">Chatbot</string>
+    <string name="nav_profile">Hồ sơ</string>
+    <string name="camera_desc">Camera</string>
+
 </resources>
