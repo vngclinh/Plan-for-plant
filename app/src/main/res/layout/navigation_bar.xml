@@ -1,8 +1,10 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom">
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    android:clipToPadding="false"
+    android:clipChildren="false">
 
     <!-- Thanh điều hướng dưới cùng -->
     <com.google.android.material.bottomappbar.BottomAppBar
@@ -13,8 +15,8 @@
         android:layout_gravity="bottom"
         app:backgroundTint="@android:color/white"
         app:fabCradleMargin="8dp"
-        app:fabCradleRoundedCornerRadius="40dp"
-        app:fabCradleVerticalOffset="0dp">
+        app:fabCradleRoundedCornerRadius="28dp"
+        app:fabCradleVerticalOffset="6dp">
 
         <!-- Container cho các mục menu -->
         <LinearLayout
@@ -37,14 +39,15 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_home"
+                    android:contentDescription="@string/nav_home"
                     app:tint="@color/green_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Trang chủ"
+                    android:text="@string/nav_home"
                     android:textColor="@color/green_primary"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <!-- Nhật ký -->
@@ -61,14 +64,15 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_journal"
+                    android:contentDescription="@string/nav_diary"
                     app:tint="@color/green_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nhật ký"
+                    android:text="@string/nav_diary"
                     android:textColor="@color/green_primary"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <!-- Khoảng trống cho nút Camera -->
@@ -91,14 +95,15 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_chat"
+                    android:contentDescription="@string/nav_chatbot"
                     app:tint="@color/green_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chatbot"
+                    android:text="@string/nav_chatbot"
                     android:textColor="@color/green_primary"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <!-- Hồ sơ -->
@@ -115,14 +120,15 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_profile"
+                    android:contentDescription="@string/nav_profile"
                     app:tint="@color/green_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hồ sơ"
+                    android:text="@string/nav_profile"
                     android:textColor="@color/green_primary"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.bottomappbar.BottomAppBar>
@@ -132,8 +138,10 @@
         android:id="@+id/nav_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="Camera"
+        android:contentDescription="@string/camera_desc"
         android:src="@drawable/ic_camera"
+        android:translationY="6dp"
+        app:fabSize="mini"
         app:backgroundTint="@color/green_primary"
         app:layout_anchor="@+id/bottom_app_bar"
         app:layout_anchorGravity="center"
