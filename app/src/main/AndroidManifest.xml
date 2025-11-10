@@ -53,6 +53,8 @@
         <activity android:name=".ui.LocationActivity" />
         <activity android:name=".ui.EditProfileActivity"/>
         <activity android:name=".ui.ChatActivity"/>
+        <activity android:name=".ui.HealthCaptureActivity"/>
+        <activity android:name=".ui.HealthResultActivity"/>
 
 
         <provider
