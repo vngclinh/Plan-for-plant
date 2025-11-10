@@ -141,8 +141,8 @@
         android:contentDescription="@string/camera_desc"
         android:src="@drawable/ic_camera"
         android:translationY="6dp"
-        app:fabSize="mini"
         app:backgroundTint="@color/green_primary"
+        app:fabSize="mini"
         app:layout_anchor="@+id/bottom_app_bar"
         app:layout_anchorGravity="center"
         app:tint="@android:color/white" />
