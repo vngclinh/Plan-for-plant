@@ -92,6 +92,11 @@ public class MainActivity extends NavigationBarActivity {
         MaterialButton plantIdentifier = findViewById(R.id.plant_identifier);
         plantIdentifier.setOnClickListener(v -> startActivity(new android.content.Intent(this, CaptureActivity.class)));
 
+        MaterialButton detectDisease = findViewById(R.id.btn_capture_disease);
+        detectDisease.setOnClickListener(v ->
+                startActivity(new Intent(this, HealthCaptureActivity.class))
+        );
+
         MaterialButton Setting = findViewById(R.id.btnSetting);
         Setting.setOnClickListener(v -> startActivity(new android.content.Intent(this, SettingActivity.class)));
 
