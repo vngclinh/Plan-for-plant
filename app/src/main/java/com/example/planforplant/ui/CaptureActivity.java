@@ -296,6 +296,7 @@ public class CaptureActivity extends NavigationBarActivity {
                 Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
                 intent.putExtra("message", "Lỗi khi gọi API: " + t.getMessage());
                 runOnUiThread(() -> loadingLayout.setVisibility(View.GONE));
+                Log.e(TAG, "API failed", t);
                 startActivity(intent);
                 finish();
             }
