@@ -17,7 +17,13 @@ android {
             "String",
             "PLANTNET_API_KEY",
             "\"${project.findProperty("PLANTNET_API_KEY") ?: ""}\""
-        )    }
+        )
+        buildConfigField(
+            "String",
+            "PLANT_ID_API_KEY",
+            "\"${project.findProperty("PLANT_ID_API_KEY") ?: ""}\""
+        )
+    }
 
     buildTypes {
         release {
