@@ -13,7 +13,6 @@ public class SessionManager {
     private static final String PREF_NAME = "APP_PREF";
     private static final String KEY_TOKEN = "JWT_TOKEN";
     private static final String KEY_REFRESH = "REFRESH_TOKEN";
-
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
@@ -60,7 +59,6 @@ public class SessionManager {
         // Both invalid or missing
         return false;
     }
-
 
     // Xóa token (logout)
     public void clear() {

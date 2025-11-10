@@ -493,7 +493,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Ảnh của tôi"
+                            android:text="Ảnh của cây"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="@color/green_primary"/>
@@ -578,7 +578,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Nhật ký của tôi"
+                            android:text="Nhật ký chăm cây"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="@color/green_primary"/>
