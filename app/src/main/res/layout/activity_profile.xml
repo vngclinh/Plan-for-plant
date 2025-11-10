@@ -90,10 +90,10 @@
             android:id="@+id/btnEditProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Edit Information"
+            android:text="  Cập nhật thông tin"
             android:textAllCaps="false"
             android:layout_marginTop="10dp"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="@color/green_primary"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>
