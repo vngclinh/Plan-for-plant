@@ -2,6 +2,7 @@ package com.example.planforplant.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -131,6 +132,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Plant>> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
+                Log.e("SearchActivity", "Lỗi kết nối API", t);
                 Toast.makeText(SearchActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
