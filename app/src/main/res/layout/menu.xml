@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,21 +8,18 @@
     android:background="@color/beige"
     tools:context=".ui.MainActivity">
 
-    <!-- Thanh trên: vị trí + thời tiết -->
+    <!-- 🔹 Thanh thời tiết (giữ nguyên) -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="12dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp"
-        android:background="#B3E5FC"
+        android:layout_marginBottom="8dp"
+        android:background="@color/sky_blue_light"
         android:gravity="center_vertical"
-        android:elevation="2dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- City name -->
         <TextView
             android:id="@+id/tvLocation"
             android:layout_width="0dp"
@@ -30,9 +28,8 @@
             android:text="📍 Hà Nội"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#6D4C41" />
+            android:textColor="@color/earth_brown_dark" />
 
-        <!-- Weather icon -->
         <ImageView
             android:id="@+id/ivWeatherIcon"
             android:layout_width="24dp"
@@ -41,7 +38,6 @@
             android:src="@drawable/ic_sunny"
             android:contentDescription="Weather Icon" />
 
-        <!-- Weather temperature -->
         <TextView
             android:id="@+id/tvWeather"
             android:layout_width="wrap_content"
@@ -49,202 +45,225 @@
             android:text="30°C"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#2E7D32" />
-
+            android:textColor="@color/green_primary" />
     </LinearLayout>
 
 
-    <!-- Search box -->
+    <!-- 🔹 Ô tìm kiếm -->
     <EditText
         android:id="@+id/search_box"
         android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
         android:hint="Tìm cây, hoa..."
-        android:paddingStart="26dp"
+        android:paddingStart="36dp"
         android:background="@drawable/bg_search"
         android:drawableStart="@android:drawable/ic_menu_search"
         android:drawablePadding="8dp"
         android:textColor="#333"
         android:textColorHint="#999"
-        android:fontFamily="@font/roboto_regular"
-        android:textSize="16sp"
         android:gravity="center_vertical"
         app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Menu Buttons: Chụp cây, Chụp bệnh, Thêm vào vườn của tôi -->
+
+    <!-- 🌿 Hai nút lớn chia đôi màn hình -->
     <LinearLayout
-        android:id="@+id/menu_buttons"
+        android:id="@+id/scan_buttons_container"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="230dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="24dp"
+        android:weightSum="2"
         app:layout_constraintTop_toBottomOf="@id/search_box"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Chụp cây với hình ảnh đại diện -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/plant_identifier"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:icon="@drawable/ic_plant"
-            app:iconPadding="16dp"
-            app:iconGravity="textStart"
-            android:text="Chụp cây"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:backgroundTint="@android:color/white"
-            android:textColor="@color/green_primary"
-            android:strokeColor="@color/green_primary"
-            app:strokeWidth="2dp"
-            android:elevation="4dp"
-            app:iconTint="@null"
-            app:cornerRadius="40dp" />
+        <!-- 🌱 Nhận diện xanh -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_plant_healthy"
+            android:clipToOutline="true">
 
-        <!-- Chụp bệnh với hình ảnh đại diện -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_capture_disease"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:icon="@drawable/ic_disease"
-            app:iconPadding="16dp"
-            app:iconGravity="textStart"
-            android:text="Chụp bệnh"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:backgroundTint="@android:color/white"
-            android:textColor="@color/earth_brown_dark"
-            android:strokeColor="@color/earth_brown_dark"
-            app:strokeWidth="2dp"
-            android:elevation="4dp"
-            app:iconTint="@null"
-            app:cornerRadius="40dp" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:gravity="top">
 
-        <!-- Xem vườn cây của tôi -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_view_my_garden"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            app:iconPadding="16dp"
-            app:iconGravity="textStart"
-            android:text="Xem vườn cây của tôi"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:backgroundTint="@android:color/white"
-            android:textColor="@color/green_primary"
-            android:strokeColor="@color/green_primary"
-            app:strokeWidth="2dp"
-            android:elevation="2dp"
-            app:cornerRadius="32dp" />
+                <TextView
+                    android:text="Nhận diện xanh"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="Nhận biết cây trồng"
+                    android:textColor="#E0E0E0"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <!-- Overlay click area giữ nguyên ID -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/plant_identifier"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"/>
+        </FrameLayout>
+
+        <!-- 🍂 Bắt bệnh cho cây -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_plant_sick"
+            android:clipToOutline="true">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:gravity="bottom">
+
+                <TextView
+                    android:text="Bắt bệnh cho cây"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="Kiểm tra sức khỏe cây"
+                    android:textColor="#E0E0E0"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <!-- Overlay giữ nguyên ID -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_capture_disease"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"/>
+        </FrameLayout>
     </LinearLayout>
 
-    <!-- Danh sách Card -->
+    <!-- 🍀 Nút vườn cây của tôi -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_view_my_garden"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="32dp"
+        android:text="🍀 Vườn cây của tôi"
+        android:textColor="@color/green_primary"
+        android:textSize="18sp"
+        android:strokeColor="@color/green_primary"
+        app:strokeWidth="2dp"
+        app:cornerRadius="32dp"
+        app:layout_constraintTop_toBottomOf="@id/scan_buttons_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 🌼 Danh sách “Sự thật thú vị về thực vật” -->
     <LinearLayout
         android:id="@+id/card_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/menu_buttons"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_view_my_garden"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Card 1 -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF"/>
+            app:cardBackgroundColor="#FFFFFF" />
 
-        <!-- Card 2 -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF"/>
+            app:cardBackgroundColor="#FFFFFF" />
 
-        <!-- Card 3 -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="#FFFFFF"/>
+            app:cardBackgroundColor="#FFFFFF" />
     </LinearLayout>
 
-    <!-- Thanh điều hướng được tái sử dụng -->
-    <FrameLayout
-        android:id="@+id/bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
 
-        <include layout="@layout/navigation_bar" />
-
-    </FrameLayout>
-
+    <!-- ⚙️ Các nút dưới (giữ nguyên id để không lỗi code Java) -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCreatePlan"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Tạo kế hoạch"
-        style="@style/Widget.MaterialComponents.Button"
-        app:cornerRadius="12dp"
-        app:iconPadding="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintTop_toBottomOf="@id/card_container"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnViewPlan"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:text="Xem kế hoạch"
-        app:cornerRadius="12dp"
-        app:iconPadding="8dp"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/btnCreatePlan"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_container"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSetting"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:text="Cài đặt"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Setting"
-        app:cornerRadius="12dp"
-        app:iconPadding="8dp"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@id/btnViewPlan"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_container"
-        app:layout_constraintVertical_bias="0.845" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav" />
+
+    <!-- Thanh navigation -->
+    <FrameLayout
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <include layout="@layout/navigation_bar" />
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
