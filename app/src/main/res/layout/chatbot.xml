@@ -114,6 +114,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <ImageButton
+            android:id="@+id/btnImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_camera_alt_24"
+            android:contentDescription="Chọn ảnh"
+            android:background="@drawable/bg_input"
+
+            android:layout_marginEnd="8dp"/>
         <EditText
             android:id="@+id/etMessage"
             android:layout_width="0dp"
@@ -130,9 +139,11 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/bg_circle_green"
-            android:src="@android:drawable/ic_menu_send"
+            app:srcCompat="@drawable/ic_send_24"
             android:contentDescription="Gửi"
-            app:tint="@color/white"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            app:tint="@color/btn_send_tint"
+            android:enabled="false"
+            android:scaleType="centerInside"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

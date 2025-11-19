@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@android:color/white"
+    android:layout_marginBottom="8dp"
+    android:elevation="1dp">
+
+    <TextView
+        android:id="@+id/tvDiaryDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="24/09/2025"
+        android:textColor="#2E7D32"
+        android:textStyle="bold"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tvDiaryText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Tưới nước, bón phân hữu cơ, lá xanh tốt 🌿"
+        android:textSize="14sp"
+        android:textColor="#000" />
+</LinearLayout>

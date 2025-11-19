@@ -17,7 +17,13 @@ android {
             "String",
             "PLANTNET_API_KEY",
             "\"${project.findProperty("PLANTNET_API_KEY") ?: ""}\""
-        )    }
+        )
+        buildConfigField(
+            "String",
+            "PLANT_ID_API_KEY",
+            "\"${project.findProperty("PLANT_ID_API_KEY") ?: ""}\""
+        )
+    }
 
     buildTypes {
         release {
@@ -49,6 +55,7 @@ dependencies {
     implementation(libs.play.services.location)
     implementation("com.google.android.material:material:1.9.0")
     implementation(libs.recyclerview)
+    implementation(libs.work.runtime)
 
 
     // (tuỳ chọn) nếu IDE kêu thiếu ListenableFuture

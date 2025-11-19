@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class GardenResponse {
-
     private Long id;
     private String nickname;
 
@@ -25,6 +24,12 @@ public class GardenResponse {
 
     @SerializedName("diseaseStatuses")
     private Map<Long, String> diseaseStatuses;
+    @SerializedName("diseaseNames")
+    private List<String> diseaseNames;
+    @SerializedName("dateAdded")
+    private String dateAdded;
+    @SerializedName("diaries")
+    private List<DiaryResponse> diaries;
 
     @SerializedName("detectedDates")
     private Map<Long, String> detectedDates;
@@ -40,6 +45,10 @@ public class GardenResponse {
     public String getStatus() { return status; }
     public String getType() { return type; }
     public String getPotType() { return potType; }
+    public List<String> getDiseaseNames() { return diseaseNames; }
+    public List<DiaryResponse> getDiaries() { return diaries; }
+    public void setDiaries(List<DiaryResponse> diaries) { this.diaries = diaries; }
+}
 
     public List<GardenDiseaseResponse> getDiseases() { return diseases; }
     public Map<Long, String> getDiseaseStatuses() { return diseaseStatuses; }
