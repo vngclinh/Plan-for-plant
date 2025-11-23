@@ -108,9 +108,7 @@ public class MainActivity extends NavigationBarActivity {
 
         // view garden click (TEMPORARY: Send notification)
         MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
-        viewGarden.setOnClickListener(v -> {
-            notificationHelper.dispatchNotification("Nhắc nhở chăm sóc cây", "Đã đến giờ tưới cây cho hoa hồng của bạn!");
-            // Original functionality: startActivity(new android.content.Intent(this,GardenActivity.class ));
+        viewGarden.setOnClickListener(v -> { startActivity(new android.content.Intent(this,GardenActivity.class ));
         });
     }
 

@@ -10,31 +10,25 @@ import retrofit2.http.Part;
 
 public interface ChatApi {
 
-    @Multipart
+    // 1. Gửi Text (Dùng JSON - Khớp với @RequestBody Map<String, String> ở Backend)
     @POST("api/chat")
-    Call<String> sendMessage(
-            @Part("message") RequestBody message
-    );
+    Call<String> sendTextMessage(@Body MessageRequest body);
 
+    // 2. Gửi Ảnh (Dùng Multipart - Khớp với @RequestPart ở Backend)
     @Multipart
     @POST("api/chat")
     Call<String> sendImageMessage(
-            @Part("message") RequestBody message,
-            @Part MultipartBody.Part image
+            @Part("message") RequestBody message, // Khớp với @RequestPart("message")
+            @Part MultipartBody.Part image        // Khớp với @RequestPart("image")
     );
+
+    // Class DTO để đóng gói dữ liệu JSON
     class MessageRequest {
         private String message;
 
         public MessageRequest(String message) {
             this.message = message;
         }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
+        // Getter/Setter (nếu cần thiết, Gson/Moshi thường tự hiểu)
     }
 }
