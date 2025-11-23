@@ -32,7 +32,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nhận diện bệnh cho cây"
+        android:text="Nhận diện cây"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -41,6 +41,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp" />
+
+    <!-- 🌸 Khung chọn loại chụp: đặt ngay trên nút chụp -->
+    <LinearLayout
+        android:id="@+id/captureOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_transparent_rounded"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:gravity="center"
+        android:elevation="3dp"
+        app:layout_constraintBottom_toTopOf="@id/btnCamera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:id="@+id/optionFlower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="Hoa"
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:background="@drawable/option_selector"
+            android:layout_marginEnd="6dp" />
+
+        <TextView
+            android:id="@+id/optionLeaf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="Lá"
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:background="@drawable/option_selector"
+            android:layout_marginEnd="6dp" />
+
+        <TextView
+            android:id="@+id/optionWhole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="Toàn cây"
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:background="@drawable/option_selector" />
+    </LinearLayout>
 
     <!-- 📸 Nút chụp ảnh trung tâm -->
     <ImageButton

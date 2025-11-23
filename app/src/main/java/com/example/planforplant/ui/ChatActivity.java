@@ -150,20 +150,27 @@ public class ChatActivity extends NavigationBarActivity{
         etMessage.setText("");
         View typingView = addBotTyping();
 
-        RequestBody messagePart = RequestBody.create(MediaType.parse("text/plain"), text);
+        // ✅ CÁCH MỚI: Tạo object JSON request
+        ChatApi.MessageRequest requestBody = new ChatApi.MessageRequest(text);
 
-        chatApi.sendMessage(messagePart).enqueue(new Callback<String>() {
-            @Override public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+        // Gọi API gửi Text (Retrofit tự thêm Header: application/json)
+        chatApi.sendTextMessage(requestBody).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 removeView(typingView);
-                addBotBubbleMarkdown(response.isSuccessful() && response.body()!=null
-                        ? response.body()
-                        : "**⚠️ Lỗi:** " + response.code() + " - " + response.message());
+                if (response.isSuccessful() && response.body() != null) {
+                    addBotBubbleMarkdown(response.body());
+                    checkForConfirmationTrigger(response.body());
+                } else {
+                    addBotBubbleMarkdown("**⚠️ Lỗi:** " + response.code() + " - " + response.message());
+                }
                 isSending = false;
                 updateSendEnabled();
                 scrollToBottom();
             }
 
-            @Override public void onFailure(Call<String> call, Throwable t) {
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 removeView(typingView);
                 addBotBubbleMarkdown("**⚠️ Mạng lỗi:** " + t.getMessage());
                 isSending = false;
@@ -184,52 +191,63 @@ public class ChatActivity extends NavigationBarActivity{
                     out.write(buffer, 0, bytesRead);
                 }
             }
-            if (!etMessage.getText().toString().trim().isEmpty()) {
-                addUserBubble(etMessage.getText().toString().trim());
-            }
+
             String userText = etMessage.getText().toString().trim();
             if (userText.isEmpty()) userText = "Phân tích hình ảnh này";
+            addUserBubble(userText); // (Bạn có thể thêm hiển thị ảnh user ở đây nếu muốn)
 
+            // 1. Tạo Part cho file ảnh (Key là "image" - Khớp Backend)
             String mimeType = getContentResolver().getType(imageUri);
             if (mimeType == null) mimeType = "image/jpeg";
-
             RequestBody reqFile = RequestBody.create(MediaType.parse(mimeType), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
-            RequestBody message = RequestBody.create(MediaType.parse("text/plain"), userText);
+
+            // 2. Tạo Part cho text message (Key là "message" - Khớp Backend)
+            // Lưu ý: Backend nhận @RequestPart("message") String, nên gửi text/plain là chuẩn
+            RequestBody messagePart = RequestBody.create(MediaType.parse("text/plain"), userText);
 
             View typingView = addBotTyping();
+            etMessage.setText("");
 
-            chatApi.sendImageMessage(message, body).enqueue(new Callback<String>() {
+            // ✅ Gọi API gửi Ảnh (Retrofit tự thêm Header: multipart/form-data)
+            chatApi.sendImageMessage(messagePart, body).enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     removeView(typingView);
-                    addBotBubbleMarkdown(response.isSuccessful() && response.body()!=null
-                            ? response.body()
-                            : "**⚠️ Lỗi:** " + response.code() + " - " + response.message());
-                    scrollToBottom();
+                    if (response.isSuccessful() && response.body() != null) {
+                        addBotBubbleMarkdown(response.body());
+                        checkForConfirmationTrigger(response.body());
+                    } else {
+                        addBotBubbleMarkdown("**⚠️ Lỗi Server:** " + response.code());
+                    }
+                    cleanupAfterSend();
                 }
 
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                     removeView(typingView);
                     addBotBubbleMarkdown("**⚠️ Lỗi gửi ảnh:** " + t.getMessage());
-                    scrollToBottom();
+                    cleanupAfterSend();
                 }
             });
 
-            etMessage.setText("");
-            selectedImageUri = null;
-            if (previewLayout != null) {
-                chatContainer.removeView(previewLayout);
-                previewLayout = null;
-            }
-            previewImageView = null;
-
         } catch (Exception e) {
-            Toast.makeText(this, "Lỗi đọc ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
+    // Helper để dọn dẹp biến sau khi gửi xong
+    private void cleanupAfterSend() {
+        isSending = false;
+        updateSendEnabled();
+        selectedImageUri = null;
+        if (previewLayout != null) {
+            chatContainer.removeView(previewLayout);
+            previewLayout = null;
+        }
+        previewImageView = null;
+        scrollToBottom();
+    }
     private void addUserBubble(String text) {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
@@ -352,5 +370,97 @@ public class ChatActivity extends NavigationBarActivity{
     private int dp(int value) {
         final float scale = getResources().getDisplayMetrics().density;
         return (int) (value * scale);
+    }
+    // Thêm vào trong class ChatActivity
+
+    private void addConfirmationButtons(String botMessage) {
+        // Tạo Layout chứa 2 nút
+        LinearLayout buttonLayout = new LinearLayout(this);
+        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+        buttonLayout.setGravity(android.view.Gravity.END); // Căn phải
+        buttonLayout.setPadding(0, dp(4), 0, dp(12));
+
+        // --- Nút KHÔNG ---
+        Button btnNo = new Button(this);
+        btnNo.setText("Không");
+        btnNo.setTextSize(13);
+        btnNo.setBackgroundTintList(getColorStateList(R.color.gray)); // Giả sử bạn có màu này
+        btnNo.setTextColor(getColor(R.color.white));
+        LinearLayout.LayoutParams paramsNo = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, dp(40));
+        paramsNo.setMargins(0, 0, dp(8), 0);
+        btnNo.setLayoutParams(paramsNo);
+
+        btnNo.setOnClickListener(v -> {
+            // Nếu chọn Không: Chỉ cần ẩn nút đi hoặc gửi tin nhắn "Không cần đâu"
+            chatContainer.removeView(buttonLayout);
+            sendUserMessageInternal("Không cần đâu, cảm ơn.");
+        });
+
+        // --- Nút CÓ ---
+        Button btnYes = new Button(this);
+        btnYes.setText("Có, áp dụng ngay");
+        btnYes.setTextSize(13);
+        btnYes.setBackgroundTintList(getColorStateList(R.color.green_primary)); // Màu xanh chủ đạo
+        btnYes.setTextColor(getColor(R.color.white));
+        btnYes.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, dp(40)));
+
+        btnYes.setOnClickListener(v -> {
+            chatContainer.removeView(buttonLayout);
+
+            // 🔥 QUAN TRỌNG: Gửi câu lệnh đầy đủ để Gemini hiểu context
+            // Chúng ta trích xuất tên cây/bệnh từ tin nhắn bot (nếu có thể) hoặc gửi lệnh chung
+            // Cách tốt nhất: Gửi lệnh kích hoạt tool confirm
+            sendUserMessageInternal("Tôi xác nhận. Hãy áp dụng kế hoạch điều trị này vào database.");
+        });
+
+        buttonLayout.addView(btnNo);
+        buttonLayout.addView(btnYes);
+
+        chatContainer.addView(buttonLayout);
+        scrollToBottom();
+    }
+
+    // Hàm phụ trợ để gửi tin nhắn mà không cần gõ vào EditText
+    private void sendUserMessageInternal(String text) {
+        addUserBubble(text);
+        View typingView = addBotTyping();
+
+        // Gọi API gửi Text (đã sửa ở bước trước)
+        com.example.planforplant.api.ChatApi.MessageRequest request =
+                new com.example.planforplant.api.ChatApi.MessageRequest(text);
+
+        chatApi.sendTextMessage(request).enqueue(new retrofit2.Callback<String>() {
+            @Override
+            public void onResponse(@NonNull retrofit2.Call<String> call, @NonNull retrofit2.Response<String> response) {
+                removeView(typingView);
+                if (response.isSuccessful() && response.body() != null) {
+                    String reply = response.body();
+                    addBotBubbleMarkdown(reply);
+                    // Kiểm tra tiếp xem có cần hiện nút nữa không (đệ quy logic)
+                    checkForConfirmationTrigger(reply);
+                } else {
+                    addBotBubbleMarkdown("**⚠️ Lỗi:** " + response.code());
+                }
+                scrollToBottom();
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<String> call, Throwable t) {
+                removeView(typingView);
+                addBotBubbleMarkdown("**⚠️ Mạng lỗi:** " + t.getMessage());
+                scrollToBottom();
+            }
+        });
+    }
+
+    // Hàm kiểm tra xem có nên hiện nút không
+    private void checkForConfirmationTrigger(String message) {
+        // Logic bắt từ khóa đơn giản
+        if (message.contains("Bạn có muốn tôi áp dụng kế hoạch") ||
+                message.contains("áp dụng kế hoạch này không")) {
+            addConfirmationButtons(message);
+        }
     }
 }

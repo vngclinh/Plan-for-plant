@@ -16,7 +16,7 @@ public class ApiClient {
     private static Retrofit plantNetRetrofit = null;
     private static Retrofit meteosourceRetrofit = null;
 
- //   private static final String LOCAL_BASE_URL = "http://192.168.88.174:8080/";
+//    private static final String LOCAL_BASE_URL = "http://192.168.88.174:8080/";
 
     private static final String LOCAL_BASE_URL = "http://10.0.2.2:8080/";
     private static final String PLANTNET_BASE_URL = "https://my-api.plantnet.org/v2/";
