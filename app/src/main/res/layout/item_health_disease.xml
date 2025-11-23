@@ -1,35 +1,10 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvDiseaseName"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="18dp"
-    app:cardElevation="5dp"
-    app:cardBackgroundColor="@android:color/white">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tvDiseaseName"
-            android:text="Tên bệnh"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/earth_brown_dark"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
-
-        <TextView
-            android:id="@+id/tvDiseaseProb"
-            android:text="Xác suất: 90%"
-            android:textSize="15sp"
-            android:textColor="@color/green_primary"
-            android:layout_marginTop="4dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    android:textSize="16sp"
+    android:padding="12dp"
+    android:textColor="#000000"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_marginBottom="6dp" />

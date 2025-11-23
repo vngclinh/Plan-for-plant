@@ -1,6 +1,6 @@
 package com.example.planforplant.api;
 
-import com.example.planforplant.model.HealthResponse;
+import com.example.planforplant.DTO.HealthResponse;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

@@ -1,4 +1,4 @@
-package com.example.planforplant.model;
+package com.example.planforplant.DTO;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;

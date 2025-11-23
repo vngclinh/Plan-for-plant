@@ -424,13 +424,12 @@
                     android:textSize="18sp"
                     android:layout_marginBottom="8dp" />
 
-                <TextView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/tvDiseases"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="🍂 Bệnh rụng lá sớm\n🕷️ Sâu đục thân\n🦠 Nấm mốc trắng"
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:nestedScrollingEnabled="false"/>
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
