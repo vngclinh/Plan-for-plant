@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,12 +18,27 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.planforplant.DTO.GardenScheduleResponse;
 import com.example.planforplant.NotificationHelper;
 import com.example.planforplant.R;
+import com.example.planforplant.api.ApiClient;
+import com.example.planforplant.api.ApiService;
 import com.example.planforplant.session.SessionManager;
 import com.example.planforplant.weather.WeatherManager;
 import com.example.planforplant.weather.WeatherUtils;
 import com.google.android.material.button.MaterialButton;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends NavigationBarActivity {
 
@@ -71,6 +88,7 @@ public class MainActivity extends NavigationBarActivity {
         // --- Weather manager ---
         weatherManager = new WeatherManager(this, tvLocation, tvWeather, ivWeatherIcon);
         weatherManager.start();
+        loadTodayPlans();
 
         // --- Search box ---
         searchBox = findViewById(R.id.search_box);
@@ -97,19 +115,101 @@ public class MainActivity extends NavigationBarActivity {
                 startActivity(new Intent(this, HealthCaptureActivity.class))
         );
 
-        MaterialButton Setting = findViewById(R.id.btnSetting);
-        Setting.setOnClickListener(v -> startActivity(new android.content.Intent(this, SettingActivity.class)));
-
-        MaterialButton addPlan = findViewById(R.id.btnCreatePlan);
+        MaterialButton addPlan = findViewById(R.id.btnTodayCreate);
         addPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, PlanActivity.class)));
-
-        MaterialButton viewPlan = findViewById(R.id.btnViewPlan);
-        viewPlan.setOnClickListener(v -> startActivity(new Intent(this, ScheduleListActivity.class)));
 
         // view garden click (TEMPORARY: Send notification)
         MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
         viewGarden.setOnClickListener(v -> { startActivity(new android.content.Intent(this,GardenActivity.class ));
         });
+    }
+
+    private void loadTodayPlans() {
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+
+        api.getAllSchedules().enqueue(new Callback<List<GardenScheduleResponse>>() {
+            @Override
+            public void onResponse(Call<List<GardenScheduleResponse>> call, Response<List<GardenScheduleResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                    String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                    List<GardenScheduleResponse> todayList = new ArrayList<>();
+
+                    for (GardenScheduleResponse s : response.body()) {
+                        if (s.getScheduledTime() != null && s.getScheduledTime().startsWith(today)) {
+                            todayList.add(s);
+                        }
+                    }
+
+                    Collections.sort(todayList, Comparator.comparing(GardenScheduleResponse::getScheduledTime));
+
+                    showTodayPlans(todayList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<GardenScheduleResponse>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Không thể tải kế hoạch hôm nay", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void showTodayPlans(List<GardenScheduleResponse> list) {
+
+        LinearLayout layoutList = findViewById(R.id.todayPlanList);
+        LinearLayout layoutEmpty = findViewById(R.id.todayPlanEmpty);
+        TextView tvTitle = findViewById(R.id.tvTodayPlanTitle);
+
+        layoutList.removeAllViews();
+
+        if (list == null || list.isEmpty()) {
+            layoutList.setVisibility(View.GONE);
+            layoutEmpty.setVisibility(View.VISIBLE);
+            tvTitle.setVisibility(View.GONE);
+            return;
+        }
+
+        layoutList.setVisibility(View.VISIBLE);
+        layoutEmpty.setVisibility(View.GONE);
+        tvTitle.setVisibility(View.VISIBLE);
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        for (GardenScheduleResponse s : list) {
+
+            View card = inflater.inflate(R.layout.item_plan_today, layoutList, false);
+
+            TextView tvTime = card.findViewById(R.id.tvPlanTime);
+            TextView tvTitle2 = card.findViewById(R.id.tvPlanTitle);
+            TextView tvNote = card.findViewById(R.id.tvPlanNote);
+
+            // Time formatting
+            String time = s.getScheduledTime().substring(11, 16);
+            tvTime.setText(time);
+
+            // Title
+            String plant = s.getPlantName() != null ? s.getPlantName() : "Cây #" + s.getGardenId();
+            tvTitle2.setText(mapType(s.getType()) + " (" + plant + ")");
+
+            // Note
+            if (s.getNote() != null && !s.getNote().trim().isEmpty()) {
+                tvNote.setText("Ghi chú: " + s.getNote());
+                tvNote.setVisibility(View.VISIBLE);
+            }
+
+            layoutList.addView(card);
+        }
+    }
+
+    private String mapType(String type) {
+        switch (type) {
+            case "WATERING": return "Tưới cây";
+            case "FERTILIZING": return "Bón phân";
+            case "PRUNING": return "Tỉa lá";
+            case "MIST": return "Phun ẩm";
+            case "OTHER": return "Hoạt động khác";
+            case "NOTE": return "Ghi chú";
+            default: return type;
+        }
     }
 
     @Override

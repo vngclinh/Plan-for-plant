@@ -8,8 +8,7 @@ public class Disease {
     private String symptoms;
     private String causes;
     private String careguide;
-
-
+    private String imageUrl;
 
     // --- Getters & Setters ---
     public long getId() { return id; }
@@ -32,6 +31,7 @@ public class Disease {
 
     public String getCareguide() { return careguide; }
     public void setCareguide(String careguide) { this.careguide = careguide; }
-
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
 }

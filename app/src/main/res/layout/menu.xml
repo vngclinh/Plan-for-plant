@@ -218,44 +218,92 @@
             app:cardBackgroundColor="#FFFFFF" />
     </LinearLayout>
 
-
-    <!-- ⚙️ Các nút dưới (giữ nguyên id để không lỗi code Java) -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCreatePlan"
-        style="@style/Widget.MaterialComponents.Button"
+    <!-- 📅 Kế hoạch hôm nay - dạng text đơn giản trên nền -->
+    <LinearLayout
+        android:id="@+id/todayPlanContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Tạo kế hoạch"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@id/card_container"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_view_my_garden"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnViewPlan"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Xem kế hoạch"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@id/btnCreatePlan"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/tvTodayPlanTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📅 Kế hoạch hôm nay:"
+            android:textSize="18sp"
+            android:textColor="@color/earth_brown_dark"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSetting"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Cài đặt"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btnViewPlan"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav" />
+        <ScrollView
+            android:id="@+id/scrollTodayPlans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:id="@+id/todayPlanList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"/>
+        </ScrollView>
+
+        <!-- Khi không có kế hoạch -->
+        <LinearLayout
+            android:id="@+id/todayPlanEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingTop="8dp"
+            android:layout_marginTop="6dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:src="@drawable/ic_leaf"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView
+                    android:id="@+id/tvTodayPlanEmpty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hôm nay bạn chưa có kế hoạch nào."
+                    android:textSize="17sp"
+                    android:textColor="@color/earth_brown_dark"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- Nút tạo mới nằm dưới -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnTodayCreate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TẠO MỚI"
+                android:textSize="14sp"
+                android:layout_marginTop="12dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:cornerRadius="24dp"
+                app:strokeColor="@color/green_primary"
+                app:strokeWidth="2dp"
+                android:textColor="@color/green_primary"/>
+        </LinearLayout>
+    </LinearLayout>
+
 
     <!-- Thanh navigation -->
     <FrameLayout

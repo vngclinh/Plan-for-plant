@@ -55,7 +55,7 @@
         <activity android:name=".ui.NotificationActivity"/>
         <activity android:name=".ui.ChatActivity"/>
         <activity android:name=".ui.HealthCaptureActivity"/>
-        <activity android:name=".ui.HealthResultActivity"/>
+        <activity android:name=".ui.DiseaseDetailActivity"/>
 
 
         <provider
