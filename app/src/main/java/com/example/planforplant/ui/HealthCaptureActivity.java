@@ -26,10 +26,11 @@ import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 
 import com.example.planforplant.BuildConfig;
+import com.example.planforplant.DTO.HealthResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.HealthApi;
 import com.example.planforplant.api.HealthClient;
-import com.example.planforplant.model.HealthResponse;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 

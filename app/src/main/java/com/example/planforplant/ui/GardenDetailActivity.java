@@ -18,6 +18,10 @@ import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.activity.result.ActivityResultLauncher;
@@ -543,15 +547,37 @@ public class GardenDetailActivity extends AppCompatActivity {
 
         // Bệnh thường gặp
         List<Disease> diseases = plant.getDiseases();
+
         if (diseases != null && !diseases.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
+
+            SpannableString spannable = new SpannableString(buildDiseaseListText(diseases));
+
+            int start = 0;
             for (Disease d : diseases) {
-                sb.append("🦠 ").append(d.getName()).append("\n");
+                String line = "🦠 " + d.getName() + "\n";
+                int end = start + line.length();
+
+                final long diseaseId = d.getId();
+
+                spannable.setSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        Intent intent = new Intent(GardenDetailActivity.this, DiseaseDetailActivity.class);
+                        intent.putExtra("diseaseId", diseaseId);
+                        startActivity(intent);
+                    }
+                }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                start = end;
             }
-            tvDiseases.setText(sb.toString().trim());
+
+            tvDiseases.setText(spannable);
+            tvDiseases.setMovementMethod(LinkMovementMethod.getInstance());  // enable click
+
         } else {
             tvDiseases.setText("✅ Không có bệnh được ghi nhận");
         }
+
 
         // Ảnh cây
         if (plant.getImageUrl() != null && !plant.getImageUrl().isEmpty()) {
@@ -561,6 +587,14 @@ public class GardenDetailActivity extends AppCompatActivity {
                     .into(imgPlant);
         }
     }
+    private String buildDiseaseListText(List<Disease> diseases) {
+        StringBuilder sb = new StringBuilder();
+        for (Disease d : diseases) {
+            sb.append("🦠 ").append(d.getName()).append("\n");
+        }
+        return sb.toString();
+    }
+
 
     private void generateAutoWateringSchedule() {
         progressDialog.setMessage("Checking your saved location...");
