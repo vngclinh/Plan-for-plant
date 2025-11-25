@@ -20,6 +20,7 @@ import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,19 +61,67 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                 ? "🌿 " + s.getPlantName()
                 : "🌿 Không rõ");
 
-        // hiển thị trạng thái checkbox & màu nền
         boolean isDone = s.getCompletion() != null &&
-                (s.getCompletion().toString().equalsIgnoreCase("Complete")
-                        || s.getCompletion().toString().equalsIgnoreCase("Done"));
+                (s.getCompletion().equalsIgnoreCase("Complete") ||
+                        s.getCompletion().equalsIgnoreCase("Done"));
 
         holder.cbDone.setChecked(isDone);
-        holder.cardSchedule.setCardBackgroundColor(isDone
+
+        // 💡 Kiểm tra xem kế hoạch thuộc ngày nào
+        boolean isToday = false;
+        boolean isPastOrFuture = false;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+
+            Date scheduleDate = timeFormat.parse(s.getScheduledTime());
+            if (scheduleDate != null) {
+                String scheduleDay = dateFormat.format(scheduleDate);
+                String todayDay = dateFormat.format(new Date());
+
+                Date d1 = dateFormat.parse(scheduleDay);
+                Date d2 = dateFormat.parse(todayDay);
+
+                if (d1 != null && d2 != null) {
+                    if (d1.equals(d2)) {
+                        isToday = true;
+                    } else {
+                        isPastOrFuture = true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // ✅ Biến final để dùng trong lambda
+        final boolean finalIsToday = isToday;
+        final boolean finalIsPastOrFuture = isPastOrFuture;
+        final boolean finalIsDone = isDone;
+
+        // 💡 Đặt màu nền theo trạng thái
+        holder.cardSchedule.setCardBackgroundColor(finalIsDone
                 ? Color.parseColor("#A5D6A7")   // xanh lá nhạt
                 : Color.parseColor("#CCFFE082")); // vàng nhạt
 
-        // Khi tick / bỏ tick -> gửi API cập nhật completion
+        // Nếu không phải hôm nay -> disable checkbox
+        if (finalIsPastOrFuture) {
+            holder.cbDone.setEnabled(false);
+            holder.cbDone.setAlpha(0.4f); // làm mờ
+        } else {
+            holder.cbDone.setEnabled(true);
+            holder.cbDone.setAlpha(1f);
+        }
+
+        // ✅ Khi tick / bỏ tick chỉ cho phép nếu là hôm nay
         holder.cbDone.setOnCheckedChangeListener((buttonView, checked) -> {
             if (buttonView.isPressed()) { // tránh trigger khi bind
+                if (!finalIsToday) {
+                    Toast.makeText(holder.itemView.getContext(),
+                            "Chỉ có thể cập nhật trạng thái trong ngày hôm nay", Toast.LENGTH_SHORT).show();
+                    holder.cbDone.setChecked(finalIsDone); // revert lại
+                    return;
+                }
                 updateCompletion(holder, s, checked);
             }
         });

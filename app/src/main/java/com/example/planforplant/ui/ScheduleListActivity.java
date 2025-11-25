@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CalendarView;
@@ -12,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,6 +66,13 @@ public class ScheduleListActivity extends NavigationBarActivity {
             finish();
         });
         recyclerSchedules.setLayoutManager(new LinearLayoutManager(this));
+        ScheduleGroupAdapter emptyAdapter = new ScheduleGroupAdapter(new ArrayList<>(), new ScheduleAdapter.ScheduleListener() {
+            @Override public void onItemClick(GardenScheduleResponse s) {}
+            @Override public void onEdit(GardenScheduleResponse s) {}
+            @Override public void onDelete(GardenScheduleResponse s) {}
+        });
+        recyclerSchedules.setAdapter(emptyAdapter);
+
 
         loadSchedules();
 
@@ -120,28 +128,52 @@ public class ScheduleListActivity extends NavigationBarActivity {
     /** 🔹 Gom các kế hoạch theo khung giờ trong ngày */
     private void showSchedulesGrouped(String date) {
         List<GardenScheduleResponse> filtered = new ArrayList<>();
+        boolean isPast = false;
+
+        try {
+            Date selected = dateFormat.parse(date);
+            Date today = dateFormat.parse(dateFormat.format(new Date()));
+            if (selected != null && today != null && selected.before(today)) {
+                isPast = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        final boolean isPastDate = isPast; // ✅ tạo biến final để dùng trong inner class
+
+        // Lọc kế hoạch theo ngày
         for (GardenScheduleResponse s : allSchedules) {
             if (s.getScheduledTime() != null && s.getScheduledTime().startsWith(date)) {
-                filtered.add(s);
+                if (isPastDate) {
+                    if ("COMPLETED".equalsIgnoreCase(s.getCompletion())) {
+                        filtered.add(s);
+                    }
+                } else {
+                    filtered.add(s);
+                }
             }
         }
 
         if (filtered.isEmpty()) {
             recyclerSchedules.setAdapter(null);
-            tvStatus.setText("🌫️ Không có kế hoạch cho ngày này");
+            if (isPastDate) {
+                tvStatus.setText("📅 Ngày đã qua - Không có kế hoạch hoàn thành");
+            } else {
+                tvStatus.setText("🌫️ Không có kế hoạch cho ngày này");
+            }
             tvStatus.setTextColor(Color.parseColor("#9E9E9E"));
             return;
         }
 
+        // Gom nhóm theo giờ
         Map<String, List<GardenScheduleResponse>> grouped = new TreeMap<>();
         for (GardenScheduleResponse s : filtered) {
             try {
                 Date time = timeFormat.parse(s.getScheduledTime());
                 Calendar c = Calendar.getInstance();
                 c.setTime(time);
-                int hour = c.get(Calendar.HOUR_OF_DAY);
-                int minute = c.get(Calendar.MINUTE);
-                String key = String.format("%02d:%02d", hour, minute); // ✅ hiển thị cả giờ và phút
+                String key = String.format("%02d:%02d", c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
                 grouped.computeIfAbsent(key, k -> new ArrayList<>()).add(s);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -159,11 +191,19 @@ public class ScheduleListActivity extends NavigationBarActivity {
 
             @Override
             public void onEdit(GardenScheduleResponse schedule) {
+                if (isPastDate) {
+                    Toast.makeText(ScheduleListActivity.this, "Không thể chỉnh sửa kế hoạch đã qua", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 showEditPopup(schedule);
             }
 
             @Override
             public void onDelete(GardenScheduleResponse schedule) {
+                if (isPastDate) {
+                    Toast.makeText(ScheduleListActivity.this, "Không thể xóa kế hoạch đã qua", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 new AlertDialog.Builder(ScheduleListActivity.this)
                         .setTitle("Xóa kế hoạch")
                         .setMessage("Bạn có chắc muốn xóa kế hoạch này?")
@@ -174,7 +214,7 @@ public class ScheduleListActivity extends NavigationBarActivity {
         });
 
         recyclerSchedules.setAdapter(groupAdapter);
-        tvStatus.setText("Kế hoạch chi tiết");
+        tvStatus.setText(isPastDate ? "✅ Kế hoạch đã hoàn thành" : "Kế hoạch chi tiết");
     }
 
     /** Popup sửa kế hoạch */

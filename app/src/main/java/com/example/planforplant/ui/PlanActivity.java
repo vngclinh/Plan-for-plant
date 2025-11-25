@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.planforplant.DTO.GardenResponse;
@@ -32,6 +32,9 @@ import retrofit2.Response;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.TimeUnit;
 
@@ -291,12 +294,12 @@ public class PlanActivity extends AppCompatActivity {
         String timePart = String.format(Locale.getDefault(), "%02d:%02d:00", selectedHour, selectedMinute);
         String scheduledTime = datePart + "T" + timePart;
 
+        // Build request list
         if (cbWatering.isChecked()) requests.add(makeReq("WATERING", scheduledTime, completion));
         if (cbFertilizing.isChecked()) requests.add(makeReq("FERTILIZING", scheduledTime, completion));
         if (cbPruning.isChecked()) requests.add(makeReq("PRUNING", scheduledTime, completion));
         if (cbMisting.isChecked()) requests.add(makeReq("MIST", scheduledTime, completion));
         if (cbOther.isChecked()) requests.add(makeReq("OTHER", scheduledTime, completion));
-
         if (!cbWatering.isChecked() && !cbFertilizing.isChecked() && !cbPruning.isChecked()
                 && !cbMisting.isChecked() && !cbOther.isChecked()
                 && !etNote.getText().toString().trim().isEmpty()) {
@@ -308,9 +311,55 @@ public class PlanActivity extends AppCompatActivity {
             return;
         }
 
+        // ✅ Step 1: Check schedule conflicts first
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+        api.getSchedulesByGardenAndDate(selectedGardenId, datePart)
+                .enqueue(new Callback<List<GardenScheduleResponse>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<GardenScheduleResponse>> call,
+                                           @NonNull Response<List<GardenScheduleResponse>> response) {
+                        boolean showConflictDialog = false;
+                        String msg = "Ngày này đang có:\n";
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<GardenScheduleResponse> list = response.body();
+                            boolean hasStopWatering = list.stream().anyMatch(s -> "STOP_WATERING".equals(s.getType()));
+                            boolean hasCurrentFungicide = list.stream().anyMatch(s -> "CURRENT_FUNGICIDE".equals(s.getType()));
+
+                            if (hasStopWatering || hasCurrentFungicide) {
+                                showConflictDialog = true;
+                                if (hasStopWatering) msg += "- ⛔ Stop watering\n";
+                                if (hasCurrentFungicide) msg += "- 💊 Phun thuốc hằng ngày\n";
+                                msg += "Bạn vẫn muốn tạo lịch mới chứ?";
+                            }
+                        }
+
+                        Runnable createAction = () -> sendSchedules(requests);
+
+                        if (showConflictDialog) {
+                            new AlertDialog.Builder(PlanActivity.this)
+                                    .setTitle("⚠️ Cảnh báo xung đột lịch")
+                                    .setMessage(msg)
+                                    .setPositiveButton("Vẫn tạo", (dialog, which) -> createAction.run())
+                                    .setNegativeButton("Hủy", null)
+                                    .show();
+                        } else {
+                            createAction.run();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<GardenScheduleResponse>> call, @NonNull Throwable t) {
+                        // fallback nếu lỗi kết nối
+                        sendSchedules(requests);
+                    }
+                });
+    }
+
+    // 🔹 Gửi lên API (giữ nguyên code cũ)
+    private void sendSchedules(List<GardenScheduleRequest> requests) {
         progressDialog.setMessage("Đang lưu kế hoạch...");
         progressDialog.show();
-
         ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
         final int[] done = {0};
 
@@ -320,7 +369,25 @@ public class PlanActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call<GardenScheduleResponse> call,
                                        @NonNull Response<GardenScheduleResponse> response) {
                     done[0]++;
-                    checkDone(requests.size(), done[0]);
+                    if (done[0] >= requests.size()) {
+                        progressDialog.dismiss();
+                        Toast.makeText(PlanActivity.this, "Đã lưu kế hoạch thành công 🌿", Toast.LENGTH_LONG).show();
+
+                        String gardenName = spinnerGarden.getSelectedItem().toString();
+                        long triggerTimeMillis = selectedDateMillis + selectedHour * 3600000L + selectedMinute * 60000L;
+                        List<String> actions = new ArrayList<>();
+                        if (cbWatering.isChecked()) actions.add("tưới cây");
+                        if (cbFertilizing.isChecked()) actions.add("bón phân");
+                        if (cbPruning.isChecked()) actions.add("tỉa lá");
+                        if (cbMisting.isChecked()) actions.add("phun ẩm");
+                        if (cbOther.isChecked()) actions.add("hoạt động khác");
+                        if (actions.isEmpty()) actions.add("ghi chú");
+                        String actionText = String.join(" và ", actions);
+                        scheduleWorkNotification(gardenName, actionText, triggerTimeMillis);
+
+                        setResult(RESULT_OK);
+                        finish();
+                    }
                 }
 
                 @Override
