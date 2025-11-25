@@ -16,7 +16,7 @@
         app:backgroundTint="@android:color/white"
         app:fabCradleMargin="8dp"
         app:fabCradleRoundedCornerRadius="28dp"
-        app:fabCradleVerticalOffset="6dp">
+        app:fabCradleVerticalOffset="0dp">
 
         <!-- Container cho các mục menu -->
         <LinearLayout
@@ -133,14 +133,14 @@
         </LinearLayout>
     </com.google.android.material.bottomappbar.BottomAppBar>
 
-    <!-- Nút Camera nổi -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/nav_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/camera_desc"
         android:src="@drawable/ic_camera"
-        android:translationY="6dp"
+        android:translationY="0dp"
+        android:layout_marginBottom="12dp"
         app:backgroundTint="@color/green_primary"
         app:fabSize="mini"
         app:layout_anchor="@+id/bottom_app_bar"
