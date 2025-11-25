@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.planforplant.DTO.AddGardenRequest;
@@ -71,7 +73,7 @@ public class DetailActivity extends AppCompatActivity {
         tvLight = findViewById(R.id.tvLight);
         tvTemperature = findViewById(R.id.tvTemperature);
         tvCareGuide = findViewById(R.id.tvCareGuide);
-        tvDiseases = findViewById(R.id.tvDiseases);
+        RecyclerView rvDiseases = findViewById(R.id.tvDiseases);
 
         // Bind weather views
         tvLocation = findViewById(R.id.tvLocation);
@@ -285,23 +287,23 @@ public class DetailActivity extends AppCompatActivity {
         tvCareGuide.setText(plant.getCareguide() != null ? plant.getCareguide() : "");
         List<Disease> diseases = plant.getDiseases();
 
-        if (diseases != null && !diseases.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            for (Disease d : diseases) {
-                // Add emoji + name + newline
-                sb.append("🦠 ").append(d.getName()).append("\n");
-            }
-            // Remove the last newline
-            tvDiseases.setText(sb.toString().trim());
-        } else {
-            tvDiseases.setText("✅ Không có bệnh được ghi nhận");
-        }
-
         if (plant.getImageUrl() != null && !plant.getImageUrl().isEmpty()) {
             Glide.with(this)
                     .load(plant.getImageUrl())
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .into(plantImage);
         }
+        RecyclerView rvDiseases = findViewById(R.id.tvDiseases);
+        rvDiseases.setLayoutManager(new LinearLayoutManager(this));
+
+        DiseaseListAdapter adapter = new DiseaseListAdapter(
+                this,
+                plant.getDiseases(),
+                disease -> {
+                    Toast.makeText(this, "Bạn chọn: " + disease.getName(), Toast.LENGTH_SHORT).show();
+                }
+        );
+
+        rvDiseases.setAdapter(adapter);
     }
 }
