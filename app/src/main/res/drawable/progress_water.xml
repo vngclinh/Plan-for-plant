@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Track trắng -->
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <corners android:radius="999dp" />
+            <solid android:color="#FFFFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Phần progress xanh, được clip theo % -->
+    <item android:id="@android:id/progress">
+        <clip
+            android:clipOrientation="horizontal"
+            android:gravity="left">
+            <shape android:shape="rectangle">
+                <corners android:radius="999dp" />
+                <gradient
+                    android:startColor="#35C2A6"
+                    android:endColor="#0095FF"
+                    android:angle="0" />
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>

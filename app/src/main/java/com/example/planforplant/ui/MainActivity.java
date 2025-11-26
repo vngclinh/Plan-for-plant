@@ -118,9 +118,11 @@ public class MainActivity extends NavigationBarActivity {
         MaterialButton addPlan = findViewById(R.id.btnTodayCreate);
         addPlan.setOnClickListener(v -> startActivity(new android.content.Intent(this, PlanActivity.class)));
 
-        // view garden click (TEMPORARY: Send notification)
         MaterialButton viewGarden = findViewById(R.id.btn_view_my_garden);
         viewGarden.setOnClickListener(v -> { startActivity(new android.content.Intent(this,GardenActivity.class ));
+        });
+        MaterialButton doGame = findViewById(R.id.btn_water_game);
+        doGame.setOnClickListener(v -> { startActivity(new android.content.Intent(this, WaterGameActivity.class ));
         });
     }
 
