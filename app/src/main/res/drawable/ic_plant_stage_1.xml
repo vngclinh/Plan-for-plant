@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="160dp"
+    android:viewportWidth="120"
+    android:viewportHeight="160">
+
+    <!-- Thân cây -->
+    <path
+        android:fillColor="#2F7D4A"
+        android:pathData="M58,160 L62,160 L62,80 L58,80 Z"/>
+
+    <!-- Lá trái -->
+    <path
+        android:fillColor="#5CD18B"
+        android:pathData="M60,100 C20,100 30,60 60,80 Z"/>
+
+    <!-- Lá phải -->
+    <path
+        android:fillColor="#4FC67C"
+        android:pathData="M60,90 C100,90 90,60 60,80 Z"/>
+
+</vector>

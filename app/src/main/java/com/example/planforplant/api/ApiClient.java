@@ -13,7 +13,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ApiClient {
     private static Retrofit localRetrofit = null;
-    private static Retrofit plantNetRetrofit = null;
     private static Retrofit meteosourceRetrofit = null;
 
     private static final String LOCAL_BASE_URL = "http://192.168.100.90:8080/";
