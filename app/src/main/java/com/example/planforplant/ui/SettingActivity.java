@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
@@ -28,8 +28,7 @@ public class SettingActivity extends NavigationBarActivity {
     private SessionManager sessionManager;
     private TextView tvName, tvEmail;
     private ImageView imgAvatar;
-    private CardView cardManageAccount, cardChangePassword, cardSupport;
-    private Button btnLogout;
+    // ...existing code... keep only fields that are used outside onCreate
     private ApiService apiService;
 
     @Override
@@ -48,10 +47,12 @@ public class SettingActivity extends NavigationBarActivity {
         tvName = findViewById(R.id.tvName);
         tvEmail = findViewById(R.id.tvEmail);
         imgAvatar = findViewById(R.id.imgAvatar);
-        cardManageAccount = findViewById(R.id.cardManageAccount);
-        cardChangePassword = findViewById(R.id.cardChangePassword);
-        cardSupport = findViewById(R.id.cardSupport);
-        btnLogout = findViewById(R.id.btnLogout);
+        // Convert these UI controls to local variables since they're only used in onCreate
+        CardView cardManageAccount = findViewById(R.id.cardManageAccount);
+        CardView cardChangePassword = findViewById(R.id.cardChangePassword);
+        CardView cardSupport = findViewById(R.id.cardSupport);
+        CardView cardStatistics = findViewById(R.id.cardStatistics);
+        Button btnLogout = findViewById(R.id.btnLogout);
 
         loadUserProfile();
 
@@ -65,18 +66,24 @@ public class SettingActivity extends NavigationBarActivity {
             startActivity(intent);
         });
 
-        cardSupport.setOnClickListener(v ->{
-                Intent intent = new Intent(SettingActivity.this, LocationActivity.class);
-        startActivity(intent);}
-        );
+        cardSupport.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingActivity.this, LocationActivity.class);
+            startActivity(intent);
+        });
+
+        // Mở màn hình Thống kê khi người dùng bấm vào card
+        cardStatistics.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingActivity.this, StatisticsActivity.class);
+            startActivity(intent);
+        });
 
         btnLogout.setOnClickListener(v -> logout());
     }
 
     private void loadUserProfile() {
-        apiService.getProfile().enqueue(new Callback<UserResponse>() {
+        apiService.getProfile().enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+            public void onResponse(@NonNull Call<UserResponse> call, @NonNull Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     UserResponse user = response.body();
 
@@ -98,7 +105,7 @@ public class SettingActivity extends NavigationBarActivity {
             }
 
             @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
                 Toast.makeText(SettingActivity.this, "Lỗi kết nối server", Toast.LENGTH_SHORT).show();
                 Log.e("SettingActivity", "Failure: " + t.getMessage(), t);
             }

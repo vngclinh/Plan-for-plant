@@ -16,4 +16,31 @@
     <string name="nav_profile">Hồ sơ</string>
     <string name="camera_desc">Camera</string>
 
+    <!-- Settings screen strings -->
+    <string name="profile_name">Nguyễn Văn A</string>
+    <string name="profile_email">nguyenvana@gmail.com</string>
+    <string name="manage_account">Quản lý tài khoản</string>
+    <string name="change_password">Đổi mật khẩu</string>
+    <string name="set_location">Đặt vị trí</string>
+    <string name="statistics">Thống kê</string>
+    <string name="logout">Đăng xuất</string>
+
+    <!-- Content descriptions for accessibility -->
+    <string name="avatar_desc">Ảnh đại diện người dùng</string>
+    <string name="manage_account_desc">Quản lý tài khoản</string>
+    <string name="change_password_desc">Đổi mật khẩu</string>
+    <string name="set_location_desc">Đặt vị trí</string>
+    <string name="statistics_desc">Mở trang thống kê</string>
+    <string name="logout_desc">Đăng xuất khỏi ứng dụng</string>
+    <string name="statistics_placeholder">Màn hình Thống kê (chưa có dữ liệu)</string>
+
+    <!-- Statistics filter options -->
+    <string name="granularity_day">7 ngày</string>
+    <string name="granularity_week">4 tuần</string>
+    <string name="granularity_month">6 tháng</string>
+    <string-array name="granularity_options">
+        <item>@string/granularity_day</item>
+        <item>@string/granularity_week</item>
+        <item>@string/granularity_month</item>
+    </string-array>
 </resources>

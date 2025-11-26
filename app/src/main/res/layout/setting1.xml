@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAFAFA">
@@ -21,6 +20,7 @@
             android:layout_marginBottom="16dp"
             android:scaleType="centerCrop"
             android:src="@drawable/default_avatar"
+            android:contentDescription="@string/avatar_desc"
             app:shapeAppearanceOverlay="@style/RoundedImageView"
             app:strokeColor="#E0E0E0"
             app:strokeWidth="2dp" />
@@ -35,7 +35,7 @@
             android:textColor="#2E7D32"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:text="Nguyễn Văn A" />
+            android:text="@string/profile_name" />
 
         <!-- 📧 Email -->
         <TextView
@@ -47,7 +47,7 @@
             android:fontFamily="sans-serif"
             android:layout_gravity="center"
             android:layout_marginBottom="32dp"
-            android:text="nguyenvana@gmail.com" />
+            android:text="@string/profile_email" />
 
         <!-- 📂 Card: Quản lý tài khoản -->
         <androidx.cardview.widget.CardView
@@ -69,6 +69,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
+                    android:contentDescription="@string/manage_account_desc"
                     app:tint="#4CAF50"
                     android:src="@android:drawable/ic_menu_manage" />
 
@@ -79,7 +80,7 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Quản lý tài khoản" />
+                    android:text="@string/manage_account" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -103,6 +104,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
+                    android:contentDescription="@string/change_password_desc"
                     app:tint="#81D4FA"
                     android:src="@android:drawable/ic_lock_lock" />
 
@@ -113,7 +115,7 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Đổi mật khẩu" />
+                    android:text="@string/change_password" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -137,6 +139,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
+                    android:contentDescription="@string/set_location_desc"
                     app:tint="#8D6E63"
                     android:src="@android:drawable/ic_menu_mylocation" />
 
@@ -147,7 +150,42 @@
                     android:textColor="#333333"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Đặt vị trí" />
+                    android:text="@string/set_location" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- 📊 Card: Thống kê (mới) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardStatistics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            android:backgroundTint="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:contentDescription="@string/statistics_desc"
+                    app:tint="#FFB300"
+                    android:src="@android:drawable/ic_menu_sort_by_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/statistics" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -163,7 +201,8 @@
             android:fontFamily="sans-serif-medium"
             android:padding="14dp"
             android:stateListAnimator="@null"
-            android:text="Đăng xuất"
+            android:text="@string/logout"
+            android:contentDescription="@string/logout_desc"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
