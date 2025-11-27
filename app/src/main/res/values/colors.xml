@@ -32,4 +32,8 @@
     <!-- card shadow fallback -->
     <color name="card_shadow">#22000000</color>
     <color name="transparent">#00000000</color>
+    <color name="yellow_primary">#F9A825</color>
+    <color name="yellow_light">#FFE082</color>
+
+
 </resources>
