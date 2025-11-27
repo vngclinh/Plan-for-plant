@@ -245,12 +245,12 @@ public class MainActivity extends NavigationBarActivity {
                     1f
             );
             // margin trái/phải cho đẹp
-            int margin = (int) (4 * getResources().getDisplayMetrics().density);
-            if (i % 2 == 0) {
-                lp.setMargins(0, 0, margin, margin);
-            } else {
-                lp.setMargins(margin, 0, 0, margin);
-            }
+//            int margin = (int) (4 * getResources().getDisplayMetrics().density);
+//            if (i % 2 == 0) {
+//                lp.setMargins(0, 0, margin, margin);
+//            } else {
+//                lp.setMargins(margin, 0, 0, margin);
+//            }
             card.setLayoutParams(lp);
 
             TextView tvTime = card.findViewById(R.id.tvPlanTime);

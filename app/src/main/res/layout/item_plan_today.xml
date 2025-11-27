@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:minHeight="120dp"
         android:padding="12dp"
-        android:background="@drawable/bg_water_game">   <!-- 🔹 NỀN WATER GAME -->
+        android:background="#ffff">   <!-- 🔹 NỀN WATER GAME -->
 
         <!-- Giờ (góc trái trên) -->
         <TextView

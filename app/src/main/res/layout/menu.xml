@@ -459,7 +459,6 @@
 
         </LinearLayout>
 
-
             <!-- 📅 Kế hoạch hôm nay -->
             <LinearLayout
                 android:id="@+id/todayPlanContainer"
@@ -467,7 +466,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="12dp"
-                android:layout_marginHorizontal="20dp">
+                android:layout_marginHorizontal="16dp">
 
                 <TextView
                     android:id="@+id/tvTodayPlanTitle"
