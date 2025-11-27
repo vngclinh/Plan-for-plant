@@ -444,26 +444,48 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:minHeight="60dp"
                     android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🦠 Một số bệnh thường gặp"
+                        android:text="🦠 Bệnh hiện tại"
                         android:textColor="#2E7D32"
                         android:textStyle="bold"
                         android:textSize="18sp"
                         android:layout_marginBottom="8dp" />
 
                     <TextView
-                        android:id="@+id/tvDiseases"
+                        android:id="@+id/tvHealthy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🍂 Bệnh rụng lá sớm\n🕷️ Sâu đục thân\n🦠 Nấm mốc trắng"
-                        android:textColor="#000000"
-                        android:textSize="16sp" />
+                        android:text="Hiện tại cây khoẻ mạnh 🌱"
+                        android:textSize="16sp"
+                        android:textColor="#2E7D32"
+                        android:visibility="gone"
+                        android:layout_marginTop="4dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerDiseases"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="20dp"
+                        android:nestedScrollingEnabled="false"/>
+                    <Button
+                        android:id="@+id/btnAddDisease"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thêm bệnh mới"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="12dp"
+                        android:backgroundTint="@color/green_medium"
+                        android:textColor="@android:color/white"/>
                 </LinearLayout>
+
+
             </com.google.android.material.card.MaterialCardView>
+
 
             <!-- === GALLERY CARD === -->
             <com.google.android.material.card.MaterialCardView

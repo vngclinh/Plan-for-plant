@@ -21,6 +21,10 @@ public class GardenScheduleResponse implements Serializable {
     private Double waterAmount;
     private Double fertilityAmount;
     private String fertilityType;
+
+    private String fungicideType;
+
+
     private String createdAt;
     private String updatedAt;
 
@@ -136,5 +140,13 @@ public class GardenScheduleResponse implements Serializable {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getFungicideType() {
+        return fungicideType;
+    }
+
+    public void setFungicideType(String fungicideType) {
+        this.fungicideType = fungicideType;
     }
 }

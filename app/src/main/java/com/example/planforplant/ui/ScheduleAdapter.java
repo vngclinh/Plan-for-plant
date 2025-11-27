@@ -1,6 +1,7 @@
 package com.example.planforplant.ui;
 
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,7 +55,29 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         GardenScheduleResponse s = schedules.get(position);
+        boolean isSpecialType = s.getType() != null && (
+                s.getType().equalsIgnoreCase("FUNGICIDE") ||
+                        s.getType().equalsIgnoreCase("CURRENT_FUNGICIDE") ||
+                        s.getType().equalsIgnoreCase("STOP_WATERING")
+        );
+
+// Ẩn Checkbox
+        if (isSpecialType) {
+            holder.cbDone.setVisibility(View.GONE);
+        } else {
+            holder.cbDone.setVisibility(View.VISIBLE);
+        }
+
+// Disable Edit/Delete
+        if (isSpecialType) {
+            holder.btnEdit.setVisibility(View.GONE);
+            holder.btnDelete.setVisibility(View.GONE);
+        } else {
+            holder.btnEdit.setVisibility(View.VISIBLE);
+            holder.btnDelete.setVisibility(View.VISIBLE);
+        }
 
         holder.tvTitle.setText(buildTitle(s));
         holder.tvPlantName.setText(s.getPlantName() != null
@@ -196,24 +219,76 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         String type = translateType(s.getType());
         String detail = "";
 
-        if ("WATERING".equalsIgnoreCase(s.getType()) && s.getWaterAmount() != null) {
-            detail = s.getWaterAmount() + "ml";
-        } else if ("FERTILIZING".equalsIgnoreCase(s.getType()) && s.getFertilityType() != null) {
-            detail = s.getFertilityType() + " (" + s.getFertilityAmount() + "ml/g)";
-        } else if (s.getNote() != null && !s.getNote().trim().isEmpty()) {
-            detail = s.getNote();
+        switch (s.getType().toUpperCase(Locale.ROOT)) {
+
+            case "WATERING":
+                if (s.getWaterAmount() != null)
+                    detail = s.getWaterAmount() + "ml";
+                break;
+
+            case "FERTILIZING":
+                if (s.getFertilityType() != null)
+                    detail = s.getFertilityType() + " (" + s.getFertilityAmount() + "ml/g)";
+                break;
+
+            case "FUNGICIDE":
+                if (s.getFungicideType() != null)
+                    detail = "" + s.getFungicideType();
+                break;
+
+            case "CURRENT_FUNGICIDE":
+                if (s.getFungicideType() != null)
+                    detail = "" + s.getFungicideType();
+                break;
+
+            case "STOP_WATERING":
+                if (s.getNote() != null)
+                    detail = s.getNote();
+                break;
+
+            case "PRUNNING":
+                if (s.getNote() != null)
+                    detail = s.getNote();
+                break;
+
+
+
+            default:
+                if (s.getNote() != null)
+                    detail = s.getNote();
+                break;
         }
 
-        return type + (detail.isEmpty() ? "" : ": " + detail);
+        return detail.isEmpty() ? type : type + ": " + detail;
     }
 
     private String translateType(String type) {
         if (type == null) return "(Không rõ)";
+
         switch (type.toUpperCase(Locale.ROOT)) {
-            case "WATERING": return "💧 Tưới nước";
-            case "FERTILIZING": return "🌱 Bón phân";
-            case "NOTE": return "📝 Ghi chú";
-            default: return type;
+            case "WATERING":
+                return "💧 Tưới nước";
+
+            case "FERTILIZING":
+                return "🌱 Bón phân";
+
+            case "FUNGICIDE":
+                return "🧪 Phun thuốc nấm";
+
+            case "CURRENT_FUNGICIDE":
+                return "🧪📅 Trong thời gian hiệu lực thuốc";
+
+            case "STOP_WATERING":
+                return "🚫💧 Ngừng tưới";
+
+            case "PRUNNING":
+                return "✂️ Tỉa cành";
+
+            case "NOTE":
+                return "📝 Ghi chú";
+
+            default:
+                return type;
         }
     }
 }

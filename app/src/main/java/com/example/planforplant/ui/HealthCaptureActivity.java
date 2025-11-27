@@ -27,14 +27,16 @@ import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 
 import com.example.planforplant.BuildConfig;
+import com.example.planforplant.DTO.HealthResponse;
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
 import com.example.planforplant.api.HealthApi;
 import com.example.planforplant.api.HealthClient;
+
 import com.example.planforplant.model.Disease;
-import com.example.planforplant.DTO.HealthResponse;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,7 +52,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 public class HealthCaptureActivity extends NavigationBarActivity {
 

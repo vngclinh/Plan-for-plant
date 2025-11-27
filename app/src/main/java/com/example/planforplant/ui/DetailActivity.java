@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -13,7 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,7 +47,8 @@ public class DetailActivity extends AppCompatActivity {
     private Plant plant;
     private TextView tvPlantName, tvOverview, tvFamily, tvGenus, tvSpecies;
     private TextView tvPhylum, tvClass, tvOrder;
-    private TextView tvWater, tvLight, tvTemperature, tvCareGuide, tvDiseases;
+    private TextView tvWater, tvLight, tvTemperature, tvCareGuide;
+    private RecyclerView tvDiseases;
 
     // Weather views
     private TextView tvLocation, tvWeather;
@@ -306,4 +308,6 @@ public class DetailActivity extends AppCompatActivity {
 
         rvDiseases.setAdapter(adapter);
     }
+
+
 }

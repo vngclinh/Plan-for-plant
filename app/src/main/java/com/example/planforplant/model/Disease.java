@@ -19,12 +19,6 @@ public class Disease {
     @SerializedName("plants")
     private List<Plant> plants;
 
-    // From OneToMany with GardenDisease (ignored usually)
-
-    // OneToMany: disease → treatment rules
-    @SerializedName("treatmentRules")
-    private List<TreatmentRule> treatmentRules;
-
     public long getId() { return id; }
     public String getName() { return name; }
     public String getScientificName() { return scientificName; }
@@ -36,7 +30,7 @@ public class Disease {
     public String getImageUrl() { return imageUrl; }
     public List<Plant> getPlants() { return plants; }
 
-    public List<TreatmentRule> getTreatmentRules() { return treatmentRules; }
+
 
     public void setId(long id) { this.id = id; }
     public void setName(String name) { this.name = name; }
@@ -48,6 +42,4 @@ public class Disease {
     public void setPriority(int priority) { this.priority = priority; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public void setPlants(List<Plant> plants) { this.plants = plants; }
-
-    public void setTreatmentRules(List<TreatmentRule> treatmentRules) { this.treatmentRules = treatmentRules; }
 }

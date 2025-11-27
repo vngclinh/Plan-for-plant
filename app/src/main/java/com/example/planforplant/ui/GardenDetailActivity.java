@@ -1,10 +1,12 @@
 package com.example.planforplant.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -38,6 +41,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.planforplant.DTO.AddDiaryRequest;
 import com.example.planforplant.DTO.DiaryResponse;
+import com.example.planforplant.DTO.GardenDiseaseResponse;
 import com.example.planforplant.DTO.GardenImageResponse;
 import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.GardenScheduleResponse;
@@ -57,6 +61,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -77,7 +82,11 @@ public class GardenDetailActivity extends AppCompatActivity {
     private TextView tvCommonName, tvNickname, tvStatus, tvDateAdded;
     private TextView tvOverview, tvFamily, tvGenus, tvSpecies;
     private TextView tvPhylum, tvClass, tvOrder;
-    private TextView tvWater, tvLight, tvTemperature, tvCareGuide, tvDiseases;
+    private TextView tvWater, tvLight, tvTemperature, tvCareGuide;
+    private TextView tvHealthy;
+
+    private RecyclerView recyclerDiseases;
+    private GardenDiseaseAdapter diseaseAdapter;
 
     private RecyclerView recyclerGallery;
     private TextView tvEmptyGallery;
@@ -85,9 +94,12 @@ public class GardenDetailActivity extends AppCompatActivity {
     private static final int REQUEST_PICK_IMAGE = 101;
     private Long gardenId;
 
+    private List<GardenDiseaseResponse> currentActiveDiseases = new ArrayList<>();
+
     private ActivityResultLauncher<String> requestCameraPermission;
     private ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMultipleLauncher;
+
 
     private ActivityResultLauncher<Uri> takePictureLauncher;
     private Uri photoUri;
@@ -126,7 +138,15 @@ public class GardenDetailActivity extends AppCompatActivity {
         tvLight = findViewById(R.id.tvLight);
         tvTemperature = findViewById(R.id.tvTemperature);
         tvCareGuide = findViewById(R.id.tvCareGuide);
-        tvDiseases = findViewById(R.id.tvDiseases);
+        recyclerDiseases = findViewById(R.id.recyclerDiseases);
+        tvHealthy = findViewById(R.id.tvHealthy);
+
+        diseaseAdapter = new GardenDiseaseAdapter(this);
+        recyclerDiseases.setLayoutManager(new LinearLayoutManager(this));
+        recyclerDiseases.setAdapter(diseaseAdapter);
+
+
+
 
         // === Nhận dữ liệu từ Intent ===
         Intent intent = getIntent();
@@ -142,17 +162,21 @@ public class GardenDetailActivity extends AppCompatActivity {
             finish();
             return;
         }
-        Plant plant = (Plant) intent.getSerializableExtra("plant");
+        loadDiseases(gardenId);
+        long plantId = intent.getLongExtra("plantId", -1);
+
 
         // === Gán dữ liệu Garden ===
         tvNickname.setText("Tên riêng: " + (nickname != null ? nickname : "Chưa đặt"));
         tvStatus.setText("Trạng thái: "+ getStatusDisplay(status));
         tvDateAdded.setText("Ngày thêm: " + (dateAdded != null ? dateAdded : "Không xác định"));
 
-        // === Gọi hàm hiển thị thông tin cây ===
-        if (plant != null) {
-            bindPlantEntity(plant);
+
+        if (plantId != -1) {
+            loadPlantFromAPI(plantId);
         }
+
+
 
         ImageView btnMore = findViewById(R.id.btn_more);
         btnMore.setOnClickListener(v -> {
@@ -176,6 +200,9 @@ public class GardenDetailActivity extends AppCompatActivity {
                     return true;
                 } else if (id == R.id.action_auto_gen){
                     generateAutoWateringSchedule();
+                    return true;
+                } else if (id == R.id.action_gen_disease){
+                    showGenerateConfirmationDialog(gardenId);
                     return true;
                 }
                 return false;
@@ -275,6 +302,86 @@ public class GardenDetailActivity extends AppCompatActivity {
                     .show();
         });
 
+        ActivityResultLauncher<Intent> searchDiseaseLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // DiseaseDetail đã thêm bệnh thành công
+                        loadDiseases(gardenId); // reload danh sách bệnh
+                    }
+                }
+        );
+
+
+        Button btnAddDisease = findViewById(R.id.btnAddDisease);
+        btnAddDisease.setOnClickListener(v -> {
+            Intent searchDiseaseIntent = new Intent(GardenDetailActivity.this, SearchDiseaseActivity.class);
+            searchDiseaseIntent.putExtra("gardenId", gardenId);
+            searchDiseaseIntent.putExtra("nickname", nickname);
+            searchDiseaseIntent.putExtra("status", status);
+            searchDiseaseIntent.putExtra("dateAdded", dateAdded);
+            searchDiseaseIntent.putExtra("plantId", plantId);
+            startActivity(searchDiseaseIntent);
+        });
+    }
+
+    private void loadDiseases(long gardenId) {
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+
+        api.getDiseasesByGardenId(gardenId).enqueue(new Callback<List<GardenDiseaseResponse>>() {
+            @Override
+            public void onResponse(Call<List<GardenDiseaseResponse>> call, Response<List<GardenDiseaseResponse>> response) {
+
+                if (!response.isSuccessful() || response.body() == null) {
+                    // Show error text
+                    tvHealthy.setText("Không thể tải thông tin bệnh");
+                    tvHealthy.setTextColor(Color.RED);
+                    tvHealthy.setVisibility(View.VISIBLE);
+                    diseaseAdapter.setData(Collections.emptyList());
+                    return;
+                }
+
+                // Filter ACTIVE diseases
+                List<GardenDiseaseResponse> activeList = new ArrayList<>();
+                for (GardenDiseaseResponse d : response.body()) {
+                    if ("ACTIVE".equalsIgnoreCase(d.getStatus())) {
+                        activeList.add(d);
+                    }
+                }
+
+                currentActiveDiseases = activeList;
+
+                if (activeList.isEmpty()) {
+                    // No active disease → show healthy
+                    tvHealthy.setText("Hiện tại cây khoẻ mạnh 🌱");
+                    tvHealthy.setTextColor(Color.parseColor("#2E7D32")); // green
+                    tvHealthy.setVisibility(View.VISIBLE);
+                } else {
+                    // Show disease list
+                    tvHealthy.setVisibility(View.GONE);
+                }
+
+                recyclerDiseases.setVisibility(View.VISIBLE);
+                diseaseAdapter.setData(activeList);
+            }
+
+            @Override
+            public void onFailure(Call<List<GardenDiseaseResponse>> call, Throwable t) {
+                // API failure → show error
+                tvHealthy.setText("Không thể tải thông tin bệnh");
+                tvHealthy.setTextColor(Color.RED);
+                tvHealthy.setVisibility(View.VISIBLE);
+                diseaseAdapter.setData(Collections.emptyList());
+            }
+        });
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (gardenId != -1) {
+            loadDiseases(gardenId);
+        }
     }
 
     private void loadGardenDiaries() {
@@ -544,41 +651,6 @@ public class GardenDetailActivity extends AppCompatActivity {
 
         // Hướng dẫn chăm sóc
         tvCareGuide.setText(plant.getCareguide() != null ? plant.getCareguide() : "");
-
-        // Bệnh thường gặp
-        List<Disease> diseases = plant.getDiseases();
-
-        if (diseases != null && !diseases.isEmpty()) {
-
-            SpannableString spannable = new SpannableString(buildDiseaseListText(diseases));
-
-            int start = 0;
-            for (Disease d : diseases) {
-                String line = "🦠 " + d.getName() + "\n";
-                int end = start + line.length();
-
-                final long diseaseId = d.getId();
-
-                spannable.setSpan(new ClickableSpan() {
-                    @Override
-                    public void onClick(View widget) {
-                        Intent intent = new Intent(GardenDetailActivity.this, DiseaseDetailActivity.class);
-                        intent.putExtra("diseaseId", diseaseId);
-                        startActivity(intent);
-                    }
-                }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                start = end;
-            }
-
-            tvDiseases.setText(spannable);
-            tvDiseases.setMovementMethod(LinkMovementMethod.getInstance());  // enable click
-
-        } else {
-            tvDiseases.setText("✅ Không có bệnh được ghi nhận");
-        }
-
-
         // Ảnh cây
         if (plant.getImageUrl() != null && !plant.getImageUrl().isEmpty()) {
             Glide.with(this)
@@ -586,6 +658,28 @@ public class GardenDetailActivity extends AppCompatActivity {
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .into(imgPlant);
         }
+    }
+
+    private void loadPlantFromAPI(long plantId) {
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+
+        api.getPlantById(plantId).enqueue(new Callback<Plant>() {
+            @Override
+            public void onResponse(Call<Plant> call, Response<Plant> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    bindPlantEntity(response.body());
+                } else {
+                    Toast.makeText(GardenDetailActivity.this,
+                            "Failed to load plant", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Plant> call, Throwable t) {
+                Toast.makeText(GardenDetailActivity.this,
+                        "Cannot load plant details", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     private String buildDiseaseListText(List<Disease> diseases) {
         StringBuilder sb = new StringBuilder();
@@ -630,6 +724,8 @@ public class GardenDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void showLocationDialog() {
         new AlertDialog.Builder(this)
@@ -681,6 +777,65 @@ public class GardenDetailActivity extends AppCompatActivity {
         ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
 
         api.generateWeeklyWateringSchedule(gardenId, lat, lon)
+                .enqueue(new Callback<List<GardenScheduleResponse>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<GardenScheduleResponse>> call,
+                                           @NonNull Response<List<GardenScheduleResponse>> response) {
+                        progressDialog.dismiss();
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<GardenScheduleResponse> schedules = response.body();
+                            Toast.makeText(GardenDetailActivity.this,
+                                    "✅ Generated " + schedules.size() + " tasks!",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(GardenDetailActivity.this,
+                                    "❌ Failed to generate schedule", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<GardenScheduleResponse>> call,
+                                          @NonNull Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(GardenDetailActivity.this,
+                                "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void showGenerateConfirmationDialog(long gardenId) {
+
+        String message;
+        String title;
+
+        if (currentActiveDiseases == null || currentActiveDiseases.isEmpty()) {
+            // No disease
+            title = "🌱 Cây khỏe mạnh!";
+            message = "Cây của bạn hoàn toàn khỏe mạnh.\nBạn có muốn tạo lịch chăm sóc tự động không?";
+        } else {
+            // Has disease
+            title = "⚠ Cảnh báo";
+            message = "Việc tự động điều chỉnh lịch có thể ảnh hưởng "
+                    + "tới các hoạt động điều trị khác.\nBạn có chắc muốn tiếp tục?";
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton("Tiếp tục", (dialog, which) -> {
+                    callAutoGenerateDiseaseApi(gardenId);
+                })
+                .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void callAutoGenerateDiseaseApi(Long gardenId) {
+        progressDialog.setMessage("Generating watering schedule...");
+        progressDialog.show();
+        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
+
+        api.generatewithdisease(gardenId)
                 .enqueue(new Callback<List<GardenScheduleResponse>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<GardenScheduleResponse>> call,

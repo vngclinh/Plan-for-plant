@@ -40,15 +40,9 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
         GardenResponse item = gardenList.get(position);
 
         // --- Tên cây ---
-        if (item.getNickname() != null) {
-            holder.tvPlantName.setText(
-                    item.getNickname() != null
-                            ? item.getNickname()
-                            : "Không rõ tên cây"
-            );
-        } else {
-            holder.tvPlantName.setText("Không rõ tên cây");
-        }
+        holder.tvPlantName.setText(
+                item.getNickname() != null ? item.getNickname() : "Không rõ tên cây"
+        );
 
         // --- Ngày thêm ---
         String date = (item.getDateAdded() != null)
@@ -57,9 +51,9 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
         holder.tvDateAdded.setText("Ngày thêm: " + date);
 
         // --- Trạng thái ---
-        if(item.getStatus().equals("ALIVE")){
+        if ("ALIVE".equals(item.getStatus())) {
             holder.tvStatus.setText("Trạng thái: Đang phát triển");
-        } else if (item.getStatus().equals("DEAD")){
+        } else if ("DEAD".equals(item.getStatus())) {
             holder.tvStatus.setText("Trạng thái: Cây đã chết");
         } else {
             holder.tvStatus.setText("Trạng thái: Không xác định");
@@ -74,24 +68,22 @@ public class GardenAdapter extends RecyclerView.Adapter<GardenAdapter.GardenView
         } else {
             holder.imgPlant.setImageResource(R.drawable.ic_plant);
         }
+
+        // --- Click item ---
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, GardenDetailActivity.class);
 
-            // Gửi dữ liệu cây sang GardenDetailActivity
             intent.putExtra("gardenId", item.getId());
-            intent.putExtra("plant", item.getPlant());
+            intent.putExtra("plantId", item.getPlant().getId());   // SAFE
             intent.putExtra("nickname", item.getNickname());
             intent.putExtra("status", item.getStatus());
             intent.putExtra("imageUrl", item.getPlant().getImageUrl());
             intent.putExtra("dateAdded", item.getDateAdded());
 
-            // Mở bằng startActivityForResult để có thể nhận kết quả xoá
             ((Activity) context).startActivityForResult(intent, 100);
         });
     }
 
-
-    //hàm này để Recycleview biết tong so phan tu trong danh sach
     @Override
     public int getItemCount() {
         return gardenList != null ? gardenList.size() : 0;

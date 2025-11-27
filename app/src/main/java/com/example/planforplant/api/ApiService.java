@@ -1,9 +1,11 @@
 package com.example.planforplant.api;
 
 import com.example.planforplant.DTO.AddDiaryRequest;
+import com.example.planforplant.DTO.AddDiseasesRequest;
 import com.example.planforplant.DTO.AddGardenRequest;
 import com.example.planforplant.DTO.ChangepasswordRequest;
 import com.example.planforplant.DTO.DiaryResponse;
+import com.example.planforplant.DTO.GardenDiseaseResponse;
 import com.example.planforplant.DTO.GardenImageResponse;
 import com.example.planforplant.DTO.GardenResponse;
 import com.example.planforplant.DTO.GardenScheduleRequest;
@@ -12,6 +14,7 @@ import com.example.planforplant.DTO.GardenUpdateRequest;
 import com.example.planforplant.DTO.JwtResponse;
 import com.example.planforplant.DTO.LoginRequest;
 import com.example.planforplant.DTO.RegisterRequest;
+import com.example.planforplant.DTO.UpdateGardenDiseaseRequest;
 import com.example.planforplant.DTO.UpdateUserRequest;
 
 import com.example.planforplant.DTO.UserProgressResponse;
@@ -38,6 +41,9 @@ import retrofit2.http.Query;
 public interface ApiService {
     @GET("plants/search")
     Call<List<Plant>> searchPlants(@Query("keyword") String keyword);
+
+    @GET("plants/{id}")
+    Call<Plant> getPlantById(@Path("id") long id);
 
     @POST("/api/auth/forgot-password")
     Call<String> forgotPassword(@Body Map<String, String> body);
@@ -76,6 +82,9 @@ public interface ApiService {
 
     @GET("/garden/my")
     Call<List<GardenResponse>> getMyGarden();
+
+    @GET("/garden/{gardenId}")
+    Call<GardenResponse> getGardenById(@Path("gardenId") long gardenId);
 
     @PUT("/garden/{gardenId}/")
     Call<GardenResponse> updateGarden(@Path("gardenId") long gardenId, @Body GardenUpdateRequest request);
@@ -116,6 +125,9 @@ public interface ApiService {
             @Query("lat") double lat,
             @Query("lon") double lon
     );
+
+    @POST("/api/schedules/garden/{gardenId}/generatewithdisease")
+    Call<List<GardenScheduleResponse>> generatewithdisease(@Path("gardenId") Long gardenId);
 
     @PUT("/api/user/me")
     Call<UserResponse> updateUserProfile(@Body UpdateUserRequest request);
@@ -163,6 +175,26 @@ public interface ApiService {
             @Path("gardenId") Long gardenId
     );
 
+    @GET("/api/garden-disease/garden/{gardenId}")
+    Call<List<GardenDiseaseResponse>> getDiseasesByGardenId(
+            @Path("gardenId") Long gardenId
+    );
+
+    @GET("/api/garden-disease/{id}")
+    Call<GardenDiseaseResponse> getGardenDiseaseById(
+            @Path("id") Long id
+    );
+
+    @POST("api/garden-disease/add")
+    Call<List<GardenDiseaseResponse>> addDiseases(
+            @Body AddDiseasesRequest request
+    );
+
+
+    @PUT("api/garden-disease/update")
+    Call<GardenDiseaseResponse> updateDisease(
+            @Body UpdateGardenDiseaseRequest request
+    );
     @POST("/api/user/water-tree")
     Call<UserProgressResponse> waterTreeStreak();
 
