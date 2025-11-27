@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgDisease"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_error_outline"
+            android:padding="10dp"
+            app:tint="#FFA000" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Unknown Disease"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:paddingTop="12dp"/>
+
+        <TextView
+            android:id="@+id/tvProbability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#666"
+            android:textSize="15sp"
+            android:layout_gravity="center"
+            android:paddingTop="5dp"/>
+
+        <TextView
+            android:id="@+id/tvSuggestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bệnh không có trong hệ thống."
+            android:textColor="#d32f2f"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:text="Mô tả"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="25dp"/>
+.
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No description"
+            android:textSize="16sp"
+            android:paddingTop="8dp"/>
+
+    </LinearLayout>
+</ScrollView>
