@@ -1,9 +1,12 @@
 package com.example.planforplant.api;
 
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -31,4 +34,15 @@ public interface ChatApi {
         }
         // Getter/Setter (nếu cần thiết, Gson/Moshi thường tự hiểu)
     }
+    @GET("api/chat/today")
+    Call<List<ChatHistoryResponse>> getTodayChats();
+
+    public class ChatHistoryResponse {
+        public Long id;
+        public String role;
+        public String message;
+        public String response;
+        public String createdAt;
+    }
+
 }

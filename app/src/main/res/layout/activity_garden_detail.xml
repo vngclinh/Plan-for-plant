@@ -430,7 +430,6 @@
                         android:textSize="16sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
             <!-- Bệnh thường gặp -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -447,14 +446,33 @@
                     android:minHeight="60dp"
                     android:padding="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- HEADER: tiêu đề + nút + -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🦠 Bệnh hiện tại"
-                        android:textColor="#2E7D32"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:layout_marginBottom="8dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvDiseaseTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="🦠 Bệnh hiện tại"
+                            android:textColor="#2E7D32"
+                            android:textStyle="bold"
+                            android:textSize="18sp" />
+
+                        <!-- nút + thêm bệnh (nhỏ giống header nhật ký) -->
+                        <ImageView
+                            android:id="@+id/btnAddDisease"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:contentDescription="Thêm bệnh mới"
+                            android:padding="6dp"
+                            app:srcCompat="@drawable/ic_add_24"
+                            app:tint="#2E7D32" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tvHealthy"
@@ -472,17 +490,14 @@
                         android:layout_height="wrap_content"
                         android:minHeight="20dp"
                         android:nestedScrollingEnabled="false"/>
+
+                    <!-- ĐÃ XOÁ Button to ở đây -->
+                    <!--
                     <Button
                         android:id="@+id/btnAddDisease"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Thêm bệnh mới"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="12dp"
-                        android:backgroundTint="@color/green_medium"
-                        android:textColor="@android:color/white"/>
+                        ... />
+                    -->
                 </LinearLayout>
-
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -652,116 +667,13 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <!-- Thanh điều hướng dưới -->
-    <LinearLayout
+    <!-- Bottom navigation -->
+    <FrameLayout
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="#FFFFFF"
-        android:elevation="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- Trang chủ -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_home"
-                app:tint="#2E7D32" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Trang chủ"
-                android:textSize="10sp"
-                android:textColor="@color/green_primary" />
-        </LinearLayout>
-
-        <!-- Nhật ký -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_book"
-                app:tint="#2E7D32" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nhật ký"
-                android:textSize="10sp"
-                android:textColor="@color/green_primary" />
-        </LinearLayout>
-
-        <!-- Camera -->
-        <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@android:drawable/ic_menu_camera"
-            android:background="@drawable/bg_circle_green"
-            android:padding="12dp"
-            android:layout_marginHorizontal="12dp" />
-
-        <!-- Chatbot -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_chat"
-                app:tint="#2E7D32" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chatbot"
-                android:textSize="10sp"
-                android:textColor="@color/green_primary" />
-        </LinearLayout>
-
-        <!-- Hồ sơ -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_profile"
-                app:tint="#2E7D32" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hồ sơ"
-                android:textSize="10sp"
-                android:textColor="@color/green_primary" />
-        </LinearLayout>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <include layout="@layout/navigation_bar" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import io.noties.markwon.Markwon;
 import okhttp3.MediaType;
@@ -32,6 +33,7 @@ import retrofit2.Response;
 
 public class ChatActivity extends NavigationBarActivity{
     private static final int PICK_IMAGE_REQUEST = 100;
+    private boolean isQuotaExceeded = false;
     private ImageButton btnImage;
     private Uri selectedImageUri;
     private EditText etMessage;
@@ -73,11 +75,10 @@ public class ChatActivity extends NavigationBarActivity{
 
         markwon = Markwon.create(this);
         chatApi = ApiClient.getLocalClient(this).create(ChatApi.class);
+        loadTodayChats();
 
-        // 🟢 Chọn ảnh từ thư viện
         btnImage.setOnClickListener(v -> openGallery());
 
-        // 🟢 Gửi tin nhắn text như cũ
         btnSend.setOnClickListener(v -> {
             if (selectedImageUri != null) {
                 sendImageMessage(selectedImageUri);
@@ -86,6 +87,63 @@ public class ChatActivity extends NavigationBarActivity{
             }
         });
     }
+    private void loadTodayChats() {
+        chatApi.getTodayChats().enqueue(new Callback<List<ChatApi.ChatHistoryResponse>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<ChatApi.ChatHistoryResponse>> call,
+                                   @NonNull Response<List<ChatApi.ChatHistoryResponse>> response) {
+
+                if (!response.isSuccessful()) {
+                    addBotBubbleMarkdown("⚠️ Không tải được lịch sử chat hôm nay. Mã lỗi: " + response.code());
+                    return;
+                }
+
+                List<ChatApi.ChatHistoryResponse> data = response.body();
+                if (data == null || data.isEmpty()) {
+                    // Không có lịch sử cũng không sao, chỉ im lặng (hoặc log nếu muốn)
+                    return;
+                }
+
+                for (ChatApi.ChatHistoryResponse item : data) {
+                    if (item == null) continue;
+
+                    // 🧑 Tin nhắn user
+                    if (!TextUtils.isEmpty(item.message)) {
+                        String msg = item.message;
+                        msg = msg.replace(" [ảnh]", "").replace("[ảnh]", "").trim();
+                        addUserBubble(msg);
+                    }
+
+                    // 🤖 Tin của bot
+                    if (!TextUtils.isEmpty(item.response)) {
+                        addBotBubbleMarkdown(item.response);
+                    }
+                }
+
+                scrollToBottom();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<ChatApi.ChatHistoryResponse>> call,
+                                  @NonNull Throwable t) {
+                addBotBubbleMarkdown("⚠️ Lỗi mạng khi tải lịch sử chat: " + t.getMessage());
+            }
+        });
+    }
+
+    private boolean isQuotaMessage(String reply) {
+        if (reply == null) return false;
+        // Backend format: "Ban da het %d luot hoi hom nay cho cap do %s. Thu lai vao ngay mai nhe."
+        reply = reply.toLowerCase();
+        return reply.contains("ban da het") && reply.contains("luot hoi hom nay");
+    }
+    private void addQuotaWarningBubble(String msg) {
+        // Dùng bubble bot nhưng màu khác, hoặc reuse addBotBubbleMarkdown
+        addBotBubbleMarkdown("⚠️ " + msg + "\n\nVui lòng quay lại vào ngày mai nhé 🌱");
+    }
+
+
+
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
@@ -140,6 +198,10 @@ public class ChatActivity extends NavigationBarActivity{
 
 
     private void sendTextMessage() {
+        if (isQuotaExceeded) {
+            addQuotaWarningBubble("Bạn đã hết lượt hỏi hôm nay.");
+            return;
+        }
         String text = etMessage.getText().toString().trim();
         if (text.isEmpty() || isSending) return;
 
@@ -181,6 +243,10 @@ public class ChatActivity extends NavigationBarActivity{
     }
 
     private void sendImageMessage(Uri imageUri) {
+        if (isQuotaExceeded) {
+            addQuotaWarningBubble("Bạn đã hết lượt hỏi hôm nay.");
+            return;
+        }
         try {
             File file = new File(getCacheDir(), "upload.jpg");
             try (InputStream in = getContentResolver().openInputStream(imageUri);
@@ -194,7 +260,8 @@ public class ChatActivity extends NavigationBarActivity{
 
             String userText = etMessage.getText().toString().trim();
             if (userText.isEmpty()) userText = "Phân tích hình ảnh này";
-            addUserBubble(userText); // (Bạn có thể thêm hiển thị ảnh user ở đây nếu muốn)
+            addUserBubble(userText);
+            addUserImageBubble(imageUri);
 
             // 1. Tạo Part cho file ảnh (Key là "image" - Khớp Backend)
             String mimeType = getContentResolver().getType(imageUri);
@@ -215,8 +282,15 @@ public class ChatActivity extends NavigationBarActivity{
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     removeView(typingView);
                     if (response.isSuccessful() && response.body() != null) {
-                        addBotBubbleMarkdown(response.body());
-                        checkForConfirmationTrigger(response.body());
+                        String reply = response.body();
+
+                        if (isQuotaMessage(reply)) {
+                            isQuotaExceeded = true;
+                            addQuotaWarningBubble(reply);
+                        } else {
+                            addBotBubbleMarkdown(reply);
+                            checkForConfirmationTrigger(reply);
+                        }
                     } else {
                         addBotBubbleMarkdown("**⚠️ Lỗi Server:** " + response.code());
                     }
@@ -424,6 +498,10 @@ public class ChatActivity extends NavigationBarActivity{
 
     // Hàm phụ trợ để gửi tin nhắn mà không cần gõ vào EditText
     private void sendUserMessageInternal(String text) {
+        if (isQuotaExceeded) {
+            addQuotaWarningBubble("Bạn đã hết lượt hỏi hôm nay.");
+            return;
+        }
         addUserBubble(text);
         View typingView = addBotTyping();
 
@@ -433,16 +511,24 @@ public class ChatActivity extends NavigationBarActivity{
 
         chatApi.sendTextMessage(request).enqueue(new retrofit2.Callback<String>() {
             @Override
-            public void onResponse(@NonNull retrofit2.Call<String> call, @NonNull retrofit2.Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 removeView(typingView);
                 if (response.isSuccessful() && response.body() != null) {
                     String reply = response.body();
-                    addBotBubbleMarkdown(reply);
-                    // Kiểm tra tiếp xem có cần hiện nút nữa không (đệ quy logic)
-                    checkForConfirmationTrigger(reply);
+
+                    if (isQuotaMessage(reply)) {
+                        isQuotaExceeded = true;
+                        addQuotaWarningBubble(reply);
+                        // Không cần check confirm nữa
+                    } else {
+                        addBotBubbleMarkdown(reply);
+                        checkForConfirmationTrigger(reply);
+                    }
                 } else {
-                    addBotBubbleMarkdown("**⚠️ Lỗi:** " + response.code());
+                    addBotBubbleMarkdown("**⚠️ Lỗi:** " + response.code() + " - " + response.message());
                 }
+                isSending = false;
+                updateSendEnabled();
                 scrollToBottom();
             }
 

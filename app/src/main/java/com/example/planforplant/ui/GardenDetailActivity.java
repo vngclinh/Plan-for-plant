@@ -71,7 +71,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GardenDetailActivity extends AppCompatActivity {
+public class GardenDetailActivity extends NavigationBarActivity {
 
     private static final int REQUEST_LOCATION_PERMISSION = 200;
 
@@ -313,7 +313,7 @@ public class GardenDetailActivity extends AppCompatActivity {
         );
 
 
-        Button btnAddDisease = findViewById(R.id.btnAddDisease);
+        ImageView btnAddDisease = findViewById(R.id.btnAddDisease);
         btnAddDisease.setOnClickListener(v -> {
             Intent searchDiseaseIntent = new Intent(GardenDetailActivity.this, SearchDiseaseActivity.class);
             searchDiseaseIntent.putExtra("gardenId", gardenId);
