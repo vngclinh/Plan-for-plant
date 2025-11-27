@@ -59,6 +59,7 @@
 
         <activity android:name=".ui.StatisticsActivity"/>
 <activity android:name=".ui.WaterGameActivity"/>
+        <activity android:name=".ui.DiseaseHistoryActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

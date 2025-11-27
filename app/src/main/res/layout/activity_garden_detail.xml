@@ -481,6 +481,19 @@
                         android:layout_marginTop="12dp"
                         android:backgroundTint="@color/green_medium"
                         android:textColor="@android:color/white"/>
+                    <TextView
+                        android:id="@+id/btnViewDiseaseHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📜 Xem lịch sử bệnh"
+                        android:textSize="16sp"
+                        android:textColor="#1E88E5"
+                        android:textStyle="bold"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="end"
+                        android:padding="4dp"
+                        android:clickable="true"
+                        android:focusable="true"/>
                 </LinearLayout>
 
 

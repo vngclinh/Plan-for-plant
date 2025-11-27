@@ -126,8 +126,6 @@ public interface ApiService {
             @Query("lon") double lon
     );
 
-    @POST("/api/schedules/garden/{gardenId}/generatewithdisease")
-    Call<List<GardenScheduleResponse>> generatewithdisease(@Path("gardenId") Long gardenId);
 
     @PUT("/api/user/me")
     Call<UserResponse> updateUserProfile(@Body UpdateUserRequest request);
