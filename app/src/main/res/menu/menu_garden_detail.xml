@@ -15,4 +15,9 @@
         android:title="Lên lịch tự động cho tuần tới"
         android:icon="@android:drawable/ic_menu_camera"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_gen_disease"
+        android:title="Lên và điều chỉnh lịch theo bệnh"
+        android:icon="@android:drawable/ic_menu_camera"
+        app:showAsAction="never" />
 </menu>

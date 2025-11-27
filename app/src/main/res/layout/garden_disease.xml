@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/tvDiseaseName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disease Name"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#2E7D32"/>
+
+    <TextView
+        android:id="@+id/tvDiseaseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Detected: 2025-01-01"
+        android:textSize="14sp"
+        android:textColor="#333333"/>
+
+    <CheckBox
+        android:id="@+id/chkCured"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đã khỏi"/>
+
+</LinearLayout>
