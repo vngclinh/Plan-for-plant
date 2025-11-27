@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_water_game"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_water_game">
+
+    <!-- Thanh info trên cùng -->
+    <LinearLayout
+        android:id="@+id/top_info_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/bg_top_info"
+        android:elevation="4dp"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tvLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cấp độ: Mầm non 🌱"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1E3A3A" />
+
+        <TextView
+            android:id="@+id/tvStreak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bạn chưa tưới cây hôm nay"
+            android:textSize="14sp"
+            android:textColor="#375A5A"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tvHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chạm vào cây để tưới nước 💧"
+            android:textSize="13sp"
+            android:textColor="#557777"
+            android:layout_marginTop="2dp" />
+
+    </LinearLayout>
+
+    <!-- Mây -->
+    <ImageView
+        android:id="@+id/ivCloudLeft"
+        android:layout_width="146dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:alpha="0.9"
+        android:src="@drawable/ic_clouds_soft"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_info_bar" />
+
+    <!-- Khu vực cây + bình + giọt -->
+    <ImageView
+        android:id="@+id/ivCloudRight"
+        android:layout_width="97dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:alpha="0.9"
+        android:src="@drawable/ic_clouds_soft"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_info_bar" />
+
+    <FrameLayout
+        android:id="@+id/plant_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/ivCloudRight"
+        app:layout_constraintBottom_toTopOf="@id/card_water_progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 🌿 Bình tưới: CAO HƠN & BÉ HƠN -->
+        <ImageView
+            android:id="@+id/ivWateringCan"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="0dp"
+            android:alpha="0"
+            android:src="@drawable/ic_watering_can" />
+
+        <!-- 💧 Giọt lớn -->
+        <ImageView
+            android:id="@+id/ivWaterDrop1"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="70dp"
+            android:alpha="0"
+            android:src="@drawable/ic_water_drop_blue" />
+
+        <!-- 💧 Giọt vừa -->
+        <ImageView
+            android:id="@+id/ivWaterDrop2"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="90dp"
+            android:alpha="0"
+            android:src="@drawable/ic_water_drop_blue" />
+
+        <!-- 💧 Giọt nhỏ -->
+        <ImageView
+            android:id="@+id/ivWaterDrop3"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="110dp"
+            android:alpha="0"
+            android:src="@drawable/ic_water_drop_blue" />
+
+        <!-- 🌱 Cây (ở dưới, to hơn 1 chút) -->
+        <ImageView
+            android:id="@+id/ivPlant"
+            android:layout_width="177dp"
+            android:layout_height="222dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple_plant_click"
+            android:src="@drawable/ic_plant_mam" />
+
+    </FrameLayout>
+
+    <!-- Card progress -->
+    <LinearLayout
+        android:id="@+id/card_water_progress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_card"
+        android:padding="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tvWaterTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tiến độ lớn lên"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#1E3A3A" />
+
+
+        <ProgressBar
+            android:id="@+id/progressLevel"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_marginTop="10dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/progress_water" />
+
+
+        <TextView
+            android:id="@+id/tvLevelHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đã hoàn thành 12/50 lịch tưới và 4 cây 🌿"
+            android:textSize="12sp"
+            android:textColor="#375A5A"
+            android:layout_marginTop="6dp" />
+
+    </LinearLayout>
+
+    <!-- BOTTOM NAV BAR -->
+    <FrameLayout
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <include layout="@layout/navigation_bar" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

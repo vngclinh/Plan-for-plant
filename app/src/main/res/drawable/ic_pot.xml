@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Thân chậu -->
+    <item
+        android:width="140dp"
+        android:height="80dp"
+        android:gravity="bottom|center_horizontal">
+        <shape>
+            <gradient
+                android:startColor="#FFCC8A4A"
+                android:endColor="#FFB06A30"
+                android:angle="90" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+    <!-- Miệng chậu -->
+    <item
+        android:width="160dp"
+        android:height="32dp"
+        android:gravity="top|center_horizontal">
+        <shape>
+            <solid android:color="#FFD89055" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+
+</layer-list>

@@ -75,7 +75,7 @@ public class DetailActivity extends AppCompatActivity {
         tvLight = findViewById(R.id.tvLight);
         tvTemperature = findViewById(R.id.tvTemperature);
         tvCareGuide = findViewById(R.id.tvCareGuide);
-        tvDiseases = findViewById(R.id.tvDiseases);
+        RecyclerView rvDiseases = findViewById(R.id.tvDiseases);
 
         // Bind weather views
         tvLocation = findViewById(R.id.tvLocation);

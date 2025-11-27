@@ -31,4 +31,5 @@
 
     <!-- card shadow fallback -->
     <color name="card_shadow">#22000000</color>
+    <color name="transparent">#00000000</color>
 </resources>

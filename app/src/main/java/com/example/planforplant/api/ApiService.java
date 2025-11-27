@@ -17,6 +17,7 @@ import com.example.planforplant.DTO.RegisterRequest;
 import com.example.planforplant.DTO.UpdateGardenDiseaseRequest;
 import com.example.planforplant.DTO.UpdateUserRequest;
 
+import com.example.planforplant.DTO.UserProgressResponse;
 import com.example.planforplant.DTO.UserResponse;
 import com.example.planforplant.model.Disease;
 import com.example.planforplant.model.Plant;
@@ -194,4 +195,9 @@ public interface ApiService {
     Call<GardenDiseaseResponse> updateDisease(
             @Body UpdateGardenDiseaseRequest request
     );
+    @POST("/api/user/water-tree")
+    Call<UserProgressResponse> waterTreeStreak();
+
+    @GET("/api/user/progress")
+    Call<UserProgressResponse> getProgress();
 }

@@ -38,6 +38,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        // Enable core library desugaring so java.time APIs work on older devices
+        isCoreLibraryDesugaringEnabled = true
     }
     buildFeatures {
         buildConfig = true
@@ -85,5 +87,14 @@ dependencies {
 
 
     implementation("io.noties.markwon:core:4.6.2")
+
+    // Core library desugaring for java.time support
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+
+
+    // Lifecycle/viewmodel
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-livedata:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime:2.6.1")
 
 }
