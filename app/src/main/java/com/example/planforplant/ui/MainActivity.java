@@ -39,6 +39,9 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.example.planforplant.DTO.UserProgressResponse;
+import com.example.planforplant.api.ApiClient;
+import com.example.planforplant.api.ApiService;
 
 public class MainActivity extends NavigationBarActivity {
 
@@ -49,7 +52,8 @@ public class MainActivity extends NavigationBarActivity {
 
     private WeatherManager weatherManager;
     private NotificationHelper notificationHelper;
-
+    private TextView tvHomeLevel, tvHomeStreak;
+    private ApiService api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,8 @@ public class MainActivity extends NavigationBarActivity {
         }
 
         setContentView(R.layout.menu);
+        api = ApiClient.getLocalClient(this).create(ApiService.class);
+
 
         // Initialize NotificationHelper and create channel
         notificationHelper = new NotificationHelper(this);
@@ -84,11 +90,13 @@ public class MainActivity extends NavigationBarActivity {
         tvLocation = findViewById(R.id.tvLocation);
         tvWeather = findViewById(R.id.tvWeather);
         ivWeatherIcon = findViewById(R.id.ivWeatherIcon);
-
+        tvHomeLevel = findViewById(R.id.tvHomeLevel);
+        tvHomeStreak = findViewById(R.id.tvHomeStreak);
         // --- Weather manager ---
         weatherManager = new WeatherManager(this, tvLocation, tvWeather, ivWeatherIcon);
         weatherManager.start();
         loadTodayPlans();
+        loadUserProgressForHome();
 
         // --- Search box ---
         searchBox = findViewById(R.id.search_box);
@@ -127,8 +135,6 @@ public class MainActivity extends NavigationBarActivity {
     }
 
     private void loadTodayPlans() {
-        ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
-
         api.getAllSchedules().enqueue(new Callback<List<GardenScheduleResponse>>() {
             @Override
             public void onResponse(Call<List<GardenScheduleResponse>> call, Response<List<GardenScheduleResponse>> response) {
@@ -155,6 +161,43 @@ public class MainActivity extends NavigationBarActivity {
             }
         });
     }
+    // --------- Lấy cấp độ + streak cho màn Home ----------
+    private void loadUserProgressForHome() {
+        api.getProgress().enqueue(new Callback<UserProgressResponse>() {
+            @Override
+            public void onResponse(Call<UserProgressResponse> call,
+                                   Response<UserProgressResponse> response) {
+                if (!response.isSuccessful() || response.body() == null) return;
+                UserProgressResponse p = response.body();
+
+                String levelLabel = mapLevelLabel(p.getLevel());
+                int streak = p.getStreak();
+
+                tvHomeLevel.setText(levelLabel);
+                tvHomeStreak.setText("🔥 Streak: " + streak);
+            }
+
+            @Override
+            public void onFailure(Call<UserProgressResponse> call, Throwable t) {
+                // có thể bỏ qua, không cần toast
+            }
+        });
+    }
+
+    private String mapLevelLabel(String level) {
+        if (level == null) return "Cấp độ: Mầm non 🌱";
+
+        switch (level) {
+            case "TRUONG_THANH":
+                return "Cấp độ: Cây trưởng thành 🪴";
+            case "CO_THU":
+                return "Cấp độ: Cây cổ thụ 🌳";
+            case "MAM":
+            default:
+                return "Cấp độ: Mầm non 🌱";
+        }
+    }
+
     private void showTodayPlans(List<GardenScheduleResponse> list) {
 
         LinearLayout layoutList = findViewById(R.id.todayPlanList);
@@ -176,29 +219,82 @@ public class MainActivity extends NavigationBarActivity {
 
         LayoutInflater inflater = LayoutInflater.from(this);
 
-        for (GardenScheduleResponse s : list) {
+        LinearLayout currentRow = null;
 
-            View card = inflater.inflate(R.layout.item_plan_today, layoutList, false);
+        for (int i = 0; i < list.size(); i++) {
+
+            // Mỗi 2 item tạo 1 hàng ngang mới
+            if (i % 2 == 0) {
+                currentRow = new LinearLayout(this);
+                currentRow.setOrientation(LinearLayout.HORIZONTAL);
+                currentRow.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                ));
+                layoutList.addView(currentRow);
+            }
+
+            GardenScheduleResponse s = list.get(i);
+
+            View card = inflater.inflate(R.layout.item_plan_today, currentRow, false);
+
+            // Cho card chiếm 1/2 hàng
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1f
+            );
+            // margin trái/phải cho đẹp
+//            int margin = (int) (4 * getResources().getDisplayMetrics().density);
+//            if (i % 2 == 0) {
+//                lp.setMargins(0, 0, margin, margin);
+//            } else {
+//                lp.setMargins(margin, 0, 0, margin);
+//            }
+            card.setLayoutParams(lp);
 
             TextView tvTime = card.findViewById(R.id.tvPlanTime);
             TextView tvTitle2 = card.findViewById(R.id.tvPlanTitle);
-            TextView tvNote = card.findViewById(R.id.tvPlanNote);
+            ImageView ivIcon = card.findViewById(R.id.ivPlanIcon);
 
             // Time formatting
-            String time = s.getScheduledTime().substring(11, 16);
-            tvTime.setText(time);
+            if (s.getScheduledTime() != null && s.getScheduledTime().length() >= 16) {
+                String time = s.getScheduledTime().substring(11, 16);
+                tvTime.setText(time);
+            }
 
             // Title
             String plant = s.getPlantName() != null ? s.getPlantName() : "Cây #" + s.getGardenId();
             tvTitle2.setText(mapType(s.getType()) + " (" + plant + ")");
 
-            // Note
-            if (s.getNote() != null && !s.getNote().trim().isEmpty()) {
-                tvNote.setText("Ghi chú: " + s.getNote());
-                tvNote.setVisibility(View.VISIBLE);
-            }
+            // Icon theo loại schedule
+            ivIcon.setImageResource(getScheduleIconRes(s.getType()));
 
-            layoutList.addView(card);
+            currentRow.addView(card);
+        }
+
+        // Nếu số lượng lẻ, có thể để card còn lại tự chiếm nửa hàng, không cần thêm gì.
+    }
+    private int getScheduleIconRes(String type) {
+        if (type == null) return R.drawable.others;
+
+        switch (type) {
+            case "WATERING":
+                return R.drawable.ic_watering_can;
+            case "FERTILIZING":
+                return R.drawable.fertilizer;
+            case "PRUNNING":
+                return R.drawable.ic_prunning;
+            case "MIST":
+                return R.drawable.ic_mist;
+            case "FUNGICIDE":return R.drawable.allergies;
+            case "CURRENT_FUNGICIDE":
+                return R.drawable.allergies;
+            case "STOP_WATERING":
+                return R.drawable.no_water;
+            case "OTHER":
+            default:
+                return R.drawable.others;
         }
     }
 
@@ -206,13 +302,16 @@ public class MainActivity extends NavigationBarActivity {
         switch (type) {
             case "WATERING": return "Tưới cây";
             case "FERTILIZING": return "Bón phân";
-            case "PRUNING": return "Tỉa lá";
+            case "PRUNNING": return "Tỉa lá";
             case "MIST": return "Phun ẩm";
+            case "FUNGICIDE": return "Diệt nấm";
+            case "CURRENT_FUNGICIDE": return "Đang trong đợt diệt nấm";
+            case "STOP_WATERING": return "Không tưới";
             case "OTHER": return "Hoạt động khác";
-            case "NOTE": return "Ghi chú";
             default: return type;
         }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

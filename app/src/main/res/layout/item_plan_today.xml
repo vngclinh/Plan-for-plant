@@ -5,77 +5,61 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:padding="0dp"
-    app:cardCornerRadius="28dp"
-    app:cardElevation="10dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
-    android:clipToPadding="false"
     app:strokeWidth="1dp"
-    app:strokeColor="#D0EAD3"
-    android:foreground="?attr/selectableItemBackground">
+    app:strokeColor="#FFCCF2E9"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
-    <!-- LỚP NỀN GRADIENT WOW -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/bg_plan_ultra_wow"
-        android:padding="20dp"
-        android:gravity="center_horizontal">
+        android:layout_height="match_parent"
+        android:minHeight="120dp"
+        android:padding="12dp"
+        android:background="#ffff">   <!-- 🔹 NỀN WATER GAME -->
 
-        <!-- BADGE GIỜ -->
-        <LinearLayout
-            android:orientation="horizontal"
+        <!-- Giờ (góc trái trên) -->
+        <TextView
+            android:id="@+id/tvPlanTime"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="6dp"
-            android:gravity="center"
-            android:background="@drawable/bg_badge_time"
-            android:layout_marginBottom="12dp"
-            android:elevation="6dp">
+            android:layout_height="wrap_content"
+            android:text="08:00"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/green_primary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_time"
-                app:tint="#4E6F52" />
+        <!-- Icon minh hoạ (góc phải trên) -->
+        <ImageView
+            android:id="@+id/ivPlanIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_plant_mam"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
-                android:id="@+id/tvPlanTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="08:00"
-                android:layout_marginStart="10dp"
-                android:textSize="17sp"
-                android:textColor="#3C463B"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <!-- TITLE WOW -->
+        <!-- Tiêu đề việc cần làm (dưới) -->
         <TextView
             android:id="@+id/tvPlanTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Tưới cây (Monstera)"
-            android:layout_marginTop="4dp"
-            android:textColor="#2E3830"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textSize="19sp"
-            android:gravity="center"/>
+            android:textColor="@color/earth_brown_dark"
+            android:gravity="start"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@id/tvPlanTime"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="1" />
 
-        <!-- NOTE WOW -->
-        <TextView
-            android:id="@+id/tvPlanNote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Ghi chú: Tưới nước nhẹ"
-            android:textColor="#6A5F58"
-            android:textSize="15sp"
-            android:gravity="center"
-            android:letterSpacing="0.01"
-            android:visibility="gone"/>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

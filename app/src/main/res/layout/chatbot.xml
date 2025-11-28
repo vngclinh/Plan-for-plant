@@ -146,4 +146,5 @@
             android:enabled="false"
             android:scaleType="centerInside"/>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GardenActivity extends AppCompatActivity {
+public class GardenActivity extends NavigationBarActivity {
     private RecyclerView recyclerView;
     private GardenAdapter adapter;
     private List<GardenResponse> gardenList = new ArrayList<>();
