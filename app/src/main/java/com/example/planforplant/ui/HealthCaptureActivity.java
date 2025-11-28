@@ -64,7 +64,7 @@ public class HealthCaptureActivity extends NavigationBarActivity {
 
     private ActivityResultLauncher<String> requestPermission;
     private ActivityResultLauncher<PickVisualMediaRequest> pickImage;
-
+    private Uri lastCapturedUri;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -118,6 +118,7 @@ public class HealthCaptureActivity extends NavigationBarActivity {
                 new ActivityResultContracts.PickVisualMedia(),
                 uri -> {
                     if (uri != null) {
+                        lastCapturedUri = uri;
                         runOnUiThread(() -> identifyDisease(uri));
                     }
                 });
@@ -181,9 +182,10 @@ public class HealthCaptureActivity extends NavigationBarActivity {
 
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                        runOnUiThread(() ->
-                                identifyDisease(Uri.fromFile(file))
-                        );
+                        runOnUiThread(() -> {
+                            lastCapturedUri = Uri.fromFile(file);
+                            identifyDisease(lastCapturedUri);
+                        });
                     }
 
                     @Override
@@ -195,7 +197,6 @@ public class HealthCaptureActivity extends NavigationBarActivity {
                 }
         );
     }
-
 
     /** ==================================================
      *  SEND BASE64 TO PLANT.ID V3 (FIX UI THREAD CRASH)
@@ -280,17 +281,19 @@ public class HealthCaptureActivity extends NavigationBarActivity {
             return;
         }
 
-        // Pick best suggestion
+        // Chọn bệnh có xác suất cao nhất
         HealthResponse.Suggestion best = list.get(0);
         for (HealthResponse.Suggestion s : list)
             if (s.probability > best.probability) best = s;
 
         String detectedName = best.name;
+        HealthResponse.Suggestion finalBest = best;
 
         ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
 
-        HealthResponse.Suggestion finalBest = best;
-        api.searchDiseases(detectedName).enqueue(new Callback<List<Disease>>() {
+        // 🔥 FE gọi API fuzzy thay vì search thường
+        api.fuzzySearch(detectedName).enqueue(new Callback<List<Disease>>() {
+
             @Override
             public void onResponse(Call<List<Disease>> call, Response<List<Disease>> res) {
 
@@ -304,12 +307,18 @@ public class HealthCaptureActivity extends NavigationBarActivity {
 
                 } else {
 
-                    // 🔥 CHUYỂN SANG TRANG NOT FOUND
+                    // 🔥 TRUYỀN ẢNH CHỤP + THÔNG TIN PLANT.ID SANG TRANG NOT FOUND
+
                     Intent i = new Intent(HealthCaptureActivity.this, DiseaseNotFoundActivity.class);
                     i.putExtra("diseaseName", finalBest.name);
                     i.putExtra("probability", finalBest.probability);
                     i.putExtra("description", finalBest.description);
-                    i.putExtra("imageUrl", finalBest.url);   // nếu Plant.id có trả URL ảnh
+                    i.putExtra("imageUrl", finalBest.url);
+
+                    // truyền ảnh người dùng đã chụp
+                    if (lastCapturedUri != null)
+                        i.putExtra("capturedImageUri", lastCapturedUri.toString());
+
                     startActivity(i);
                 }
             }
