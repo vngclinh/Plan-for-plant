@@ -1,0 +1,27 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <corners android:radius="20dp"/>
+            <solid android:color="#EEEEEE"/>
+        </shape>
+    </item>
+
+    <!-- MULTICOLOR PROGRESS BAR -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <corners android:radius="20dp"/>
+
+                <gradient
+                    android:type="linear"
+                    android:angle="0"
+                    android:startColor="#4CAF50"
+                    android:centerColor="#FFEB3B"
+                    android:centerX="0.33"
+                    android:endColor="#FF9800" />
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>

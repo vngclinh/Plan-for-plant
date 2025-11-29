@@ -1,11 +1,13 @@
 package com.example.planforplant.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
@@ -35,6 +37,9 @@ public class DiseaseDetailActivity extends AppCompatActivity {
     private ImageView btnBack, imgDisease;
     private TextView tvName, tvScientificName, tvSymptoms, tvCauses, tvCareGuide, tvDescription;
     private Button btnAddToGarden;
+    private ProgressBar progressDanger;
+    private TextView tvDangerLevel;
+    private ImageView imgPointer;
 
     private long diseaseId;
     private long gardenId;
@@ -58,6 +63,9 @@ public class DiseaseDetailActivity extends AppCompatActivity {
         tvCauses = findViewById(R.id.tvCauses);
         tvCareGuide = findViewById(R.id.tvCareGuide);
         tvDescription = findViewById(R.id.tvDescription);
+        progressDanger = findViewById(R.id.progressDanger);
+        tvDangerLevel = findViewById(R.id.tvDangerLevel);
+        imgPointer = findViewById(R.id.imgPointer);
 
         // Back button
         btnBack.setOnClickListener(v -> finish());
@@ -124,6 +132,39 @@ public class DiseaseDetailActivity extends AppCompatActivity {
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .into(imgDisease);
         }
+
+        int level = d.getPriority();   // 0–10
+        progressDanger.setProgress(level);
+
+        // ====== SET TEXT=======
+        String label;
+        if (level >= 8) label = "Rất nguy hiểm";
+        else if (level >= 6) label = "Nguy hiểm";
+        else if (level >= 4) label = "Trung bình";
+        else label = "Nhẹ";
+
+        tvDangerLevel.setText("Mức độ: " + label + " (" + level + "/10)");
+
+
+        // ====== MOVE POINTER ======
+        progressDanger.post(() -> {
+            int progressWidth = progressDanger.getWidth();
+            float position = (progressWidth / 10f) * level;
+
+            imgPointer.setTranslationX(position - (imgPointer.getWidth() / 2f));
+        });
+
+
+        // ====== SET COLOR HIGHLIGHT ======
+        int highlightColor;
+
+        if (level >= 8) highlightColor = Color.parseColor("#D32F2F");   // red
+        else if (level >= 6) highlightColor = Color.parseColor("#F57C00"); // orange
+        else if (level >= 4) highlightColor = Color.parseColor("#FBC02D"); // yellow
+        else highlightColor = Color.parseColor("#4CAF50"); // green
+
+        imgPointer.setColorFilter(highlightColor);
+        tvDangerLevel.setTextColor(highlightColor);
     }
 
 

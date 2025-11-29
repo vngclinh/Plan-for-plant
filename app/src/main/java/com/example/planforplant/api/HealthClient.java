@@ -4,7 +4,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HealthClient {
-    private static final String BASE_URL = "https://plant.id/";
+
+    private static final String BASE_URL = "https://plant.id/api/v3/";
     private static Retrofit retrofit;
 
     public static Retrofit getClient() {
