@@ -38,7 +38,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.TimeUnit;
 
-public class PlanActivity extends AppCompatActivity {
+public class PlanActivity extends NavigationBarActivity {
 
     private Spinner spinnerGarden, spinnerCompletion;
     private CalendarView calendarView;
