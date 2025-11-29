@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/beige">
+
+    <!-- ========================= -->
+    <!--   ẢNH CHIẾM NỬA TRÊN      -->
+    <!-- ========================= -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/imgCaptured"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@android:color/darker_gray"/>
+
+        <!-- Lớp mờ để nổi card -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#33000000"/>
+    </FrameLayout>
+
+    <!-- ========================= -->
+    <!--     PHẦN THÔNG BÁO        -->
+    <!-- ========================= -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="26dp"
+                app:cardElevation="5dp"
+                app:cardCornerRadius="26dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- ICON CẢNH BÁO -->
+                    <ImageView
+                        android:id="@+id/imgWarning"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:src="@drawable/ic_error_outline"
+                        app:tint="@color/sky_blue_dark"
+                        android:layout_marginBottom="20dp"/>
+
+                    <!-- TIÊU ĐỀ -->
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Không tìm thấy bệnh phù hợp"
+                        android:textSize="23sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/green_primary"
+                        android:layout_marginBottom="14dp"/>
+
+                    <!-- MÔ TẢ -->
+                    <TextView
+                        android:id="@+id/tvMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Có thể do ảnh chưa đủ rõ.\nHãy thử chụp lá gần hơn hoặc góc khác nhé!"
+                        android:textSize="16sp"
+                        android:textColor="@color/earth_brown_dark"
+                        android:gravity="center"
+                        android:paddingHorizontal="16dp"
+                        android:layout_marginBottom="24dp"/>
+
+                    <!-- ========================= -->
+                    <!--     NÚT THỬ LẠI           -->
+                    <!-- ========================= -->
+                    <LinearLayout
+                        android:id="@+id/btnRetry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="12dp">
+
+                        <!-- Icon reload -->
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/reload"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Thử lại"
+                            android:textColor="@color/green_primary"
+                            android:textSize="14sp"
+                            android:layout_marginTop="6dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

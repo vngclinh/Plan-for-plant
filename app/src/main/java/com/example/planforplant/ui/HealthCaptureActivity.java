@@ -5,9 +5,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
+import android.util.Base64;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.ImageButton;
@@ -16,7 +16,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
-
+import androidx.annotation.NonNull;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -33,29 +33,27 @@ import com.example.planforplant.api.ApiClient;
 import com.example.planforplant.api.ApiService;
 import com.example.planforplant.api.HealthApi;
 import com.example.planforplant.api.HealthClient;
-
 import com.example.planforplant.model.Disease;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HealthCaptureActivity extends NavigationBarActivity {
 
-    private static final String TAG = "HealthCaptureActivity";
     private static final String API_KEY = BuildConfig.PLANT_ID_API_KEY;
 
     private PreviewView previewView;
@@ -66,7 +64,7 @@ public class HealthCaptureActivity extends NavigationBarActivity {
 
     private ActivityResultLauncher<String> requestPermission;
     private ActivityResultLauncher<PickVisualMediaRequest> pickImage;
-
+    private Uri lastCapturedUri;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -103,22 +101,33 @@ public class HealthCaptureActivity extends NavigationBarActivity {
     }
 
 
+    /** ======================
+     *  SETUP LAUNCHERS
+     * ====================== */
     private void setupLaunchers() {
         requestPermission = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 granted -> {
                     if (granted) startCamera();
-                    else Toast.makeText(this, "Cần quyền Camera để sử dụng", Toast.LENGTH_SHORT).show();
+                    else runOnUiThread(() ->
+                            Toast.makeText(this, "Cần quyền Camera để sử dụng", Toast.LENGTH_SHORT).show()
+                    );
                 });
 
         pickImage = registerForActivityResult(
                 new ActivityResultContracts.PickVisualMedia(),
                 uri -> {
-                    if (uri != null) identifyDisease(uri);
+                    if (uri != null) {
+                        lastCapturedUri = uri;
+                        runOnUiThread(() -> identifyDisease(uri));
+                    }
                 });
     }
 
 
+    /** ======================
+     *  START CAMERA
+     * ====================== */
     private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
                 ProcessCameraProvider.getInstance(this);
@@ -146,12 +155,17 @@ public class HealthCaptureActivity extends NavigationBarActivity {
                 );
 
             } catch (Exception e) {
-                Toast.makeText(this, "Không thể khởi động Camera", Toast.LENGTH_SHORT).show();
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Không thể khởi động Camera", Toast.LENGTH_SHORT).show()
+                );
             }
         }, ContextCompat.getMainExecutor(this));
     }
 
 
+    /** ======================
+     *  CAPTURE PHOTO
+     * ====================== */
     private void takePhoto() {
         if (imageCapture == null) return;
 
@@ -165,24 +179,28 @@ public class HealthCaptureActivity extends NavigationBarActivity {
                 outputOptions,
                 cameraExecutor,
                 new ImageCapture.OnImageSavedCallback() {
+
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                        identifyDisease(Uri.fromFile(file));
+                        runOnUiThread(() -> {
+                            lastCapturedUri = Uri.fromFile(file);
+                            identifyDisease(lastCapturedUri);
+                        });
                     }
 
                     @Override
                     public void onError(@NonNull ImageCaptureException exception) {
-                        Toast.makeText(HealthCaptureActivity.this, "Chụp ảnh lỗi", Toast.LENGTH_SHORT).show();
+                        runOnUiThread(() ->
+                                Toast.makeText(HealthCaptureActivity.this, "Chụp ảnh lỗi", Toast.LENGTH_SHORT).show()
+                        );
                     }
                 }
         );
     }
 
-
-
-    /** =========================
-     *  GỬI ẢNH LÊN PLANT.ID
-     * ========================= */
+    /** ==================================================
+     *  SEND BASE64 TO PLANT.ID V3 (FIX UI THREAD CRASH)
+     * ================================================== */
     private void identifyDisease(Uri uri) {
 
         File file = getFileFromUri(uri);
@@ -191,60 +209,91 @@ public class HealthCaptureActivity extends NavigationBarActivity {
             return;
         }
 
-        loading.setVisibility(View.VISIBLE);
+        runOnUiThread(() -> loading.setVisibility(View.VISIBLE));
 
-        RequestBody req = RequestBody.create(file, MediaType.parse("image/*"));
-        MultipartBody.Part body = MultipartBody.Part.createFormData("images", file.getName(), req);
-
-        RequestBody similar = RequestBody.create("true", MultipartBody.FORM);
-        RequestBody health = RequestBody.create("all", MultipartBody.FORM);
-
-        HealthApi api = HealthClient.getClient().create(HealthApi.class);
-
-        api.identifyHealth(body, similar, health, API_KEY)
-                .enqueue(new Callback<HealthResponse>() {
-                    @Override
-                    public void onResponse(Call<HealthResponse> call, Response<HealthResponse> res) {
-                        loading.setVisibility(View.GONE);
-
-                        if (!res.isSuccessful() || res.body() == null) {
-                            Toast.makeText(HealthCaptureActivity.this, "Không phát hiện bệnh", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        handleDetectedDisease(res.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<HealthResponse> call, Throwable t) {
-                        loading.setVisibility(View.GONE);
-                        Toast.makeText(HealthCaptureActivity.this, "Lỗi API: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-
-    /** =======================================
-     *  LẤY BỆNH TRONG DB VÀ MỞ TRANG CHI TIẾT
-     * ======================================= */
-    private void handleDetectedDisease(HealthResponse response) {
-
-        if (response == null ||
-                response.getResult() == null ||
-                response.getResult().getDisease() == null ||
-                response.getResult().getDisease().suggestions == null ||
-                response.getResult().getDisease().suggestions.isEmpty()) {
-
-            Toast.makeText(this, "Không nhận diện được bệnh", Toast.LENGTH_SHORT).show();
+        String base64;
+        try {
+            byte[] bytes = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                bytes = Files.readAllBytes(file.toPath());
+            }
+            base64 = Base64.encodeToString(bytes, Base64.NO_WRAP);
+        } catch (Exception e) {
+            runOnUiThread(() ->
+                    Toast.makeText(this, "Lỗi mã hóa ảnh", Toast.LENGTH_SHORT).show()
+            );
             return;
         }
 
-        // Lấy bệnh có xác suất cao nhất
-        String detectedName = response.getResult().getDisease().suggestions.get(0).name;
+        String dataUri = "data:image/jpeg;base64," + base64;
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("images", Collections.singletonList(dataUri));
+
+        HealthApi api = HealthClient.getClient().create(HealthApi.class);
+
+        api.assessHealth(
+                "local_name,description,url,treatment,classification,common_names,cause",
+                "en",
+                true,
+                API_KEY,
+                body
+        ).enqueue(new Callback<HealthResponse>() {
+
+            @Override
+            public void onResponse(Call<HealthResponse> call, Response<HealthResponse> res) {
+                runOnUiThread(() -> loading.setVisibility(View.GONE));
+
+                if (!res.isSuccessful() || res.body() == null) {
+                    runOnUiThread(() ->
+                            Toast.makeText(HealthCaptureActivity.this, "Không phát hiện bệnh", Toast.LENGTH_SHORT).show()
+                    );
+                    return;
+                }
+
+                handleDetectedDisease(res.body());
+            }
+
+            @Override
+            public void onFailure(Call<HealthResponse> call, Throwable t) {
+                runOnUiThread(() -> {
+                    loading.setVisibility(View.GONE);
+                    Toast.makeText(HealthCaptureActivity.this,
+                            "Lỗi API: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+
+    /** ================================
+     *  PARSE RESULT & GO TO DETAIL PAGE
+     * ================================ */
+    private void handleDetectedDisease(HealthResponse response) {
+
+        List<HealthResponse.Suggestion> list =
+                response.getResult().getDisease().getSuggestions();
+
+        if (list == null || list.isEmpty()) {
+            runOnUiThread(() ->
+                    Toast.makeText(this, "Không nhận diện được bệnh", Toast.LENGTH_SHORT).show()
+            );
+            return;
+        }
+
+        // Chọn bệnh có xác suất cao nhất
+        HealthResponse.Suggestion best = list.get(0);
+        for (HealthResponse.Suggestion s : list)
+            if (s.probability > best.probability) best = s;
+
+        String detectedName = best.name;
+        HealthResponse.Suggestion finalBest = best;
 
         ApiService api = ApiClient.getLocalClient(this).create(ApiService.class);
 
-        api.searchDiseases(detectedName).enqueue(new Callback<List<Disease>>() {
+        // 🔥 FE gọi API fuzzy thay vì search thường
+        api.fuzzySearch(detectedName).enqueue(new Callback<List<Disease>>() {
+
             @Override
             public void onResponse(Call<List<Disease>> call, Response<List<Disease>> res) {
 
@@ -257,20 +306,37 @@ public class HealthCaptureActivity extends NavigationBarActivity {
                     startActivity(intent);
 
                 } else {
-                    Toast.makeText(HealthCaptureActivity.this,
-                            "Bệnh '" + detectedName + "' chưa có trong hệ thống!",
-                            Toast.LENGTH_LONG).show();
+
+                    // 🔥 TRUYỀN ẢNH CHỤP + THÔNG TIN PLANT.ID SANG TRANG NOT FOUND
+
+                    Intent i = new Intent(HealthCaptureActivity.this, DiseaseNotFoundActivity.class);
+                    i.putExtra("diseaseName", finalBest.name);
+                    i.putExtra("probability", finalBest.probability);
+                    i.putExtra("description", finalBest.description);
+                    i.putExtra("imageUrl", finalBest.url);
+
+                    // truyền ảnh người dùng đã chụp
+                    if (lastCapturedUri != null)
+                        i.putExtra("capturedImageUri", lastCapturedUri.toString());
+
+                    startActivity(i);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Disease>> call, Throwable t) {
-                Toast.makeText(HealthCaptureActivity.this,
-                        "Lỗi server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                runOnUiThread(() ->
+                        Toast.makeText(HealthCaptureActivity.this,
+                                "Lỗi server: " + t.getMessage(), Toast.LENGTH_SHORT).show()
+                );
             }
         });
     }
 
+
+    /** ======================
+     *  Convert URI → File
+     * ====================== */
     private File getFileFromUri(Uri uri) {
         try {
             if ("file".equals(uri.getScheme())) return new File(uri.getPath());
@@ -286,7 +352,6 @@ public class HealthCaptureActivity extends NavigationBarActivity {
             return temp;
 
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

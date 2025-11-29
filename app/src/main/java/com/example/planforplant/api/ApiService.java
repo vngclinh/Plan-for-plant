@@ -200,4 +200,7 @@ public interface ApiService {
 
     @GET("/api/user/progress")
     Call<UserProgressResponse> getProgress();
+
+    @GET("/api/diseases/search/fuzzy")
+    Call<List<Disease>> fuzzySearch(@Query("keyword") String keyword);
 }
