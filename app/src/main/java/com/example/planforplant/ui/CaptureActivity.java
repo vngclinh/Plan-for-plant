@@ -17,7 +17,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -29,11 +28,10 @@ import androidx.core.content.ContextCompat;
 
 import com.example.planforplant.R;
 import com.example.planforplant.api.ApiClient;
-import com.example.planforplant.api.PlantNetApi;
+import com.example.planforplant.api.PlantIdentifyApi;
 import com.example.planforplant.model.PlantResponse;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
-import com.example.planforplant.BuildConfig;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -248,60 +246,66 @@ public class CaptureActivity extends NavigationBarActivity {
 
         // Chuẩn bị multipart file
         RequestBody requestFile = RequestBody.create(file, okhttp3.MediaType.parse("image/*"));
-        MultipartBody.Part body = MultipartBody.Part.createFormData("images", file.getName(), requestFile);
+        // ⚠ tên field "image" phải TRÙNG với BE: @RequestPart("image")
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 
         // Organ
         String organ = mapOptionToOrgan(selectedOption);
+        // ⚠ tên part "organ" phải trùng với BE: @RequestPart("organ")
         RequestBody organPart = RequestBody.create(organ, MultipartBody.FORM);
 
-        // Gọi API
-        PlantNetApi api = ApiClient.getPlantNetClient().create(PlantNetApi.class);
-        Call<PlantResponse> call = api.identify(body, organPart, BuildConfig.PLANTNET_API_KEY);
+        // Gọi API backend, không gọi PlantNet trực tiếp nữa
+        PlantIdentifyApi api = ApiClient.getLocalClient(CaptureActivity.this)
+                .create(PlantIdentifyApi.class);
+
+        Call<PlantResponse> call = api.identify(body, organPart);
 
         call.enqueue(new Callback<PlantResponse>() {
             @Override
             public void onResponse(Call<PlantResponse> call, Response<PlantResponse> response) {
+                runOnUiThread(() -> loadingLayout.setVisibility(View.GONE));
+
                 if (response.isSuccessful() && response.body() != null) {
                     PlantResponse plantResponse = response.body();
 
-                    // kiểm tra nếu không có kết quả
                     if (plantResponse.getResults() == null || plantResponse.getResults().isEmpty()) {
                         Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
                         intent.putExtra("message", "Không tìm thấy loài cây nào khớp với ảnh bạn chọn.");
-                        runOnUiThread(() -> loadingLayout.setVisibility(View.GONE));
                         startActivity(intent);
                         finish();
                     } else {
-                        // Có kết quả -> sang DetailActivity
                         Intent intent = new Intent(CaptureActivity.this, DetailActivity.class);
                         intent.putExtra("imageUri", imageUri.toString());
                         intent.putExtra("plantResponseJson", new Gson().toJson(plantResponse));
-                        runOnUiThread(() -> loadingLayout.setVisibility(View.GONE));
                         startActivity(intent);
                     }
                 } else {
-                    Toast.makeText(CaptureActivity.this, "API trả về lỗi", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
+                    Toast.makeText(CaptureActivity.this, "Server trả về lỗi", Toast.LENGTH_SHORT).show();
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "null";
                         Log.e(TAG, "API error: " + response.code() + " - " + response.message() + " - " + errorBody);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
+                    intent.putExtra("message", "Server trả về lỗi khi nhận diện cây.");
+                    startActivity(intent);
+                    finish();
                 }
             }
 
             @Override
             public void onFailure(Call<PlantResponse> call, Throwable t) {
-                Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
-                intent.putExtra("message", "Lỗi khi gọi API: " + t.getMessage());
                 runOnUiThread(() -> loadingLayout.setVisibility(View.GONE));
                 Log.e(TAG, "API failed", t);
+                Intent intent = new Intent(CaptureActivity.this, NotFoundActivity.class);
+                intent.putExtra("message", "Lỗi khi gọi API backend: " + t.getMessage());
                 startActivity(intent);
                 finish();
             }
         });
     }
+
     private File getFileFromUri(Uri uri) {
         try {
             if ("file".equals(uri.getScheme())) {
