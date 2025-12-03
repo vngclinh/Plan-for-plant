@@ -3,6 +3,7 @@ package com.example.planforplant.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,10 +49,10 @@ public class SettingActivity extends NavigationBarActivity {
         tvEmail = findViewById(R.id.tvEmail);
         imgAvatar = findViewById(R.id.imgAvatar);
         // Convert these UI controls to local variables since they're only used in onCreate
-        CardView cardManageAccount = findViewById(R.id.cardManageAccount);
-        CardView cardChangePassword = findViewById(R.id.cardChangePassword);
-        CardView cardSupport = findViewById(R.id.cardSupport);
-        CardView cardStatistics = findViewById(R.id.cardStatistics);
+        View cardManageAccount = findViewById(R.id.cardManageAccount);
+        View cardChangePassword = findViewById(R.id.cardChangePassword);
+        View cardSupport = findViewById(R.id.cardSupport);
+        View cardStatistics = findViewById(R.id.cardStatistics);
         Button btnLogout = findViewById(R.id.btnLogout);
 
         loadUserProfile();
