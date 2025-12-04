@@ -1,100 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/beige"
+    android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="20dp">
+        android:gravity="center_horizontal">
 
-        <!-- Avatar -->
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgAvatar"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/default_avatar"
-            app:shapeAppearanceOverlay="@style/RoundedImageView"
-            app:strokeColor="#E0E0E0"
-            app:strokeWidth="2dp" />
-
-        <!-- Full name -->
-        <TextView
-            android:id="@+id/tvFullname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nguyễn Văn A"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginTop="12dp" />
-
-        <!-- Username -->
-        <TextView
-            android:id="@+id/tvUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="nguyenvana"
-            android:textSize="14sp"
-            android:textColor="#777777"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Info section -->
-        <LinearLayout
+        <!-- AVATAR + CARD -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#F5F5F5"
-            android:padding="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp">
+            app:cardCornerRadius="24dp"
+            app:cardElevation="6dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@android:color/white">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email:"
-                android:textStyle="bold"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tvEmail"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="nguyenvana@gmail.com"
-                android:textSize="15sp"
-                android:layout_marginBottom="10dp" />
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:gravity="center_horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Phone:"
-                android:textStyle="bold"
-                android:textSize="16sp" />
+                <!-- Avatar -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imgAvatar"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_avatar"
+                    app:strokeColor="@color/green_primary"
+                    app:strokeWidth="3dp"
+                    app:shapeAppearanceOverlay="@style/RoundedImageView"
+                    android:layout_marginBottom="16dp" />
 
-            <TextView
-                android:id="@+id/tvPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0123456789"
-                android:textSize="15sp"
-                android:layout_marginBottom="10dp" />
-        </LinearLayout>
+                <!-- Fullname -->
+                <TextView
+                    android:id="@+id/tvFullname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyễn Văn A"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/earth_brown_dark"
+                    android:layout_marginTop="8dp" />
 
-        <!-- Edit button -->
-        <Button
-            android:id="@+id/btnEditProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="  Cập nhật thông tin"
-            android:textAllCaps="false"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/green_primary"
-            android:textColor="#FFFFFF" />
+                <!-- Username -->
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="nguyenvana"
+                    android:textSize="15sp"
+                    android:textColor="@color/green_medium"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="20dp" />
 
+                <!-- PHẦN THÔNG TIN -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_input"
+                    android:padding="18dp">
+
+                    <!-- Email -->
+                    <TextView
+                        android:text="Email"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/earth_brown_dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tvEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="email@gmail.com"
+                        android:textColor="@color/green_medium"
+                        android:textSize="15sp"
+                        android:layout_marginBottom="14dp" />
+
+                    <!-- Phone -->
+                    <TextView
+                        android:text="Số điện thoại"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/earth_brown_dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tvPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0123456789"
+                        android:textColor="@color/green_medium"
+                        android:textSize="15sp"
+                        android:layout_marginBottom="6dp" />
+
+                </LinearLayout>
+
+                <!-- Nút cập nhật -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="22dp"
+                    android:text="Cập nhật thông tin"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="26dp"
+                    android:backgroundTint="@color/green_primary"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </ScrollView>
