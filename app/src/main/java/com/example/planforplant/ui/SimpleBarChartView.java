@@ -15,19 +15,27 @@ import java.util.List;
 
 public class SimpleBarChartView extends View {
 
-    private List<StatsPoint> data = new ArrayList<>();
+    // ===== DATA =====
+    private final List<StatsPoint> data = new ArrayList<>();
 
+    // ===== PAINT =====
     private Paint barPaint;
-    private Paint textPaint;
+    private Paint valuePaint;
     private Paint axisPaint;
     private Paint labelPaint;
+    private Paint yAxisLabelPaint;
+    private Paint gridPaint;
 
+    // ===== CONFIG =====
     private float animationProgress = 1f;
+    private String yAxisLabel = "Số lần hoạt động";
 
-    private final int paddingLeft = 80;
-    private final int paddingBottom = 80;
-    private final int paddingTop = 40;
+    private final int paddingLeft = 110;
+    private final int paddingBottom = 90;
+    private final int paddingTop = 50;
     private final int paddingRight = 40;
+
+    private final int yAxisSteps = 5;
 
     public SimpleBarChartView(Context context) {
         super(context);
@@ -48,30 +56,43 @@ public class SimpleBarChartView extends View {
         barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         barPaint.setStyle(Paint.Style.FILL);
 
-        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setColor(Color.DKGRAY);
-        textPaint.setTextSize(26f);
-        textPaint.setTextAlign(Paint.Align.CENTER);
+        valuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        valuePaint.setColor(Color.DKGRAY);
+        valuePaint.setTextSize(26f);
+        valuePaint.setTextAlign(Paint.Align.CENTER);
 
         labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         labelPaint.setColor(Color.GRAY);
         labelPaint.setTextSize(24f);
         labelPaint.setTextAlign(Paint.Align.CENTER);
 
+        yAxisLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        yAxisLabelPaint.setColor(Color.GRAY);
+        yAxisLabelPaint.setTextSize(26f);
+        yAxisLabelPaint.setTextAlign(Paint.Align.CENTER);
+
         axisPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         axisPaint.setColor(Color.LTGRAY);
         axisPaint.setStrokeWidth(2f);
+
+        gridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        gridPaint.setColor(Color.parseColor("#EEEEEE"));
+        gridPaint.setStrokeWidth(1.5f);
     }
 
-    /**
-     * Gọi từ Activity / Fragment
-     */
+    // ===== PUBLIC API =====
     public void setData(List<StatsPoint> stats) {
-        this.data.clear();
-        if (stats != null) this.data.addAll(stats);
+        data.clear();
+        if (stats != null) data.addAll(stats);
         startAnimation();
     }
 
+    public void setYAxisLabel(String label) {
+        this.yAxisLabel = label;
+        invalidate();
+    }
+
+    // ===== ANIMATION =====
     private void startAnimation() {
         ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
         animator.setDuration(600);
@@ -95,9 +116,29 @@ public class SimpleBarChartView extends View {
         float chartHeight = height - paddingTop - paddingBottom;
 
         int maxValue = getMaxValue();
-        if (maxValue == 0) return;
+        if (maxValue <= 0) return;
 
-        // ===== Draw Y axis =====
+        // ===== GRID + Y AXIS VALUES =====
+        for (int i = 0; i <= yAxisSteps; i++) {
+            float y = paddingTop + chartHeight * i / yAxisSteps;
+            canvas.drawLine(
+                    paddingLeft,
+                    y,
+                    width - paddingRight,
+                    y,
+                    gridPaint
+            );
+
+            int value = maxValue - (maxValue * i / yAxisSteps);
+            canvas.drawText(
+                    String.valueOf(value),
+                    paddingLeft - 20,
+                    y + 8,
+                    valuePaint
+            );
+        }
+
+        // ===== AXES =====
         canvas.drawLine(
                 paddingLeft,
                 paddingTop,
@@ -106,7 +147,6 @@ public class SimpleBarChartView extends View {
                 axisPaint
         );
 
-        // ===== Draw X axis =====
         canvas.drawLine(
                 paddingLeft,
                 height - paddingBottom,
@@ -115,23 +155,33 @@ public class SimpleBarChartView extends View {
                 axisPaint
         );
 
-        int count = data.size();
-        float barSpacing = chartWidth / count;
-        float barWidth = barSpacing * 0.55f;
+        // ===== Y AXIS LABEL =====
+        canvas.save();
+        canvas.rotate(-90);
+        canvas.drawText(
+                yAxisLabel,
+                -(paddingTop + chartHeight / 2),
+                40,
+                yAxisLabelPaint
+        );
+        canvas.restore();
 
-        for (int i = 0; i < count; i++) {
+        // ===== BARS =====
+        float barSpace = chartWidth / data.size();
+        float barWidth = barSpace * 0.55f;
+
+        for (int i = 0; i < data.size(); i++) {
             StatsPoint p = data.get(i);
 
-            float left = paddingLeft + i * barSpacing + (barSpacing - barWidth) / 2;
+            float left = paddingLeft + i * barSpace + (barSpace - barWidth) / 2;
             float right = left + barWidth;
 
-            float valueRatio = (float) p.getValue() / maxValue;
-            float barHeight = chartHeight * valueRatio * animationProgress;
+            float ratio = (float) p.getValue() / maxValue;
+            float barHeight = chartHeight * ratio * animationProgress;
 
             float top = paddingTop + (chartHeight - barHeight);
             float bottom = height - paddingBottom;
 
-            // Gradient cho cột
             LinearGradient gradient = new LinearGradient(
                     0, top, 0, bottom,
                     getResources().getColor(R.color.green_primary),
@@ -141,21 +191,21 @@ public class SimpleBarChartView extends View {
             barPaint.setShader(gradient);
 
             RectF rect = new RectF(left, top, right, bottom);
-            canvas.drawRoundRect(rect, 14f, 14f, barPaint);
+            canvas.drawRoundRect(rect, 18f, 18f, barPaint);
 
-            // ===== Value text =====
+            // VALUE
             canvas.drawText(
                     String.valueOf(p.getValue()),
                     (left + right) / 2,
                     top - 10,
-                    textPaint
+                    valuePaint
             );
 
-            // ===== X label =====
+            // X LABEL
             canvas.drawText(
                     p.getLabel(),
                     (left + right) / 2,
-                    height - paddingBottom + 30,
+                    height - paddingBottom + 32,
                     labelPaint
             );
         }
@@ -164,7 +214,7 @@ public class SimpleBarChartView extends View {
     private int getMaxValue() {
         int max = 0;
         for (StatsPoint p : data) {
-            if (p.getValue() > max) max = p.getValue();
+            max = Math.max(max, p.getValue());
         }
         return max;
     }
