@@ -81,7 +81,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#2E7D32"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"/>
 
         <!-- Overview / Description -->
         <androidx.cardview.widget.CardView
@@ -90,7 +91,9 @@
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
             android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="@android:color/white">
+            app:cardBackgroundColor="@android:color/white"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
 
             <TextView
                 android:id="@+id/tvOverview"
@@ -110,7 +113,9 @@
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white">
+            app:cardBackgroundColor="@android:color/white"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -279,7 +284,9 @@
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white">
+            app:cardBackgroundColor="@android:color/white"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -376,7 +383,9 @@
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white">
+            app:cardBackgroundColor="@android:color/white"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -410,7 +419,9 @@
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white">
+            app:cardBackgroundColor="@android:color/white"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

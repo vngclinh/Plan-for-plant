@@ -1,218 +1,221 @@
 package com.example.planforplant.ui;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
+import android.graphics.*;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.example.planforplant.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleBarChartView extends View {
 
-    private List<StatsPoint> data = new ArrayList<>();
+    // ===== DATA =====
+    private final List<StatsPoint> data = new ArrayList<>();
+
+    // ===== PAINT =====
     private Paint barPaint;
-    private Paint textPaint;
+    private Paint valuePaint;
     private Paint axisPaint;
-    private final int barColor = Color.parseColor("#4CAF50");
+    private Paint labelPaint;
+    private Paint yAxisLabelPaint;
+    private Paint gridPaint;
 
-    // cached bar rects for touch detection
-    private final List<RectF> barRects = new ArrayList<>();
-    private int selectedIndex = -1;
+    // ===== CONFIG =====
+    private float animationProgress = 1f;
+    private String yAxisLabel = "Số lần hoạt động";
 
-    // responsive sizes
-    private float labelTextSizePx;
-    private float valueTextSizePx;
+    private final int paddingLeft = 110;
+    private final int paddingBottom = 90;
+    private final int paddingTop = 50;
+    private final int paddingRight = 40;
+
+    private final int yAxisSteps = 5;
 
     public SimpleBarChartView(Context context) {
         super(context);
-        init(context);
+        init();
     }
 
-    public SimpleBarChartView(Context context, AttributeSet attrs) {
+    public SimpleBarChartView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init();
     }
 
-    public SimpleBarChartView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SimpleBarChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init();
     }
 
-    private void init(Context context) {
-        DisplayMetrics dm = context.getResources().getDisplayMetrics();
-        labelTextSizePx = 12 * dm.density; // sp -> px approx
-        valueTextSizePx = 12 * dm.density;
-
+    private void init() {
         barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        barPaint.setColor(barColor);
+        barPaint.setStyle(Paint.Style.FILL);
 
-        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setColor(Color.DKGRAY);
-        textPaint.setTextSize(labelTextSizePx);
-        textPaint.setTextAlign(Paint.Align.CENTER);
+        valuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        valuePaint.setColor(Color.DKGRAY);
+        valuePaint.setTextSize(26f);
+        valuePaint.setTextAlign(Paint.Align.CENTER);
+
+        labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        labelPaint.setColor(Color.GRAY);
+        labelPaint.setTextSize(24f);
+        labelPaint.setTextAlign(Paint.Align.CENTER);
+
+        yAxisLabelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        yAxisLabelPaint.setColor(Color.GRAY);
+        yAxisLabelPaint.setTextSize(26f);
+        yAxisLabelPaint.setTextAlign(Paint.Align.CENTER);
 
         axisPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         axisPaint.setColor(Color.LTGRAY);
-        axisPaint.setStrokeWidth(2f * dm.density);
+        axisPaint.setStrokeWidth(2f);
+
+        gridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        gridPaint.setColor(Color.parseColor("#EEEEEE"));
+        gridPaint.setStrokeWidth(1.5f);
     }
 
-    public void setData(List<StatsPoint> points) {
-        if (points == null) {
-            this.data = new ArrayList<>();
-        } else {
-            this.data = points;
-        }
-        selectedIndex = -1;
-        // ensure barRects capacity
-        if (barRects.size() < this.data.size()) {
-            for (int i = barRects.size(); i < this.data.size(); i++) {
-                barRects.add(new RectF());
-            }
-        }
+    // ===== PUBLIC API =====
+    public void setData(List<StatsPoint> stats) {
+        data.clear();
+        if (stats != null) data.addAll(stats);
+        startAnimation();
+    }
+
+    public void setYAxisLabel(String label) {
+        this.yAxisLabel = label;
         invalidate();
     }
 
+    // ===== ANIMATION =====
+    private void startAnimation() {
+        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+        animator.setDuration(600);
+        animator.addUpdateListener(a -> {
+            animationProgress = (float) a.getAnimatedValue();
+            invalidate();
+        });
+        animator.start();
+    }
+
     @Override
-    protected void onDraw(@NonNull Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        int width = getWidth();
-        int height = getHeight();
+        if (data.isEmpty()) return;
 
-        int paddingLeft = getPaddingLeft();
-        int paddingRight = getPaddingRight();
-        int paddingTop = getPaddingTop();
-        int paddingBottom = getPaddingBottom();
+        float width = getWidth();
+        float height = getHeight();
 
-        int usableWidth = width - paddingLeft - paddingRight;
-        int usableHeight = height - paddingTop - paddingBottom - (int)(40 * getResources().getDisplayMetrics().density); // reserve for labels
+        float chartWidth = width - paddingLeft - paddingRight;
+        float chartHeight = height - paddingTop - paddingBottom;
 
-        // draw baseline
-        float baselineY = paddingTop + usableHeight;
-        canvas.drawLine(paddingLeft, baselineY, paddingLeft + usableWidth, baselineY, axisPaint);
+        int maxValue = getMaxValue();
+        if (maxValue <= 0) return;
 
-        if (data == null || data.isEmpty()) return;
+        // ===== GRID + Y AXIS VALUES =====
+        for (int i = 0; i <= yAxisSteps; i++) {
+            float y = paddingTop + chartHeight * i / yAxisSteps;
+            canvas.drawLine(
+                    paddingLeft,
+                    y,
+                    width - paddingRight,
+                    y,
+                    gridPaint
+            );
 
-        // find max value
-        int max = 0;
-        for (StatsPoint p : data) {
-            if (p.getCount() > max) max = p.getCount();
+            int value = maxValue - (maxValue * i / yAxisSteps);
+            canvas.drawText(
+                    String.valueOf(value),
+                    paddingLeft - 20,
+                    y + 8,
+                    valuePaint
+            );
         }
-        if (max == 0) max = 1; // avoid division by zero
 
-        int count = data.size();
-        float gap = Math.max(8f, usableWidth * 0.06f / Math.max(1, count));
-        float barAreaWidth = usableWidth - gap * (count + 1);
-        float barWidth = Math.max(8f, barAreaWidth / Math.max(1, count));
+        // ===== AXES =====
+        canvas.drawLine(
+                paddingLeft,
+                paddingTop,
+                paddingLeft,
+                height - paddingBottom,
+                axisPaint
+        );
 
-        // reuse existing RectF objects
-        for (int i = 0; i < count; i++) {
+        canvas.drawLine(
+                paddingLeft,
+                height - paddingBottom,
+                width - paddingRight,
+                height - paddingBottom,
+                axisPaint
+        );
+
+        // ===== Y AXIS LABEL =====
+        canvas.save();
+        canvas.rotate(-90);
+        canvas.drawText(
+                yAxisLabel,
+                -(paddingTop + chartHeight / 2),
+                40,
+                yAxisLabelPaint
+        );
+        canvas.restore();
+
+        // ===== BARS =====
+        float barSpace = chartWidth / data.size();
+        float barWidth = barSpace * 0.55f;
+
+        for (int i = 0; i < data.size(); i++) {
             StatsPoint p = data.get(i);
-            float left = paddingLeft + gap + i * (barWidth + gap);
+
+            float left = paddingLeft + i * barSpace + (barSpace - barWidth) / 2;
             float right = left + barWidth;
 
-            float valueRatio = (float) p.getCount() / (float) max;
-            float top = baselineY - valueRatio * usableHeight;
+            float ratio = (float) p.getValue() / maxValue;
+            float barHeight = chartHeight * ratio * animationProgress;
 
-            RectF rect;
-            if (i < barRects.size()) {
-                rect = barRects.get(i);
-                rect.set(left, top, right, baselineY);
-            } else {
-                rect = new RectF(left, top, right, baselineY);
-                barRects.add(rect);
-            }
+            float top = paddingTop + (chartHeight - barHeight);
+            float bottom = height - paddingBottom;
 
-            // draw bar
-            canvas.drawRect(rect, barPaint);
+            LinearGradient gradient = new LinearGradient(
+                    0, top, 0, bottom,
+                    getResources().getColor(R.color.green_primary),
+                    getResources().getColor(R.color.green_light),
+                    Shader.TileMode.CLAMP
+            );
+            barPaint.setShader(gradient);
 
-            // draw value above bar
-            textPaint.setTextSize(valueTextSizePx);
-            canvas.drawText(String.valueOf(p.getCount()), rect.centerX(), rect.top - 8f, textPaint);
+            RectF rect = new RectF(left, top, right, bottom);
+            canvas.drawRoundRect(rect, 18f, 18f, barPaint);
 
-            // draw label
-            textPaint.setTextSize(labelTextSizePx);
-            float labelY = baselineY + 24f;
-            canvas.drawText(p.getLabel(), rect.centerX(), labelY, textPaint);
-        }
+            // VALUE
+            canvas.drawText(
+                    String.valueOf(p.getValue()),
+                    (left + right) / 2,
+                    top - 10,
+                    valuePaint
+            );
 
-        // draw tooltip if selected
-        if (selectedIndex >= 0 && selectedIndex < barRects.size()) {
-            RectF r = barRects.get(selectedIndex);
-            String value = String.valueOf(data.get(selectedIndex).getCount());
-            drawTooltip(canvas, r.centerX(), r.top - 10f, value);
+            // X LABEL
+            canvas.drawText(
+                    p.getLabel(),
+                    (left + right) / 2,
+                    height - paddingBottom + 32,
+                    labelPaint
+            );
         }
     }
 
-    private void drawTooltip(Canvas canvas, float cx, float cy, String text) {
-        float padding = 8f * getResources().getDisplayMetrics().density;
-        textPaint.setTextSize(valueTextSizePx);
-        float textWidth = textPaint.measureText(text);
-        float rectWidth = textWidth + padding * 2;
-        float rectHeight = valueTextSizePx + padding * 2;
-
-        float left = cx - rectWidth / 2f;
-        float top = cy - rectHeight;
-        float right = cx + rectWidth / 2f;
-        float bottom = cy;
-
-        Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bg.setColor(Color.WHITE);
-        bg.setStyle(Paint.Style.FILL);
-        bg.setShadowLayer(4f, 0, 2f, Color.GRAY);
-
-        // draw background rect
-        canvas.drawRoundRect(new RectF(left, top, right, bottom), 8f, 8f, bg);
-
-        // draw border
-        Paint border = new Paint(Paint.ANTI_ALIAS_FLAG);
-        border.setColor(Color.LTGRAY);
-        border.setStyle(Paint.Style.STROKE);
-        border.setStrokeWidth(1f);
-        canvas.drawRoundRect(new RectF(left, top, right, bottom), 8f, 8f, border);
-
-        // draw text
-        textPaint.setColor(Color.BLACK);
-        canvas.drawText(text, cx, top + padding + valueTextSizePx * 0.8f, textPaint);
-        textPaint.setColor(Color.DKGRAY);
-
-        // clear shadow
-        bg.clearShadowLayer();
-    }
-
-    @Override
-    public boolean onTouchEvent(@NonNull MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            float x = event.getX();
-            float y = event.getY();
-            int idx = -1;
-            for (int i = 0; i < barRects.size(); i++) {
-                if (barRects.get(i).contains(x, y)) {
-                    idx = i;
-                    break;
-                }
-            }
-            if (idx != selectedIndex) {
-                selectedIndex = idx;
-                invalidate();
-                performClick();
-            }
-            return true;
+    private int getMaxValue() {
+        int max = 0;
+        for (StatsPoint p : data) {
+            max = Math.max(max, p.getValue());
         }
-        return super.onTouchEvent(event);
-    }
-
-    @Override
-    public boolean performClick() {
-        super.performClick();
-        return true;
+        return max;
     }
 }

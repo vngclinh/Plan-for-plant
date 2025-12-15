@@ -25,7 +25,7 @@ public class EditPasswordActivity extends AppCompatActivity {
     private ApiService apiService;
     private ProgressDialog progressDialog;
 
-    // ✅ Strong password rule: ≥8 chars, uppercase, lowercase, number, special character
+    // Strong password rule: ≥8 chars, uppercase, lowercase, number, special character
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!._-])(?=\\S+$).{8,}$");
 
@@ -35,6 +35,7 @@ public class EditPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_password);
 
         apiService = ApiClient.getLocalClient(this).create(ApiService.class);
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         initViews();
         setupListeners();
