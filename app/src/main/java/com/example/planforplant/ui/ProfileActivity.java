@@ -35,6 +35,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.widget.ImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -78,6 +79,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvEmail = findViewById(R.id.tvEmail);
         tvPhone = findViewById(R.id.tvPhone);
         btnEditProfile = findViewById(R.id.btnEditProfile);
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);

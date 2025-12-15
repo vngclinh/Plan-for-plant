@@ -80,6 +80,7 @@ public class LocationActivity extends AppCompatActivity {
         });
 
         btnUseCurrentLocation.setOnClickListener(v -> useCurrentLocation());
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
 
     private void resolveCityToLatLon(String cityName) {
