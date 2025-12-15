@@ -1,149 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/beige"
-    android:padding="20dp">
+    android:background="@color/beige">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+    <!-- Nội dung cuộn -->
+    <ScrollView
+        android:id="@+id/profileScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:padding="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- CARD -->
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="22dp"
-            app:cardElevation="6dp"
-            android:backgroundTint="@android:color/white">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:padding="22dp"
+            <!-- CARD -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="6dp"
+                android:backgroundTint="@android:color/white">
 
-                <!-- TITLE -->
-                <TextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Chỉnh sửa thông tin cá nhân"
-                    android:textSize="22sp"
-                    android:textColor="@color/earth_brown_dark"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_horizontal"
-                    android:paddingBottom="18dp" />
-
-                <!-- FULL NAME -->
                 <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="22dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_input"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp">
+                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/name"/>
-
-                    <EditText
-                        android:id="@+id/etFullName"
-                        android:layout_width="0dp"
+                    <!-- TITLE -->
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:hint="Họ và tên"
+                        android:text="Chỉnh sửa thông tin cá nhân"
+                        android:textSize="22sp"
                         android:textColor="@color/earth_brown_dark"
-                        android:textColorHint="@color/green_medium"
-                        android:inputType="textPersonName" />
-                </LinearLayout>
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingBottom="18dp" />
 
-                <!-- EMAIL -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_input"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp"
-                    android:layout_marginTop="16dp">
-
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/gmail" />
-
-                    <EditText
-                        android:id="@+id/etEmail"
-                        android:layout_width="0dp"
+                    <!-- FULL NAME -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:hint="Email"
-                        android:textColor="@color/earth_brown_dark"
-                        android:textColorHint="@color/green_medium"
-                        android:inputType="textEmailAddress" />
-                </LinearLayout>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_input"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp">
 
-                <!-- PHONE -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_input"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp"
-                    android:layout_marginTop="16dp">
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/name"/>
 
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/phone"/>
+                        <EditText
+                            android:id="@+id/etFullName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:hint="Họ và tên"
+                            android:textColor="@color/earth_brown_dark"
+                            android:textColorHint="@color/green_medium"
+                            android:inputType="textPersonName" />
+                    </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/etPhone"
-                        android:layout_width="0dp"
+                    <!-- EMAIL -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:hint="Số điện thoại"
-                        android:textColor="@color/earth_brown_dark"
-                        android:textColorHint="@color/green_medium"
-                        android:inputType="phone" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_input"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
+                        android:layout_marginTop="16dp">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/gmail" />
+
+                        <EditText
+                            android:id="@+id/etEmail"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:hint="Email"
+                            android:textColor="@color/earth_brown_dark"
+                            android:textColorHint="@color/green_medium"
+                            android:inputType="textEmailAddress" />
+                    </LinearLayout>
+
+                    <!-- PHONE -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_input"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
+                        android:layout_marginTop="16dp">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/phone"/>
+
+                        <EditText
+                            android:id="@+id/etPhone"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:hint="Số điện thoại"
+                            android:textColor="@color/earth_brown_dark"
+                            android:textColorHint="@color/green_medium"
+                            android:inputType="phone" />
+                    </LinearLayout>
+
+                    <!-- SAVE BUTTON -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Lưu thay đổi"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:layout_marginTop="26dp"
+                        android:backgroundTint="@color/green_primary"
+                        app:cornerRadius="26dp" />
+
+                    <!-- PROGRESS BAR -->
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="14dp"
+                        android:visibility="gone" />
+
                 </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                <!-- SAVE BUTTON -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSave"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="Lưu thay đổi"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"
-                    android:layout_marginTop="26dp"
-                    android:backgroundTint="@color/green_primary"
-                    app:cornerRadius="26dp" />
+        </LinearLayout>
+    </ScrollView>
 
-                <!-- PROGRESS BAR -->
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="14dp"
-                    android:visibility="gone" />
+    <!-- ✅ Bottom navigation -->
+    <FrameLayout
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        <include layout="@layout/navigation_bar"/>
+    </FrameLayout>
 
-    </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

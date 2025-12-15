@@ -11,13 +11,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Top bar: location + weather -->
+        <!-- Top bar: location + weather (full width) -->
         <LinearLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="12dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:background="#B3E5FC"
             android:gravity="center_vertical"
             android:elevation="2dp">
@@ -28,7 +29,7 @@
                 android:layout_height="28dp"
                 android:src="@drawable/outline_arrow_back_ios_24"
                 android:tint="@color/green_primary"
-                android:padding="4dp"/>
+                android:padding="4dp" />
 
             <TextView
                 android:id="@+id/tvLocation"
@@ -56,417 +57,453 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_1" />
         </LinearLayout>
-    <LinearLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-        <!-- Plant image -->
-        <ImageView
-            android:id="@+id/plantImage"
-            android:layout_width="match_parent"
-            android:layout_height="435dp"
-            android:layout_marginBottom="16dp"
-            android:contentDescription="Ảnh minh họa cây"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_gallery" />
 
-        <!-- Plant name -->
-        <TextView
-            android:id="@+id/tvPlantName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cây hoa đào mai"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#2E7D32"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"/>
-
-        <!-- Overview / Description -->
-        <androidx.cardview.widget.CardView
+        <!-- Content: tất cả dùng chung lề 16dp -->
+        <LinearLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="@android:color/white"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
+            android:orientation="vertical"
+            android:padding="16dp">
 
+            <!-- Plant image -->
+            <ImageView
+                android:id="@+id/plantImage"
+                android:layout_width="match_parent"
+                android:layout_height="435dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:contentDescription="Ảnh minh họa cây"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_gallery" />
+
+            <!-- Plant name -->
             <TextView
-                android:id="@+id/tvOverview"
+                android:id="@+id/tvPlantName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cây hoa đào mai"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#2E7D32"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Overview / Description -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="Hoa đào mai là loại cây thường nở vào dịp Tết, có màu sắc rực rỡ và mang ý nghĩa may mắn."
-                android:textSize="14sp"
-                android:lineSpacingExtra="4dp"
-                android:textColor="#000000" />
-        </androidx.cardview.widget.CardView>
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
 
-        <!-- Taxonomy -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
+                <TextView
+                    android:id="@+id/tvOverview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Hoa đào mai là loại cây thường nở vào dịp Tết, có màu sắc rực rỡ và mang ý nghĩa may mắn."
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="#000000" />
+            </androidx.cardview.widget.CardView>
 
-            <LinearLayout
+            <!-- Taxonomy -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🧪 Phân loại khoa học"
-                    android:textColor="#2E7D32"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp" />
-
-                <!-- Phylum -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="4dp">
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Ngành"
+                        android:text="🧪 Phân loại khoa học"
+                        android:textColor="#2E7D32"
                         android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/tvPhylum"
-                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="8dp" />
+
+                    <!-- Phylum -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Magnoliophyta"
-                        android:textSize="16sp" />
+                        android:orientation="horizontal"
+                        android:paddingVertical="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Ngành"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvPhylum"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Magnoliophyta"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#22000000" />
+
+                    <!-- Class -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="6dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Lớp"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvClass"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Magnoliopsida"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#22000000" />
+
+                    <!-- Order -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="6dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Bộ"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvOrder"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Rosales"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#22000000" />
+
+                    <!-- Family -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="6dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Họ"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvFamily"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Rosaceae"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#22000000" />
+
+                    <!-- Genus -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="6dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Chi"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvGenus"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Prunus"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#22000000" />
+
+                    <!-- Species -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="6dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Loài"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvSpecies"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="P. mume"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
+            </com.google.android.material.card.MaterialCardView>
 
-                <!-- Class -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="6dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Lớp"
-                        android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/tvClass"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Magnoliopsida"
-                        android:textSize="16sp" />
-                </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
-
-                <!-- Order -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="6dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Bộ"
-                        android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/tvOrder"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Rosales"
-                        android:textSize="16sp" />
-                </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
-
-                <!-- Family -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="6dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Họ"
-                        android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/tvFamily"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Rosaceae"
-                        android:textSize="16sp" />
-                </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
-
-                <!-- Genus -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="6dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Chi"
-                        android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/tvGenus"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Prunus"
-                        android:textSize="16sp" />
-                </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
-
-                <!-- Species -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="6dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Loài"
-                        android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/tvSpecies"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="P. mume"
-                        android:textSize="16sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Growth conditions -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp">
-
-            <LinearLayout
+            <!-- Growth conditions -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="💧☀️ Điều kiện sinh trưởng"
-                    android:textColor="#2E7D32"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp" />
-
-                <!-- Water -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="4dp">
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="💧 Nước"
+                        android:text="💧☀️ Điều kiện sinh trưởng"
+                        android:textColor="#2E7D32"
                         android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/tvWater"
-                        android:layout_width="0dp"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="8dp" />
+
+                    <!-- Water -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Tưới 2–3 lần/tuần"
-                        android:textSize="16sp" />
+                        android:orientation="horizontal"
+                        android:paddingVertical="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="💧 Nước"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvWater"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Tưới 2–3 lần/tuần"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#22000000" />
+
+                    <!-- Light -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="☀️ Ánh sáng"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvLight"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="Ưa sáng, cần ≥4h/ngày"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#22000000" />
+
+                    <!-- Temperature -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="🌡️ Nhiệt độ"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvTemperature"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="18–30°C"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
+            </com.google.android.material.card.MaterialCardView>
 
-                <!-- Light -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="4dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="☀️ Ánh sáng"
-                        android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/tvLight"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Ưa sáng, cần ≥4h/ngày"
-                        android:textSize="16sp" />
-                </LinearLayout>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#22000000" />
-
-                <!-- Temperature -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="4dp">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="🌡️ Nhiệt độ"
-                        android:textStyle="bold"
-                        android:textSize="16sp" />
-                    <TextView
-                        android:id="@+id/tvTemperature"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="18–30°C"
-                        android:textSize="16sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Care guide -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp">
-
-            <LinearLayout
+            <!-- Care guide -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🌿 Điều kiện chăm sóc"
-                    android:textColor="#2E7D32"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/tvCareGuide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cần cắt tỉa định kỳ, bón phân hữu cơ 1–2 tháng/lần, kiểm tra sâu bệnh thường xuyên."
-                    android:textColor="#000000"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Common diseases -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🦠 Một số bệnh thường gặp"
-                    android:textColor="#2E7D32"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="8dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/tvDiseases"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"/>
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🌿 Điều kiện chăm sóc"
+                        android:textColor="#2E7D32"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="8dp" />
 
-        <!-- Add to garden button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddToGarden"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Thêm vào vườn cây của tôi"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:layout_margin="16dp"
-            app:cornerRadius="24dp"
-            app:backgroundTint="@color/green_primary"
-            app:strokeColor="@color/green_primary"
-            app:strokeWidth="1dp"
-            app:iconTint="@android:color/white"
-            app:iconPadding="12dp"
-            app:iconGravity="start"
-            android:elevation="4dp"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"/>
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvCareGuide"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cần cắt tỉa định kỳ, bón phân hữu cơ 1–2 tháng/lần, kiểm tra sâu bệnh thường xuyên."
+                        android:textColor="#000000"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Common diseases -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🦠 Một số bệnh thường gặp"
+                        android:textColor="#2E7D32"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="8dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/tvDiseases"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Add to garden button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddToGarden"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thêm vào vườn cây của tôi"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                app:cornerRadius="24dp"
+                app:backgroundTint="@color/green_primary"
+                app:strokeColor="@color/green_primary"
+                app:strokeWidth="1dp"
+                app:iconTint="@android:color/white"
+                app:iconPadding="12dp"
+                app:iconGravity="start"
+                android:elevation="4dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp" />
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

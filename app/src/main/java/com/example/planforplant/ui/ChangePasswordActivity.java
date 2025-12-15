@@ -21,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ChangePasswordActivity extends AppCompatActivity {
+public class ChangePasswordActivity extends NavigationBarActivity {
 
     private EditText etNewPassword, etConfirmPassword;
     private Button btnChangePassword;

@@ -45,7 +45,7 @@ public class PlanActivity extends NavigationBarActivity {
     private TextView timePickerAction;
     private EditText etWaterDuration, etFertilizerType, etFertilizerAmount, etNote;
     private CheckBox cbWatering, cbFertilizing, cbPruning, cbMisting, cbOther;
-    private Button btnCreatePlan, btnBackHome;
+    private Button btnCreatePlan;
 
     private List<GardenResponse> myGardens = new ArrayList<>();
     private Long selectedGardenId = null;
@@ -80,7 +80,6 @@ public class PlanActivity extends NavigationBarActivity {
         cbWatering = findViewById(R.id.cbWatering);
         cbFertilizing = findViewById(R.id.cbFertilizing);
         btnCreatePlan = findViewById(R.id.btnCreatePlan);
-        btnBackHome = findViewById(R.id.btnBackHome);
         cbPruning = findViewById(R.id.cbPruning);
         cbMisting = findViewById(R.id.cbMist);
         cbOther = findViewById(R.id.cbOther);
@@ -135,13 +134,6 @@ public class PlanActivity extends NavigationBarActivity {
         timePickerAction.setOnClickListener(v -> openTimePickerDialog());
         loadMyGardens();
 
-        btnCreatePlan.setOnClickListener(v -> createSchedules());
-        btnBackHome.setOnClickListener(v -> {
-            Intent i = new Intent(this, MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-            finish();
-        });
     }
 
     private void updateCompletionSpinnerForDate(Calendar selectedDate) {

@@ -398,17 +398,6 @@
                 android:textColor="@color/white"
                 android:backgroundTint="@color/green_primary"
                 android:layout_marginBottom="16dp" />
-
-            <!-- nút quay về -->
-            <Button
-                android:id="@+id/btnBackHome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="🏠 Quay về trang chủ"
-                android:backgroundTint="@color/gray_light"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="12dp" />
         </LinearLayout>
     </ScrollView>
 

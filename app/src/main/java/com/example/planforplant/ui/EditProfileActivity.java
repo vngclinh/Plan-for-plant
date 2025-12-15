@@ -18,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends NavigationBarActivity {
 
     private EditText etFullName, etEmail, etPhone, etPassword;
     private Button btnSave;

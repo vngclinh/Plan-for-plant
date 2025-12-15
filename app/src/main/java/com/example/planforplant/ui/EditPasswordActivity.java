@@ -19,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditPasswordActivity extends AppCompatActivity {
+public class EditPasswordActivity extends NavigationBarActivity {
     private EditText etCurrentPassword, etNewPassword, etConfirmPassword;
     private Button btnChangePassword;
     private ApiService apiService;

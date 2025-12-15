@@ -37,7 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import android.widget.ImageView;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends NavigationBarActivity {
 
     private static final int REQUEST_STORAGE_PERMISSION = 100;
 
