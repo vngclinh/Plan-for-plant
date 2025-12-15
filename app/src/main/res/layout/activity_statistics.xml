@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="12dp"
                         android:entries="@array/granularity_options"
                         android:minHeight="48dp"/>
                 </LinearLayout>
@@ -225,6 +225,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <!-- Keep existing chart view ID so activity code can find it -->
                         <com.example.planforplant.ui.SimpleBarChartView
                             android:id="@+id/barChart"
                             android:layout_width="match_parent"
@@ -249,6 +250,7 @@
                             android:textColor="#777"
                             android:textSize="14sp"
                             android:visibility="gone" />
+
                     </FrameLayout>
 
                     <!-- INSIGHT TEXT -->
@@ -263,6 +265,11 @@
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <!-- Optional extra spacing -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
 
         </LinearLayout>
     </ScrollView>

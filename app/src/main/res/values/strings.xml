@@ -43,4 +43,19 @@
         <item>@string/granularity_week</item>
         <item>@string/granularity_month</item>
     </string-array>
+
+    <!-- New labels for statistics layout -->
+    <string name="label_total_plants">Cây</string>
+    <string name="label_water_events">Sự kiện tưới</string>
+    <string name="label_avg_score">Điểm TB</string>
+    <string name="label_view_by">Xem theo</string>
+
+    <!-- Metric placeholder values -->
+    <string name="value_total_plants">124</string>
+    <string name="value_water_events">540</string>
+    <string name="value_avg_score">8.6</string>
+
+    <!-- New strings for statistics screen -->
+    <string name="statistics_chart_title">Biểu đồ hoạt động</string>
+    <string name="icon_statistics_desc">Biểu tượng thống kê</string>
 </resources>
