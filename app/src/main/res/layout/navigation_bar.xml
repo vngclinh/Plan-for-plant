@@ -38,15 +38,16 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/house"
-                    android:contentDescription="@string/nav_home" />
+                    android:src="@drawable/ic_home"
+                    android:contentDescription="@string/nav_home"
+                    app:tint="@color/green_primary" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/nav_home"-->
-<!--                    android:textColor="@color/green_primary"-->
-<!--                    android:textSize="11sp" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nav_home"
+                    android:textColor="@color/green_primary"
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <!-- Nhật ký -->
@@ -62,15 +63,16 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/diary"
-                    android:contentDescription="@string/nav_diary" />
+                    android:src="@drawable/ic_journal"
+                    android:contentDescription="@string/nav_diary"
+                    app:tint="@color/green_primary" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/nav_diary"-->
-<!--                    android:textColor="@color/green_primary"-->
-<!--                    android:textSize="11sp" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nav_diary"
+                    android:textColor="@color/green_primary"
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <!-- Khoảng trống cho nút Camera -->
@@ -92,15 +94,16 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/chatbot"
-                    android:contentDescription="@string/nav_chatbot" />
+                    android:src="@drawable/ic_chat"
+                    android:contentDescription="@string/nav_chatbot"
+                    app:tint="@color/green_primary" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/nav_chatbot"-->
-<!--                    android:textColor="@color/green_primary"-->
-<!--                    android:textSize="11sp" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nav_chatbot"
+                    android:textColor="@color/green_primary"
+                    android:textSize="11sp" />
             </LinearLayout>
 
             <!-- Hồ sơ -->
@@ -116,15 +119,16 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/user"
-                    android:contentDescription="@string/nav_profile" />
+                    android:src="@drawable/ic_profile"
+                    android:contentDescription="@string/nav_profile"
+                    app:tint="@color/green_primary" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/nav_profile"-->
-<!--                    android:textColor="@color/green_primary"-->
-<!--                    android:textSize="11sp" />-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nav_profile"
+                    android:textColor="@color/green_primary"
+                    android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.bottomappbar.BottomAppBar>
@@ -133,17 +137,14 @@
         android:id="@+id/nav_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
         android:contentDescription="@string/camera_desc"
-        android:src="@drawable/camera"
-
-        app:backgroundTint="#ffffff"
-
-        app:fabSize="normal"
-        app:maxImageSize="56dp"
-        android:scaleType="centerCrop"
-        app:tint="@null"
+        android:src="@drawable/ic_camera"
+        android:translationY="0dp"
+        android:layout_marginBottom="12dp"
+        app:backgroundTint="@color/green_primary"
+        app:fabSize="mini"
         app:layout_anchor="@+id/bottom_app_bar"
-        app:layout_anchorGravity="center" />
+        app:layout_anchorGravity="center"
+        app:tint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
 package com.example.planforplant.DTO;
 
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
@@ -86,8 +87,7 @@ public class HealthResponse {
 
     // ======== Question ========
     public static class Question {
-        public String text;
-        public List<Option> options;
+        public JsonElement options;
     }
 
     public static class Option {

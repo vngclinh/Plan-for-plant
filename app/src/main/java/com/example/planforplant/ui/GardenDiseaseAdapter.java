@@ -55,12 +55,12 @@ public class GardenDiseaseAdapter extends RecyclerView.Adapter<GardenDiseaseAdap
     public void onBindViewHolder(@NonNull DiseaseViewHolder holder, int position) {
         GardenDiseaseResponse d = list.get(position);
 
-        holder.tvDiseaseName.setText("🦠 " + d.getDiseaseName());
+        holder.tvDiseaseName.setText(d.getDiseaseName());
 
         if (d.getDetectedDate() != null && d.getDetectedDate().length() >= 10) {
-            holder.tvDiseaseDate.setText("Detected: " + d.getDetectedDate().substring(0, 10));
+            holder.tvDiseaseDate.setText("Ngày phát hiện: " + d.getDetectedDate().substring(0, 10));
         } else {
-            holder.tvDiseaseDate.setText("Detected: Unknown");
+            holder.tvDiseaseDate.setText("Ngày phát hiện: Chưa biết");
         }
 
         // Remove old listener
