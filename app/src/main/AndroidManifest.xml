@@ -58,9 +58,8 @@
         <activity android:name=".ui.DiseaseDetailActivity"/>
         <activity android:name=".ui.DiseaseNotFoundActivity"/>
         <activity android:name=".ui.SearchDiseaseActivity"/>
-
         <activity android:name=".ui.StatisticsActivity"/>
-<activity android:name=".ui.WaterGameActivity"/>
+        <activity android:name=".ui.WaterGameActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

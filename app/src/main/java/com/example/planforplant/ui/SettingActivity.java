@@ -53,6 +53,7 @@ public class SettingActivity extends NavigationBarActivity {
         View cardChangePassword = findViewById(R.id.cardChangePassword);
         View cardSupport = findViewById(R.id.cardSupport);
         View cardStatistics = findViewById(R.id.cardStatistics);
+        View cardNotification = findViewById(R.id.cardNotification);
         Button btnLogout = findViewById(R.id.btnLogout);
 
         loadUserProfile();
@@ -75,6 +76,11 @@ public class SettingActivity extends NavigationBarActivity {
         // Mở màn hình Thống kê khi người dùng bấm vào card
         cardStatistics.setOnClickListener(v -> {
             Intent intent = new Intent(SettingActivity.this, StatisticsActivity.class);
+            startActivity(intent);
+        });
+
+        cardNotification.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingActivity.this, NotificationActivity.class);
             startActivity(intent);
         });
 
