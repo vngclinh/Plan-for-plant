@@ -31,13 +31,15 @@ public class AuthInterceptor implements Interceptor {
     private final ApiService authApi;
 
     private final Context appContext;
+    //    private static final String LOCAL_BASE_URL = "http://192.168.100.90:8080/";
+    private static final String LOCAL_BASE_URL = "http://10.0.2.2:8080/";
 
     public AuthInterceptor(Context context) {
         this.appContext = context.getApplicationContext();
         this.sessionManager = new SessionManager(context);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.100.90:8080/")
+                .baseUrl(LOCAL_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

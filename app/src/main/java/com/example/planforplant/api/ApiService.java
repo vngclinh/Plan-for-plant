@@ -16,13 +16,14 @@ import com.example.planforplant.DTO.LoginRequest;
 import com.example.planforplant.DTO.RegisterRequest;
 import com.example.planforplant.DTO.UpdateGardenDiseaseRequest;
 import com.example.planforplant.DTO.UpdateUserRequest;
+import com.example.planforplant.DTO.NotificationResponse;
+import java.util.List;
 
 import com.example.planforplant.DTO.UserProgressResponse;
 import com.example.planforplant.DTO.UserResponse;
 import com.example.planforplant.model.Disease;
 import com.example.planforplant.model.Plant;
 
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -30,7 +31,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -203,4 +203,16 @@ public interface ApiService {
 
     @GET("/api/diseases/search/fuzzy")
     Call<List<Disease>> fuzzySearch(@Query("keyword") String keyword);
+
+    @GET("api/notifications/user/{userId}")
+    Call<List<NotificationResponse>> getNotifications(
+            @Path("userId") Long userId
+    );
+    @POST("api/notifications/local")
+    Call<Void> saveLocalNotification(
+            @Body Map<String, String> body
+    );
+    @POST("/api/notifications/register")
+    Call<Void> registerToken(@Body Map<String, String> body);
+
 }

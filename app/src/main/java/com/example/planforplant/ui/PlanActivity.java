@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -90,6 +91,11 @@ public class PlanActivity extends NavigationBarActivity {
 
         TextView tabView = findViewById(R.id.tab_view);
         TextView tabCreate = findViewById(R.id.tab_create);
+
+        btnCreatePlan.setOnClickListener(v -> {
+            Log.d("PLAN_DEBUG", "👉 Click TẠO KẾ HOẠCH");
+            createSchedules();
+        });
 
 
         tabView.setBackgroundResource(R.drawable.bg_tab_unselected);
@@ -438,9 +444,13 @@ public class PlanActivity extends NavigationBarActivity {
         long delay = triggerTimeMillis - System.currentTimeMillis();
         if (delay < 0) delay = 0; // tránh lỗi nếu người dùng chọn giờ quá khứ
 
+        long userId = getSharedPreferences("user", MODE_PRIVATE)
+                .getLong("userId", -1);
+
         Data data = new Data.Builder()
                 .putString("gardenName", gardenName)
                 .putString("type", type)
+                .putLong("userId", userId)
                 .build();
 
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
