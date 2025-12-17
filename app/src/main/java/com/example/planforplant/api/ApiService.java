@@ -98,8 +98,10 @@ public interface ApiService {
             @Path("id") Long gardenId,
             @Part MultipartBody.Part file
     );
+
     @DELETE("garden/images/{id}")
     Call<Void> deleteGardenImage(@Path("id") Long imageId);
+
     @POST("api/schedules")
     Call<GardenScheduleResponse> createSchedule(@Body GardenScheduleRequest request);
 
@@ -138,38 +140,51 @@ public interface ApiService {
     @GET("/api/schedules")
     Call<List<GardenScheduleResponse>> getAllSchedules();
 
-    /** Lấy kế hoạch theo ID */
+    /**
+     * Lấy kế hoạch theo ID
+     */
     @GET("/api/schedules/{id}")
     Call<GardenScheduleResponse> getScheduleById(@Path("id") Long id);
 
-    /** Xóa kế hoạch */
+    /**
+     * Xóa kế hoạch
+     */
     @DELETE("/api/schedules/{id}")
     Call<Void> deleteSchedule(@Path("id") Long id);
 
-    /** Lấy kế hoạch theo ID vườn */
+    /**
+     * Lấy kế hoạch theo ID vườn
+     */
     @GET("/api/schedules/garden/{gardenId}")
     Call<List<GardenScheduleResponse>> getSchedulesByGarden(@Path("gardenId") Long gardenId);
 
-    /** Lấy kế hoạch theo trạng thái (Done / NotDone) */
+    /**
+     * Lấy kế hoạch theo trạng thái (Done / NotDone)
+     */
     @GET("/api/schedules/completion/{status}")
     Call<List<GardenScheduleResponse>> getSchedulesByCompletion(@Path("status") String status);
 
-    /** Lấy kế hoạch theo vườn + ngày */
+    /**
+     * Lấy kế hoạch theo vườn + ngày
+     */
     @GET("/api/schedules/garden/{gardenId}/date")
     Call<List<GardenScheduleResponse>> getSchedulesByGardenAndDate(
             @Path("gardenId") Long gardenId,
             @Query("date") String date
     );
+
     @POST("garden/{gardenId}/diaries")
     Call<GardenResponse> addDiaryEntry(
             @Path("gardenId") Long gardenId,
             @Body AddDiaryRequest request
     );
+
     @DELETE("garden/{gardenId}/diaries/{diaryId}")
     Call<Void> removeDiaryEntry(
             @Path("gardenId") Long gardenId,
             @Path("diaryId") Long diaryId
     );
+
     @GET("garden/{gardenId}/diaries")
     Call<List<DiaryResponse>> getDiariesByGardenId(
             @Path("gardenId") Long gardenId
@@ -195,6 +210,7 @@ public interface ApiService {
     Call<GardenDiseaseResponse> updateDisease(
             @Body UpdateGardenDiseaseRequest request
     );
+
     @POST("/api/user/water-tree")
     Call<UserProgressResponse> waterTreeStreak();
 
@@ -203,16 +219,34 @@ public interface ApiService {
 
     @GET("/api/diseases/search/fuzzy")
     Call<List<Disease>> fuzzySearch(@Query("keyword") String keyword);
+// Notification APIs (HƯỚNG B: không userId)
 
-    @GET("api/notifications/user/{userId}")
-    Call<List<NotificationResponse>> getNotifications(
-            @Path("userId") Long userId
-    );
-    @POST("api/notifications/local")
-    Call<Void> saveLocalNotification(
-            @Body Map<String, String> body
-    );
-    @POST("/api/notifications/register")
+    @GET("api/notifications/me")
+    Call<List<NotificationResponse>> getMyNotifications();
+
+    @POST("api/notifications/local/me")
+    Call<Void> saveLocalNotification(@Body Map<String, String> body);
+
+    // register token (body: token, platform)
+    @POST("api/notifications/register")
     Call<Void> registerToken(@Body Map<String, String> body);
 
+    // Mark 1 notification as read/unread (không query userId)
+    @PUT("api/notifications/{id}/read")
+    Call<Void> markAsRead(@Path("id") Long notificationId);
+
+    @PUT("api/notifications/{id}/unread")
+    Call<Void> markAsUnread(@Path("id") Long notificationId);
+
+    // Mark all as read (optional)
+    @PUT("api/notifications/me/read-all")
+    Call<Map<String, Integer>> markAllAsRead();
+
+    // Count unread (optional)
+    @GET("api/notifications/me/unread/count")
+    Call<Map<String, Long>> getUnreadCount();
+
+    // Delete 1 notification (không query userId)
+    @DELETE("api/notifications/{id}")
+    Call<Void> deleteNotification(@Path("id") Long notificationId);
 }

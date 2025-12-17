@@ -14,48 +14,107 @@ import com.example.planforplant.DTO.NotificationResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationAdapter
-        extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
+public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<NotificationResponse> list = new ArrayList<>();
+    public interface OnNotificationClickListener {
+        void onNotificationClicked(NotificationResponse n);
+        void onNotificationLongClicked(NotificationResponse n); // optional: xoá, unread...
+    }
 
-    public void setData(List<NotificationResponse> data) {
-        list.clear();
-        if (data != null) list.addAll(data);
+    private final List<NotificationListItem> items = new ArrayList<>();
+    private OnNotificationClickListener listener;
+
+    public void setOnNotificationClickListener(OnNotificationClickListener l) {
+        this.listener = l;
+    }
+
+    public void setItems(List<NotificationListItem> data) {
+        items.clear();
+        if (data != null) items.addAll(data);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return items.get(position).type;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(
+    public RecyclerView.ViewHolder onCreateViewHolder(
             @NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_notification, parent, false);
-        return new ViewHolder(view);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+        if (viewType == NotificationListItem.TYPE_HEADER) {
+            View v = inflater.inflate(R.layout.item_notification_header, parent, false);
+            return new HeaderVH(v);
+        }
+
+        View v = inflater.inflate(R.layout.item_notification, parent, false);
+        return new ItemVH(v);
     }
 
     @Override
     public void onBindViewHolder(
-            @NonNull ViewHolder holder, int position) {
+            @NonNull RecyclerView.ViewHolder holder, int position) {
 
-        NotificationResponse n = list.get(position);
-        holder.tvTitle.setText(n.title);
-        holder.tvBody.setText(n.content);
-        holder.tvTime.setText(n.createdAt);
+        NotificationListItem li = items.get(position);
 
-        holder.tvTitle.setAlpha(n.read ? 0.6f : 1f);
+        if (holder instanceof HeaderVH) {
+            ((HeaderVH) holder).tvHeader.setText(li.headerText);
+            return;
+        }
+
+        ItemVH vh = (ItemVH) holder;
+        NotificationResponse n = li.noti;
+
+        vh.tvTitle.setText(n.title);
+        vh.tvBody.setText(n.content);
+        vh.tvTime.setText(formatTime(n.createdAt));
+
+        // UI: chưa đọc -> đậm hơn, đọc rồi -> mờ
+        vh.tvTitle.setAlpha(n.read ? 0.6f : 1f);
+        vh.tvBody.setAlpha(n.read ? 0.6f : 1f);
+
+        vh.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onNotificationClicked(n);
+        });
+
+        vh.itemView.setOnLongClickListener(v -> {
+            if (listener != null) listener.onNotificationLongClicked(n);
+            return true;
+        });
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return items.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvBody, tvTime;
+    // format ISO -> "HH:mm" (đơn giản)
+    private String formatTime(String iso) {
+        try {
+            // 2025-12-17T03:49:02.967 -> lấy HH:mm
+            int t = iso.indexOf('T');
+            if (t >= 0 && iso.length() >= t + 6) {
+                return iso.substring(t + 1, t + 6);
+            }
+        } catch (Exception ignored) {}
+        return iso == null ? "" : iso;
+    }
 
-        ViewHolder(@NonNull View itemView) {
+    static class HeaderVH extends RecyclerView.ViewHolder {
+        TextView tvHeader;
+        HeaderVH(@NonNull View itemView) {
+            super(itemView);
+            tvHeader = itemView.findViewById(R.id.tvHeader);
+        }
+    }
+
+    static class ItemVH extends RecyclerView.ViewHolder {
+        TextView tvTitle, tvBody, tvTime;
+        ItemVH(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvBody = itemView.findViewById(R.id.tvBody);
