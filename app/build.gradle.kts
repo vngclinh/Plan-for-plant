@@ -58,6 +58,7 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation(libs.recyclerview)
     implementation(libs.work.runtime)
+    implementation(libs.firebase.messaging)
 
 
     // (tuỳ chọn) nếu IDE kêu thiếu ListenableFuture

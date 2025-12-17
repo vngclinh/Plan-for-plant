@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="12dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="#B3E5FC"
         android:gravity="center_vertical"

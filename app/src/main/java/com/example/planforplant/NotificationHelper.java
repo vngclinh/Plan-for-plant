@@ -53,7 +53,7 @@ public class NotificationHelper {
                 .setAutoCancel(true);
 
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-             // This is a fallback. In a real app, you'd request permission first.
+            // This is a fallback. In a real app, you'd request permission first.
             return;
         }
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build());

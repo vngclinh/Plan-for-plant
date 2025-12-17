@@ -47,7 +47,7 @@
                         android:src="@drawable/ic_user"
                         android:scaleType="centerCrop"
                         android:background="@drawable/bg_circle_green"
-                        android:padding="1dp"
+                        android:padding="12dp"
                         android:elevation="6dp"/>
 
                     <!-- Tên và email -->
@@ -80,7 +80,7 @@
             </com.google.android.material.card.MaterialCardView>
 
 
-            <!-- 🌿 SECTION TITLE -->
+            <!--  SECTION TITLE -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
                     android:layout_width="wrap_content"/>
             </LinearLayout>
 
-            <!-- 🌿 CARD CHÍNH – CAO HƠN, RÕ HƠN, KHÔNG TRỐNG -->
+            <!--  CARD CHÍNH – CAO HƠN, RÕ HƠN, KHÔNG TRỐNG -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -206,6 +206,30 @@
 
                         <TextView
                             android:text="Thống kê"
+                            android:textSize="22sp"
+                            android:textColor="@color/earth_brown_dark"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/green_light"/>
+
+                    <LinearLayout
+                        android:id="@+id/cardNotification"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="20dp"
+                        android:background="?attr/selectableItemBackground">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/notification"
+                            android:layout_marginEnd="18dp"/>
+
+                        <TextView
+                            android:text="Thông báo"
                             android:textSize="22sp"
                             android:textColor="@color/earth_brown_dark"
                             android:layout_height="wrap_content"

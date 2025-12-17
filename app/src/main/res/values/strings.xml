@@ -58,4 +58,11 @@
     <!-- New strings for statistics screen -->
     <string name="statistics_chart_title">Biểu đồ hoạt động</string>
     <string name="icon_statistics_desc">Biểu tượng thống kê</string>
+
+    <string name="welcome_to_app">Chào mừng đến với\nPlan for Plant</string>
+    <string name="app_slogan">Người bạn đồng hành cùng khu vườn của bạn</string>
+    <string name="username_label">Tên đăng nhập</string>
+    <string name="password_label">Mật khẩu</string>
+    <string name="app_logo">Logo ứng dụng</string>
+    <string name="app_description">Ứng dụng giúp bạn chăm sóc, nhận diện và theo dõi sức khỏe cây trồng một cách dễ dàng</string>
 </resources>

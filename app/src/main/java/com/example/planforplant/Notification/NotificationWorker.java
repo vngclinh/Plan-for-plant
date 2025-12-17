@@ -14,8 +14,17 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.planforplant.R;
+import com.example.planforplant.api.ApiClient;
+import com.example.planforplant.api.ApiService;
 import com.example.planforplant.ui.MainActivity;
 import com.example.planforplant.ui.ScheduleListActivity;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationWorker extends Worker {
 
@@ -28,9 +37,37 @@ public class NotificationWorker extends Worker {
     public Result doWork() {
         String gardenName = getInputData().getString("gardenName");
         String type = getInputData().getString("type");
-        Log.d("NotificationWorker", "Worker executed for " + gardenName + " - " + type);
+        long userId = getInputData().getLong("userId", -1);
+
         showNotification(gardenName, type);
+
+        if (userId != -1) {
+            saveNotificationToBackend(userId, gardenName, type);
+        }
+
         return Result.success();
+    }
+
+    private void saveNotificationToBackend(long userId, String gardenName, String type) {
+        ApiService api = ApiClient.getLocalClient(getApplicationContext())
+                .create(ApiService.class);
+
+        Map<String, String> body = new HashMap<>();
+        body.put("userId", String.valueOf(userId));
+        body.put("title", "🌿 Nhắc nhở chăm sóc cây");
+        body.put("body", "Đến giờ " + type.toLowerCase() + " cho " + gardenName + " rồi!");
+
+        api.saveLocalNotification(body).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("NOTI_SAVE", "Saved to backend");
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("NOTI_SAVE", "Failed", t);
+            }
+        });
     }
 
     private void showNotification(String gardenName, String type) {
