@@ -128,7 +128,7 @@ public class DetailActivity extends AppCompatActivity {
             if (plant != null && plant.getId() != null) {
                 showAddGardenDialog(plant.getId());
             } else {
-                Toast.makeText(this, "Không tìm thấy ID của cây", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Không tìm thấy ID của cây", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -185,7 +185,7 @@ public class DetailActivity extends AppCompatActivity {
         String token = sessionManager.getToken();
 
         if (token == null || token.isEmpty()) {
-            Toast.makeText(this, "Bạn cần đăng nhập để sử dụng chức năng này", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Bạn cần đăng nhập để sử dụng chức năng này", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -201,11 +201,11 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<GardenResponse> call, Response<GardenResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(
-                            DetailActivity.this,
-                            "🌱 Đã thêm cây '" + nickname + "' vào vườn!",
-                            Toast.LENGTH_SHORT
-                    ).show();
+//                    Toast.makeText(
+//                            DetailActivity.this,
+//                            "🌱 Đã thêm cây '" + nickname + "' vào vườn!",
+//                            Toast.LENGTH_SHORT
+//                    ).show();
                 } else {
                     String errorMsg = "Không thể thêm cây";
                     try {
@@ -214,13 +214,13 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     } catch (Exception ignored) {}
 
-                    Toast.makeText(DetailActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DetailActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<GardenResponse> call, Throwable t) {
-                Toast.makeText(DetailActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(DetailActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -264,7 +264,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<Plant>> call, Throwable t) {
-                    Toast.makeText(DetailActivity.this, "Không thể tìm thấy cây trong cơ sở dữ liệu", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DetailActivity.this, "Không thể tìm thấy cây trong cơ sở dữ liệu", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -302,7 +302,7 @@ public class DetailActivity extends AppCompatActivity {
                 this,
                 plant.getDiseases(),
                 disease -> {
-                    Toast.makeText(this, "Bạn chọn: " + disease.getName(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "Bạn chọn: " + disease.getName(), Toast.LENGTH_SHORT).show();
                 }
         );
 

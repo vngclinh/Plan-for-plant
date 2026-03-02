@@ -67,7 +67,6 @@ public class EditPasswordActivity extends NavigationBarActivity {
                 return;
             }
 
-            // ✅ Validate strong password rule
             if (!PASSWORD_PATTERN.matcher(newPass).matches()) {
                 etNewPassword.setError("Mật khẩu ≥8 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt");
                 etNewPassword.requestFocus();

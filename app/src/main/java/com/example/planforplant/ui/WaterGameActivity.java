@@ -184,7 +184,7 @@ public class WaterGameActivity extends NavigationBarActivity {
     }
 
     private void updateProgressUI(UserProgressResponse p) {
-        String level = p.getLevel();          // giả sử trả về "MAM", "TRUONG_THANH", "CO_THU"
+        String level = p.getLevel();
         int streak = p.getStreak();
         long done = p.getCompletedSchedules();
         long treeCount = p.getTreeCount();
@@ -201,7 +201,6 @@ public class WaterGameActivity extends NavigationBarActivity {
         int percent = calculateProgressPercent(level, done, treeCount, streak);
         progressLevel.setProgress(percent);
 
-        // Cập nhật hình cây theo level (chỉ đổi nếu backend đã đổi cấp)
         switch (level) {
             case "MAM":
                 ivPlant.setImageResource(R.drawable.ic_plant_mam);

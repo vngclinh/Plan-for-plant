@@ -157,7 +157,7 @@ public class MainActivity extends NavigationBarActivity {
 
             @Override
             public void onFailure(Call<List<GardenScheduleResponse>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Không thể tải kế hoạch hôm nay", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "Không thể tải kế hoạch hôm nay", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -179,7 +179,6 @@ public class MainActivity extends NavigationBarActivity {
 
             @Override
             public void onFailure(Call<UserProgressResponse> call, Throwable t) {
-                // có thể bỏ qua, không cần toast
             }
         });
     }
@@ -319,12 +318,18 @@ public class MainActivity extends NavigationBarActivity {
         // Delegate to WeatherManager first
         weatherManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == NotificationHelper.REQUEST_CODE_POST_NOTIFICATIONS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Thông báo đã được bật 🌿", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Ứng dụng cần quyền để hiển thị thông báo 🌿", Toast.LENGTH_LONG).show();
-            }
-        }
+//        if (requestCode == NotificationHelper.REQUEST_CODE_POST_NOTIFICATIONS) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(this, "Thông báo đã được bật 🌿", Toast.LENGTH_SHORT).show();
+//            } else {
+//                Toast.makeText(this, "Ứng dụng cần quyền để hiển thị thông báo 🌿", Toast.LENGTH_LONG).show();
+//            }
+//        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUserProgressForHome();
+        loadTodayPlans();
     }
 }

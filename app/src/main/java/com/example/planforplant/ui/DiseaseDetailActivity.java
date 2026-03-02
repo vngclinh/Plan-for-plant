@@ -76,7 +76,7 @@ public class DiseaseDetailActivity extends AppCompatActivity {
 
 
         if (diseaseId == -1) {
-            Toast.makeText(this, "Không tìm thấy thông tin bệnh!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Không tìm thấy thông tin bệnh!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -107,13 +107,13 @@ public class DiseaseDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     bindUI(response.body());
                 } else {
-                    Toast.makeText(DiseaseDetailActivity.this, "Lỗi khi tải dữ liệu!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DiseaseDetailActivity.this, "Lỗi khi tải dữ liệu!", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Disease> call, @NonNull Throwable t) {
-                Toast.makeText(DiseaseDetailActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(DiseaseDetailActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -179,7 +179,7 @@ public class DiseaseDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<GardenDiseaseResponse>> call, Response<List<GardenDiseaseResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(DiseaseDetailActivity.this, "Đã thêm bệnh vào vườn " + nickname, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DiseaseDetailActivity.this, "Đã thêm bệnh vào vườn " + nickname, Toast.LENGTH_SHORT).show();
 
                     // Trở về GardenDetailActivity với các field cần thiết
                     Intent intent = new Intent(DiseaseDetailActivity.this, GardenDetailActivity.class);
@@ -195,13 +195,13 @@ public class DiseaseDetailActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(DiseaseDetailActivity.this, "Thêm thất bại! Mã lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DiseaseDetailActivity.this, "Thêm thất bại! Mã lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<GardenDiseaseResponse>> call, Throwable t) {
-                Toast.makeText(DiseaseDetailActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(DiseaseDetailActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

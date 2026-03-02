@@ -41,7 +41,7 @@ public class DiseaseListAdapter extends RecyclerView.Adapter<DiseaseListAdapter.
     @Override
     public void onBindViewHolder(@NonNull DiseaseListAdapter.ViewHolder holder, int position) {
         Disease d = list.get(position);
-        holder.tvName.setText("🦠 " + d.getName());
+        holder.tvName.setText(d.getName());
 
         holder.itemView.setOnClickListener(v -> listener.onDiseaseClick(d));
     }

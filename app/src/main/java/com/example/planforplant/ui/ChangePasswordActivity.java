@@ -81,7 +81,6 @@ public class ChangePasswordActivity extends NavigationBarActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(ChangePasswordActivity.this, "Đổi mật khẩu thành công!", Toast.LENGTH_SHORT).show();
 
                     // Redirect to login
                     Intent intent = new Intent(ChangePasswordActivity.this, LoginActivity.class);
@@ -89,13 +88,11 @@ public class ChangePasswordActivity extends NavigationBarActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(ChangePasswordActivity.this, "Đổi mật khẩu thất bại", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(ChangePasswordActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

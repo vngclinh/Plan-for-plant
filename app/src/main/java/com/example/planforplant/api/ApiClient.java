@@ -15,7 +15,7 @@ public class ApiClient {
     private static Retrofit localRetrofit = null;
     private static Retrofit meteosourceRetrofit = null;
 
-    private static final String LOCAL_BASE_URL = "http://192.168.100.90:8080/";
+    private static final String LOCAL_BASE_URL = "http://172.20.10.2:8080/";
 //     private static final String LOCAL_BASE_URL = "http://10.0.2.2:8080/";
     private static final String PLANTNET_BASE_URL = "https://my-api.plantnet.org/v2/";
     private static final String METEOSOURCE_BASE_URL = "https://www.meteosource.com/";
@@ -54,7 +54,7 @@ public class ApiClient {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .protocols(Collections.singletonList(Protocol.HTTP_1_1))  // 👈 ép dùng HTTP/1.1
+                .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                 .retryOnConnectionFailure(true)
                 .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
                 .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
@@ -64,7 +64,7 @@ public class ApiClient {
 
         return new Retrofit.Builder()
                 .baseUrl(PLANTNET_BASE_URL)
-                .client(client)  // 👈 phải gắn client này vào
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

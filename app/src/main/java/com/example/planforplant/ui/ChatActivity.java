@@ -94,27 +94,26 @@ public class ChatActivity extends NavigationBarActivity{
                                    @NonNull Response<List<ChatApi.ChatHistoryResponse>> response) {
 
                 if (!response.isSuccessful()) {
-                    addBotBubbleMarkdown("⚠️ Không tải được lịch sử chat hôm nay. Mã lỗi: " + response.code());
+                    addBotBubbleMarkdown("Không tải được lịch sử chat hôm nay. Mã lỗi: " + response.code());
                     return;
                 }
 
                 List<ChatApi.ChatHistoryResponse> data = response.body();
                 if (data == null || data.isEmpty()) {
-                    // Không có lịch sử cũng không sao, chỉ im lặng (hoặc log nếu muốn)
                     return;
                 }
 
                 for (ChatApi.ChatHistoryResponse item : data) {
                     if (item == null) continue;
 
-                    // 🧑 Tin nhắn user
+                    // Tin nhắn user
                     if (!TextUtils.isEmpty(item.message)) {
                         String msg = item.message;
                         msg = msg.replace(" [ảnh]", "").replace("[ảnh]", "").trim();
                         addUserBubble(msg);
                     }
 
-                    // 🤖 Tin của bot
+                    // Tin của bot
                     if (!TextUtils.isEmpty(item.response)) {
                         addBotBubbleMarkdown(item.response);
                     }
@@ -126,7 +125,7 @@ public class ChatActivity extends NavigationBarActivity{
             @Override
             public void onFailure(@NonNull Call<List<ChatApi.ChatHistoryResponse>> call,
                                   @NonNull Throwable t) {
-                addBotBubbleMarkdown("⚠️ Lỗi mạng khi tải lịch sử chat: " + t.getMessage());
+                addBotBubbleMarkdown(" Lỗi mạng khi tải lịch sử chat: " + t.getMessage());
             }
         });
     }
@@ -138,8 +137,7 @@ public class ChatActivity extends NavigationBarActivity{
         return reply.contains("ban da het") && reply.contains("luot hoi hom nay");
     }
     private void addQuotaWarningBubble(String msg) {
-        // Dùng bubble bot nhưng màu khác, hoặc reuse addBotBubbleMarkdown
-        addBotBubbleMarkdown("⚠️ " + msg + "\n\nVui lòng quay lại vào ngày mai nhé 🌱");
+        addBotBubbleMarkdown(msg + "\n\nVui lòng quay lại vào ngày mai nhé 🌱");
     }
 
 
@@ -165,7 +163,7 @@ public class ChatActivity extends NavigationBarActivity{
             }
         }
     }
-    private ImageView previewImageView; // thêm ở đầu class
+    private ImageView previewImageView;
 
     private void addImagePreview(Uri uri) {
         LinearLayout layout = new LinearLayout(this);
@@ -183,7 +181,7 @@ public class ChatActivity extends NavigationBarActivity{
         previewImageView.setBackground(getDrawable(R.drawable.bg_chat_user));
 
         Button cancelBtn = new Button(this);
-        cancelBtn.setText("❌ Hủy ảnh này");
+        cancelBtn.setText(" Hủy ảnh này");
         cancelBtn.setOnClickListener(v -> {
             chatContainer.removeView(layout);
             selectedImageUri = null;
@@ -212,10 +210,8 @@ public class ChatActivity extends NavigationBarActivity{
         etMessage.setText("");
         View typingView = addBotTyping();
 
-        // ✅ CÁCH MỚI: Tạo object JSON request
         ChatApi.MessageRequest requestBody = new ChatApi.MessageRequest(text);
 
-        // Gọi API gửi Text (Retrofit tự thêm Header: application/json)
         chatApi.sendTextMessage(requestBody).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -270,13 +266,12 @@ public class ChatActivity extends NavigationBarActivity{
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
 
             // 2. Tạo Part cho text message (Key là "message" - Khớp Backend)
-            // Lưu ý: Backend nhận @RequestPart("message") String, nên gửi text/plain là chuẩn
             RequestBody messagePart = RequestBody.create(MediaType.parse("text/plain"), userText);
 
             View typingView = addBotTyping();
             etMessage.setText("");
 
-            // ✅ Gọi API gửi Ảnh (Retrofit tự thêm Header: multipart/form-data)
+            //  Gọi API gửi Ảnh (Retrofit tự thêm Header: multipart/form-data)
             chatApi.sendImageMessage(messagePart, body).enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -458,7 +453,7 @@ public class ChatActivity extends NavigationBarActivity{
         Button btnNo = new Button(this);
         btnNo.setText("Không");
         btnNo.setTextSize(13);
-        btnNo.setBackgroundTintList(getColorStateList(R.color.gray)); // Giả sử bạn có màu này
+        btnNo.setBackgroundTintList(getColorStateList(R.color.gray));
         btnNo.setTextColor(getColor(R.color.white));
         LinearLayout.LayoutParams paramsNo = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, dp(40));
@@ -483,9 +478,6 @@ public class ChatActivity extends NavigationBarActivity{
         btnYes.setOnClickListener(v -> {
             chatContainer.removeView(buttonLayout);
 
-            // 🔥 QUAN TRỌNG: Gửi câu lệnh đầy đủ để Gemini hiểu context
-            // Chúng ta trích xuất tên cây/bệnh từ tin nhắn bot (nếu có thể) hoặc gửi lệnh chung
-            // Cách tốt nhất: Gửi lệnh kích hoạt tool confirm
             sendUserMessageInternal("Tôi xác nhận. Hãy áp dụng kế hoạch điều trị này vào database.");
         });
 
@@ -505,7 +497,6 @@ public class ChatActivity extends NavigationBarActivity{
         addUserBubble(text);
         View typingView = addBotTyping();
 
-        // Gọi API gửi Text (đã sửa ở bước trước)
         com.example.planforplant.api.ChatApi.MessageRequest request =
                 new com.example.planforplant.api.ChatApi.MessageRequest(text);
 
@@ -519,7 +510,6 @@ public class ChatActivity extends NavigationBarActivity{
                     if (isQuotaMessage(reply)) {
                         isQuotaExceeded = true;
                         addQuotaWarningBubble(reply);
-                        // Không cần check confirm nữa
                     } else {
                         addBotBubbleMarkdown(reply);
                         checkForConfirmationTrigger(reply);
