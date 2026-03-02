@@ -1,0 +1,56 @@
+package com.example.plant_sever.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "garden")
+public class Garden {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "plant_id")
+    private Plant plant;
+
+    private String nickname;
+
+    private LocalDateTime dateAdded;
+
+    @OneToMany(mappedBy = "garden", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Diary> diaries = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private GardenType type;
+
+    @Enumerated(EnumType.STRING)
+    private GardenStatus status = GardenStatus.ALIVE;
+
+    @OneToMany(mappedBy = "garden", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GardenImage> images = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private PotType potType;
+
+    @OneToMany(mappedBy = "garden", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("garden-gardenDisease")
+    private List<GardenDisease> gardenDiseases = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "garden", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GardenSchedule> schedules = new ArrayList<>();
+}

@@ -1,0 +1,116 @@
+package com.example.plant_sever.controller;
+
+import com.example.plant_sever.DAO.UserRepo;
+import com.example.plant_sever.DTO.GardenScheduleRequest;
+import com.example.plant_sever.DTO.GardenScheduleResponse;
+import com.example.plant_sever.model.Completion;
+import com.example.plant_sever.model.User;
+import com.example.plant_sever.service.GardenScheduleService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/schedules")
+@RequiredArgsConstructor
+public class GardenScheduleController {
+
+    private final GardenScheduleService scheduleService;
+    private final UserRepo userRepository;
+
+    @PostMapping
+    public ResponseEntity<GardenScheduleResponse> create(@RequestBody GardenScheduleRequest request) {
+        return ResponseEntity.ok(scheduleService.create(request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<GardenScheduleResponse> update(@PathVariable Long id,
+                                                         @RequestBody GardenScheduleRequest request) {
+        return ResponseEntity.ok(scheduleService.update(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        scheduleService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GardenScheduleResponse> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(scheduleService.getById(id));
+    }
+
+    @GetMapping("/garden/{gardenId}")
+    public ResponseEntity<List<GardenScheduleResponse>> getByGarden(@PathVariable Long gardenId) {
+        return ResponseEntity.ok(scheduleService.getByGarden(gardenId));
+    }
+
+    @GetMapping("/completion/{status}")
+    public ResponseEntity<List<GardenScheduleResponse>> getByCompletion(@PathVariable Completion status) {
+        return ResponseEntity.ok(scheduleService.getByCompletion(status));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<GardenScheduleResponse>> getAll() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+
+        return ResponseEntity.ok(scheduleService.getAll(user));
+    }
+
+    @PostMapping("/garden/{gardenId}/generate")
+    public ResponseEntity<List<GardenScheduleResponse>> generateWeeklyWateringSchedule(
+            @PathVariable Long gardenId,
+            @RequestParam double lat,
+            @RequestParam double lon
+    ) {
+        List<GardenScheduleResponse> schedules =
+                scheduleService.generateWeeklyWateringSchedule(gardenId, lat, lon);
+        return ResponseEntity.ok(schedules);
+    }
+
+    @PostMapping("/garden/{gardenId}/generatewithdisease")
+    public ResponseEntity<List<GardenScheduleResponse>> generateCaringSchedule(
+            @PathVariable Long gardenId
+
+    ) {
+        List<GardenScheduleResponse> schedules =
+                scheduleService.generateDiseaseTreatmentSchedule(gardenId);
+        return ResponseEntity.ok(schedules);
+    }
+
+
+    @GetMapping("/garden/{gardenId}/date")
+    public ResponseEntity<List<GardenScheduleResponse>> getByGardenAndDate(
+            @PathVariable Long gardenId,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        List<GardenScheduleResponse> schedules = scheduleService.getByGardenAndDate(gardenId, date);
+        return ResponseEntity.ok(schedules);
+    }
+
+    @GetMapping("/exists")
+    public ResponseEntity<Boolean> checkScheduleExists(
+            @RequestParam Long gardenId,
+            @RequestParam String scheduledTime) {
+
+        boolean exists = scheduleService.existsSchedule(gardenId, scheduledTime);
+        return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("/by-date")
+    public ResponseEntity<List<GardenScheduleResponse>> getUserSchedulesByDate(
+            @RequestHeader("Authorization") String token,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        List<GardenScheduleResponse> schedules = scheduleService.getUserSchedulesByDate(token, date);
+        return ResponseEntity.ok(schedules);
+    }
+}
