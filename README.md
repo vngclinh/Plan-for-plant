@@ -9,8 +9,6 @@ This repository contains two main modules:
 - `mobile/`: Android app (Java)
 - `backend/Plant_sever/`: Spring Boot API (Java)
 
-![Plan For Plant](mobile/app/src/main/sample_plant-playstore.png)
-
 ## Features
 - User authentication (register, login, forgot password, reset password)
 - Plant identification from camera/gallery images
